@@ -1,0 +1,24 @@
+[tmp]
+.tmp.drivedownload/
+.idea/
+
+[PHPUnit]
+bin/.phpunit/
+.phpunit
+phpunit.xml
+
+[Symfony]
+.env
+var/
+vendor/
+
+[PHP-CS-FIXER]
+.php_cs.cache
+php-cs-fixer
+
+[Others]
+/.web-server-pid
+TryAction.php
+
+[JWT AUTHENTICATION]
+/config/jwt/*.pem

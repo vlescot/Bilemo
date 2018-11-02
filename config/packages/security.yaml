@@ -1,0 +1,62 @@
+security:
+    encoders:
+        App\Domain\Entity\User:
+            algorithm: bcrypt
+        Symfony\Component\Security\Core\User\UserInterface: plaintext
+
+    role_hierarchy:
+        ROLE_COMPANY:   [ROLE_USER, ROLE_SELF_USER]
+
+    providers:
+        chain_provider:
+            chain:
+                providers: [user_provider, company_provider]
+        user_provider:
+            entity:
+                class: App\Domain\Entity\User
+                property: username
+        company_provider:
+            memory:
+                users:
+                    Bilemo:  { password: 'Bilemo', roles: [ 'ROLE_COMPANY' ] }
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js|try)/
+            security: false
+        user_login:
+            pattern: ^/user/token
+            provider: user_provider
+            stateless: true
+            anonymous: ~
+            json_login:
+                check_path:               user_token
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+        company_login:
+            pattern: ^/company/token
+            provider: company_provider
+            stateless: true
+            anonymous: ~
+            json_login:
+                check_path:               company_token
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+        main:
+            provider: chain_provider
+            stateless: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.security.guard.jwt_token_authenticator
+
+    access_control:
+        - { path: ^/user/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        - { path: ^/phone/.,        roles: ROLE_USER,     methods: [GET] }
+        - { path: ^/phone/.,        roles: ROLE_COMPANY,  methods: [PUT, DELETE] }
+        - { path: ^/phone,          roles: ROLE_USER,     methods: [GET] }
+        - { path: ^/phone,          roles: ROLE_COMPANY,  methods: [POST] }
+
+        - { path: ^/user/.,         roles: ROLE_SELF_USER, methods: [GET, PUT, DELETE] }
+        - { path: ^/user,           roles: ROLE_COMPANY,  methods: [GET, POST, PUT, DELETE] }

@@ -1,0 +1,24 @@
+phone_0:
+    Brand: Samsung
+    Model: S10
+    Description: Le meilleur Samsumg
+    Price: 1599
+    Stock: 56
+phone_1:
+    Brand: Apple
+    Model: iPhone X
+    Description: Le meilleur iPhone
+    Price: 1399
+    Stock: 12
+phone_2:
+    Brand: Samsung
+    Model: S10
+    Description: Le meilleur Samsumg
+    Price: 1499
+    Stock: 36
+phone_3:
+    Brand: Samsung
+    Model: X20
+    Description: Le deuxième meilleur Samsumg
+    Price: 999
+    Stock: 63

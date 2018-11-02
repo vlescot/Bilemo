@@ -1,0 +1,4 @@
+Actions:
+    resource: '../src/UI/Action'
+    type: annotation
+    defaults: { _format: 'json' }

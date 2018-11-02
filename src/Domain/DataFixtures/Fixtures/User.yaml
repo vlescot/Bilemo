@@ -1,0 +1,16 @@
+user_0:
+    Roles:
+        - ROLE_USER
+    Username: User0
+    Password: password0
+    Email: user0@mail.com
+    Reference:
+        Phones: ~
+user_1:
+    Roles:
+        - ROLE_USER
+    Username: User1
+    Password: password1
+    Email: user1@mail.com
+    Reference:
+        Phones: ~

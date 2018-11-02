@@ -1,0 +1,8 @@
+App\Domain\Entity\User:
+    attributes:
+        username:
+            groups: ['user']
+        email:
+            groups: ['user']
+        createdAt:
+            groups: ['user']
