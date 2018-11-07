@@ -12,6 +12,7 @@
         <id name="id" type="uuid" />
         <field name="roles" type="array" />
         <field name="createdAt" type="integer" />
+        <field name="updatedAt" type="integer" />
         <field name="username" type="string" unique="true" />
         <field name="password" type="string" />
         <field name="email" type="string" unique="true" />

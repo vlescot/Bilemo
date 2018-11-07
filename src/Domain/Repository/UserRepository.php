@@ -11,9 +11,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserRepository extends ServiceEntityRepository implements UserLoaderInterface
 {
+    /**
+     * UserRepository constructor.
+     *
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    /**
+     * @param int $id
+     * @return null|object
+     */
+    public function findOneById(string $id)
+    {
+        return parent::findOneBy(['id' => $id]);
     }
 
     /**
@@ -29,15 +43,6 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->setParameter('username', $username)
             ->getQuery()
             ->getOneOrNullResult();
-    }
-
-    // TODO REMOVE (Used to test security)
-    public function findUsers()
-    {
-        return $this->createQueryBuilder('u')
-            ->select('u.username, u.email, u.createdAt')
-            ->getQuery()
-            ->getResult();
     }
 
     /**

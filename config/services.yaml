@@ -19,13 +19,11 @@ services:
         resource: '../src/UI/Action'
         tags: ['controller.service_arguments']
 
-    App\App\EventListener\ApiExceptionSubscriber:
+    App\App\EventSubscriber\ApiExceptionSubscriber:
         arguments:
             $isAppDebug: '%kernel.debug%'
 
-    app.security.jwt_token_authenticator:
-        class: App\App\Security\JwtTokenAuthenticator
-#        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
-#        public: true
-#        autowire: true
-#        autoconfigure: false
+    App\App\Pagination\PaginationFactory:
+        arguments:
+            $itemsPerPage: 10
+

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/phone/{brand}-{model}",
+ *     "/api/phone/{id}",
  *     name="phone_delete",
  *     methods={"DELETE"}
  * )
@@ -43,16 +43,12 @@ final class DeletePhoneAction
      */
     public function __invoke(Request $request)
     {
-        $brand = $request->attributes->get('brand');
-        $model = $request->attributes->get('model');
+        $phoneId = $request->attributes->get('id');
 
-        $phone = $this->phoneRepository->findOneBy([
-            'brand' => $brand,
-            'model' => $model
-        ]);
+        $phone = $this->phoneRepository->findOneById($phoneId);
 
         if (!$phone) {
-            throw new NotFoundHttpException(sprintf('Resource not found with brand "%s" and model "%s"', $brand, $model));
+            throw new NotFoundHttpException(sprintf('Resource %s not found with brand "%s"', 'Phone', $phoneId));
         }
 
         $this->phoneRepository->remove($phone);

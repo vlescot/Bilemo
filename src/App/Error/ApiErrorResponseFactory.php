@@ -6,7 +6,7 @@ namespace App\App\Error;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ApiErrorResponseFactory // TODO Rename in ExceptionResponseFactory ??
+final class ApiErrorResponseFactory
 {
     /**
      * @param ApiError $apiError

@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace App\UI\Action\User;
 
-use App\App\ApiValidator;
+use App\App\Validator\ApiValidator;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
 use App\Domain\Entity\User;
 use App\Domain\Repository\UserRepository;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/user",
+ *     "/api/user",
  *     name="user_create",
  *     methods={"POST"}
  * )
@@ -88,8 +87,13 @@ final class CreateUserAction
 
         $this->userRepository->save($user);
 
-        return new Response('', Response::HTTP_CREATED, [
-            'Location' => $this->urlGenerator->generate('user_read', $user->getUsername())
-        ]);
+        $jsonUser = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
+
+        return new Response($jsonUser, Response::HTTP_CREATED, [
+                'location' => $this->urlGenerator->generate('user_read', [
+                    'id' => $user->getId()
+                ])
+            ]
+        );
     }
 }

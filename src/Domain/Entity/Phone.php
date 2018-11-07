@@ -19,6 +19,11 @@ class Phone
     private $createdAt;
 
     /**
+     * @var int
+     */
+    private $updatedAt;
+
+    /**
      * @var string
      */
     private $brand;
@@ -43,7 +48,6 @@ class Phone
      */
     private $stock;
 
-
     /**
      * Phone constructor.
      *
@@ -63,8 +67,25 @@ class Phone
     ) {
         $this->id = Uuid::uuid4();
         $this->createdAt = time();
+        $this->updatedAt = time();
         $this->brand = $brand;
         $this->model = $model;
+        $this->description = $description;
+        $this->price = $price;
+        $this->stock = $stock;
+    }
+
+    /**
+     * @param string|null $description
+     * @param int|null $price
+     * @param int|null $stock
+     */
+    public function update(
+        string $description = null,
+        int $price = null,
+        int $stock = null
+    ) {
+        $this->updatedAt = time();
         $this->description = $description;
         $this->price = $price;
         $this->stock = $stock;
@@ -84,6 +105,14 @@ class Phone
     public function getCreatedAt(): int
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUpdatedAt(): int
+    {
+        return $this->updatedAt;
     }
 
     /**

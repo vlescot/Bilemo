@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\App\ApiValidator;
+use App\App\Validator\ApiValidator;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
+use App\Domain\DTO\PhoneDTO;
 use App\Domain\Entity\Phone;
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Responder\Phone\CreatePhoneResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
@@ -18,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/phone/{brand}-{model}",
+ *     "/api/phone/{id}",
  *     name="phone_update",
  *     methods={"PUT"}
  * )
@@ -69,18 +70,42 @@ final class UpdatePhoneAction
     }
 
     /**
+     * @param Request $request
+     * @return mixed
      */
     public function __invoke(Request $request)
     {
-        /*
-         * TODO
-         * Deserializer json en Phone
-         * Repo->GetPhone(request->attribute)
-         * Phone->update()Phone
-         * Validation
-         * Repo->save
-         * Response
-         */
+        $json = $request->getContent();
 
+        $phoneId = $request->attributes->get('id');
+
+        $phone = $this->phoneRepository->findOneById($phoneId);
+
+        if (!$phone) {
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s" and model "%s"', 'Phone', $phoneId));
+        }
+
+        try {
+            $phoneDTO = $this->serializer->deserialize($json, PhoneDTO::class, 'json');
+        } catch (NotEncodableValueException $e) {
+            $apiError = new ApiError(Response::HTTP_BAD_REQUEST, ApiError::TYPE_INVALID_REQUEST_BODY_FORMAT);
+            throw new ApiException($apiError);
+        }
+
+        $phone->update(
+            $phoneDTO->description,
+            $phoneDTO->price,
+            $phoneDTO->stock
+        );
+
+        $this->apiValidator->validate($phone, null, ['phone']);
+
+        $this->phoneRepository->save($phone);
+
+        $jsonPhone = $this->serializer->serialize($phone, 'json', ['groups' => ['phone']]);
+
+        return new Response($jsonPhone, Response::HTTP_OK, [
+            'Location' => $this->urlGenerator->generate('phone_read', ['id' => $phone->getId()] )
+        ]);
     }
 }

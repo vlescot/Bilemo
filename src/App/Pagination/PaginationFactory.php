@@ -5,10 +5,8 @@ namespace App\App\Pagination;
 
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
-use App\Domain\Repository\Interfaces\RepositoryAllowPagination;
-use App\Domain\Repository\PhoneRepository;
+use App\Domain\Repository\Interfaces\RepositoryAllowPaginationInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 final class PaginationFactory
@@ -17,6 +15,11 @@ final class PaginationFactory
      * @var RouterInterface
      */
     private $router;
+
+    /**
+     * @var int
+     */
+    private $itemsPerPage;
 
     /**
      * @var string
@@ -32,23 +35,26 @@ final class PaginationFactory
      * PaginationFactory constructor.
      *
      * @param RouterInterface $router
+     * @param int $itemsPerPage
      */
-    public function __construct(RouterInterface $router)
-    {
+    public function __construct(
+        RouterInterface $router,
+        int $itemsPerPage
+    ) {
         $this->router = $router;
+        $this->itemsPerPage = $itemsPerPage;
     }
 
     /**
-     * @param PhoneRepository $repository
+     * @param RepositoryAllowPaginationInterface $repository
      * @param Request $request
      * @param string $route
      * @param array $routeParams
-     * @return PaginatedCollection
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return PaginatedCollection
      */
     public function createCollection(
-        PhoneRepository $repository,
+        RepositoryAllowPaginationInterface $repository,
         Request $request,
         string $route,
         array $routeParams = []
@@ -58,16 +64,15 @@ final class PaginationFactory
 
         $queryParams = $request->query->all();
         $page = (int) $request->query->get('page', 1);
-        $maxPerPage = 5;
 
         // Make sure query parameters are included in pagination links
         $this->routeParams = array_merge($routeParams, $queryParams);
 
-        $paginator = new Paginator($repository, $page, $maxPerPage, $queryParams);
+        $paginator = new Paginator($repository, $page, $this->itemsPerPage, $queryParams);
 
 
         // Check if the page exists and return 404 Exception if false
-        $nbPages = (int) ceil($paginator->getNbResults() / $maxPerPage);
+        $nbPages = (int) ceil($paginator->getNbResults() / $this->itemsPerPage);
         if ($page > $nbPages) {
             $apiError = new ApiError(404, ApiError::TYPE_INVALID_REQUEST_FILTER_PAGINATION);
             if ($nbPages > 0) {
@@ -93,6 +98,7 @@ final class PaginationFactory
             $paginatedCollection->addLink('next', $this->createLinkUrl($paginator->getNextPage()));
         }
         $paginatedCollection->addLink('last', $this->createLinkUrl($paginator->getNbPages()));
+
 
         return $paginatedCollection;
     }

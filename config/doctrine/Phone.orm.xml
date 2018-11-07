@@ -16,6 +16,7 @@
         </unique-constraints>
         
         <field name="createdAt" type="integer" />
+        <field name="updatedAt" type="integer" />
         <field name="brand" type="string" />
         <field name="model" type="string" />
         <field name="description" type="text" />

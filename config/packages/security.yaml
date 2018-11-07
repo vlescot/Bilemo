@@ -24,8 +24,11 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js|try)/
             security: false
+        doc:
+            pattern: ^/api/doc
+            security: false
         user_login:
-            pattern: ^/user/token
+            pattern: ^/api/user/token
             provider: user_provider
             stateless: true
             anonymous: ~
@@ -34,7 +37,7 @@ security:
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         company_login:
-            pattern: ^/company/token
+            pattern: ^/api/company/token
             provider: company_provider
             stateless: true
             anonymous: ~
@@ -43,6 +46,7 @@ security:
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         main:
+            pattern: ^/
             provider: chain_provider
             stateless: true
             guard:
@@ -50,13 +54,14 @@ security:
                     - lexik_jwt_authentication.security.guard.jwt_token_authenticator
 
     access_control:
-        - { path: ^/user/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/user/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/phone/.,        roles: ROLE_USER,     methods: [GET] }
-        - { path: ^/phone/.,        roles: ROLE_COMPANY,  methods: [PUT, DELETE] }
-        - { path: ^/phone,          roles: ROLE_USER,     methods: [GET] }
-        - { path: ^/phone,          roles: ROLE_COMPANY,  methods: [POST] }
+        - { path: ^/api/phone/,        roles: ROLE_USER,     methods: [GET] }
+        - { path: ^/api/phone/,        roles: ROLE_COMPANY,  methods: [PUT, DELETE] }
+        - { path: ^/api/phone,          roles: ROLE_USER,     methods: [GET] }
+        - { path: ^/api/phone,          roles: ROLE_COMPANY,  methods: [POST] }
 
-        - { path: ^/user/.,         roles: ROLE_SELF_USER, methods: [GET, PUT, DELETE] }
-        - { path: ^/user,           roles: ROLE_COMPANY,  methods: [GET, POST, PUT, DELETE] }
+        - { path: ^/api/user/,         roles: ROLE_SELF_USER, methods: [GET] }
+        - { path: ^/api/user/,         roles: ROLE_COMPANY, methods: [PUT, DELETE] }
+        - { path: ^/api/user,           roles: ROLE_COMPANY,  methods: [GET, POST] }

@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/user",
+ *     "/api/user",
  *     name="users_list",
  *     methods={"GET"}
  * )
@@ -47,7 +47,7 @@ final class ReadUserListAction
 
     public function __invoke()
     {
-        $users = $this->userRepository->findUsers();
+        $users = $this->userRepository->findAll();
 
         $json  = $this->serializer->serialize($users, 'json', ['groups' => ['user']]);
 

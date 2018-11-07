@@ -3,22 +3,21 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\App\ApiValidator;
+use App\App\Validator\ApiValidator;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
 use App\Domain\Entity\Phone;
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Responder\Phone\CreatePhoneResponder;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/phone",
+ *     "/api/phone",
  *     name="phone_create",
  *     methods={"POST"}
  * )
@@ -44,28 +43,37 @@ final class CreatePhoneAction
     private $phoneRepository;
 
     /**
-     * CreatePhoneHandler constructor.
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
+     * CreatePhoneAction constructor.
      *
      * @param SerializerInterface $serializer
      * @param ApiValidator $apiValidator
      * @param PhoneRepository $phoneRepository
+     * @param UrlGeneratorInterface $urlGenerator
      */
     public function __construct(
         SerializerInterface $serializer,
         ApiValidator $apiValidator,
-        PhoneRepository $phoneRepository
+        PhoneRepository $phoneRepository,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->serializer = $serializer;
         $this->apiValidator = $apiValidator;
         $this->phoneRepository = $phoneRepository;
+        $this->urlGenerator = $urlGenerator;
     }
+
 
     /**
      * @param Request $request
-     * @param CreatePhoneResponder $responder
+     *
      * @return Response
      */
-    public function __invoke(Request $request, CreatePhoneResponder $responder)
+    public function __invoke(Request $request)
     {
         $json = $request->getContent();
 
@@ -80,9 +88,13 @@ final class CreatePhoneAction
 
         $this->phoneRepository->save($phone);
 
-        return $responder([
-            'brand' => $phone->getBrand(),
-            'model' => $phone->getModel()
-        ]);
+        $jsonPhone = $this->serializer->serialize($phone, 'json', ['groups' => ['phone']]);
+
+        return new Response($jsonPhone, Response::HTTP_CREATED, [
+                'location' => $this->urlGenerator->generate('phone_read', [
+                    'id' => $phone->getId()
+                ])
+            ]
+        );
     }
 }

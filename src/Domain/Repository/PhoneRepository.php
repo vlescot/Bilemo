@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace App\Domain\Repository;
 
 use App\Domain\Entity\Phone;
-use App\Domain\Repository\Interfaces\RepositoryAllowPagination;
+use App\Domain\Repository\Interfaces\RepositoryAllowFilteringInterface;
+use App\Domain\Repository\Interfaces\RepositoryAllowPaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class PhoneRepository extends ServiceEntityRepository implements RepositoryAllowPagination
+class PhoneRepository extends ServiceEntityRepository implements RepositoryAllowPaginationInterface, RepositoryAllowFilteringInterface
 {
     /**
      * PhoneRepository constructor.
@@ -20,6 +21,15 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Phone::class);
+    }
+
+    /**
+     * @param string $id
+     * @return null|object
+     */
+    public function findOneById(string $id)
+    {
+        return parent::findOneBy(['id' => $id]);
     }
 
     /**
@@ -56,26 +66,9 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
             ->getQuery()
             ->useResultCache(true)
             ->useQueryCache(true)
-            ->getResult(Query::HYDRATE_ARRAY);
+            ->getResult(Query::HYDRATE_OBJECT);
     }
 
-    /**
-     * @param Phone $phone
-     */
-    public function save(Phone $phone)
-    {
-        $this->_em->persist($phone);
-        $this->_em->flush();
-    }
-
-    /**
-     * @param Phone $phone
-     */
-    public function remove(Phone $phone)
-    {
-        $this->_em->remove($phone);
-        $this->_em->flush();
-    }
 
     /**
      * @param QueryBuilder $qb
@@ -99,5 +92,64 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
         }
 
         return $qb;
+    }
+
+    /**
+     * @param string $brand
+     * @param string $model
+     *
+     * @return mixed
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getOneUpdateDate(string $brand, string $model)
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.updatedAt')
+            ->where('p.brand LIKE :brand')
+            ->andWhere('p.model LIKE :model')
+            ->setParameters([
+                'brand' => $brand,
+                'model' => $model
+            ])
+            ->setCacheable(true)
+            ->getQuery()
+            ->useResultCache(true)
+            ->useQueryCache(true)
+            ->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+    }
+
+    /**
+     * @return mixed
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getLastUpdateDate()
+    {
+        return $this->createQueryBuilder('p')
+            ->select('MAX(p.updatedAt) as lastUpdate')
+            ->setCacheable(true)
+            ->getQuery()
+            ->useResultCache(true)
+            ->useQueryCache(true)
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @param Phone $phone
+     */
+    public function save(Phone $phone)
+    {
+        $this->_em->persist($phone);
+        $this->_em->flush();
+    }
+
+    /**
+     * @param Phone $phone
+     */
+    public function remove(Phone $phone)
+    {
+        $this->_em->remove($phone);
+        $this->_em->flush();
     }
 }

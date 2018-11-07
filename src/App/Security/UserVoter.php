@@ -45,7 +45,7 @@ final class UserVoter implements VoterInterface
             return false;
         }
 
-        return count(array_intersect($attributes, self::ROLES)) > 0;
+        return \count(array_intersect($attributes, self::ROLES)) > 0;
     }
 
     /**
@@ -71,7 +71,7 @@ final class UserVoter implements VoterInterface
         if (!$queringUser) {
             return false;
         }
-
+        dump('voter');
         return $this->allowAccess($querierUser, $queringUser);
     }
 
@@ -86,8 +86,6 @@ final class UserVoter implements VoterInterface
         if ($queringUser->isEqualTo($querierUser)) {
             return VoterInterface::ACCESS_GRANTED;
         }
-
         return VoterInterface::ACCESS_ABSTAIN;
     }
 }
-

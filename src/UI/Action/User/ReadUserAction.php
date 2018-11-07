@@ -6,6 +6,8 @@ namespace App\UI\Action\User;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
 use App\Domain\Repository\UserRepository;
+use Swagger\Annotations as SWG;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -15,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/user/{username}",
+ *     "/api/user/{id}",
  *     name="user_read",
  *     methods={"GET"}
  * )
@@ -23,7 +25,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class ReadUserAction
  * @package App\UI\Action\User
  */
-final class ReadUserAction
+final class ReadUserAction extends AbstractController
 {
     /**
      * @var AuthorizationCheckerInterface
@@ -63,15 +65,16 @@ final class ReadUserAction
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    // TODO RESPONDER
     public function __invoke(Request $request)
     {
-        $username = $request->attributes->get('username');
+//        $this->isGranted('ROLE_SELF_USER', $request);
 
-        $user = $this->userRepository->loadUserByUsername($username);
+        $userId = $request->attributes->get('id');
+
+        $user = $this->userRepository->findOneById($userId);
 
         if (!$user) {
-            throw new NotFoundHttpException(sprintf('Resource not found with username "%s"', $username));
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $userId));
         }
 
         $json = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);

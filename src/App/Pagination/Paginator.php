@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace App\App\Pagination;
 
-use App\Domain\Repository\Interfaces\RepositoryAllowPagination;
-use App\Domain\Repository\PhoneRepository;
+use App\Domain\Repository\Interfaces\RepositoryAllowPaginationInterface;
 
 final class Paginator
 {
     /**
-     * @var RepositoryAllowPagination
+     * @var RepositoryAllowPaginationInterface
      */
     private $repository;
 
@@ -37,14 +36,13 @@ final class Paginator
     /**
      * Paginator constructor.
      *
-     * @param PhoneRepository $repository
+     * @param RepositoryAllowPaginationInterface $repository
      * @param int $currentPage
      * @param int $maxPerPage
      * @param array $filters
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function __construct(
-        PhoneRepository $repository,
+        RepositoryAllowPaginationInterface $repository,
         int $currentPage,
         int $maxPerPage,
         array $filters

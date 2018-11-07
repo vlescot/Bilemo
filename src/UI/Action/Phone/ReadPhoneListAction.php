@@ -5,14 +5,14 @@ namespace App\UI\Action\Phone;
 
 use App\App\Pagination\PaginationFactory;
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Responder\Phone\CatalogueResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/phone",
+ *     "/api/phone",
  *     name="phones_list",
  *     methods={"GET"}
  * )
@@ -33,37 +33,47 @@ final class ReadPhoneListAction
     private $paginationFactory;
 
     /**
-     * ReadCatalogueAction constructor.
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * ReadPhoneListAction constructor.
      *
      * @param PhoneRepository $phoneRepository
      * @param PaginationFactory $paginationFactory
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         PhoneRepository $phoneRepository,
-        PaginationFactory $paginationFactory
+        PaginationFactory $paginationFactory,
+        SerializerInterface $serializer
     ) {
         $this->phoneRepository = $phoneRepository;
         $this->paginationFactory = $paginationFactory;
+        $this->serializer = $serializer;
     }
-
 
     /**
      * @param Request $request
-     * @param CatalogueResponder $responder
      *
      * @return Response
      */
-    public function __invoke(Request $request, CatalogueResponder $responder): Response
+    public function __invoke(Request $request): Response
     {
         $route = $request->attributes->get('_route');
 
-        // TODO Inserer des liens vers chaque Phone
-        $phones = $this->paginationFactory->createCollection(
+        $paginatedCollection = $this->paginationFactory->createCollection(
             $this->phoneRepository,
             $request,
             $route
         );
 
-        return $responder($phones);
+        $json = $this->serializer->serialize($paginatedCollection, 'json', ['groups' => ['phone_list']]);
+
+
+        // TODO header-> 'Content-type'=> application/hal+json
+        // Pour chacune des routes avec des liens hal
+        return new Response($json, Response::HTTP_OK);
     }
 }

@@ -3,15 +3,22 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
+use App\App\Serializer\Normalizer\ApiNormalizer;
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Responder\Phone\ReadPhoneResponder;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "phone/{brand}-{model}",
+ *     "/api/phone/{id}",
  *     name="phone_read",
  *     methods={"GET"}
  * )
@@ -27,29 +34,41 @@ final class ReadPhoneAction
     private $phoneRepository;
 
     /**
-     * PhoneAction constructor.
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+
+    /**
+     * ReadPhoneAction constructor.
      *
      * @param PhoneRepository $phoneRepository
+     * @param SerializerInterface $serializer
      */
-    public function __construct(PhoneRepository $phoneRepository)
-    {
+    public function __construct(
+        PhoneRepository $phoneRepository,
+        SerializerInterface $serializer
+    ) {
         $this->phoneRepository = $phoneRepository;
+        $this->serializer = $serializer;
     }
 
-    public function __invoke(Request $request, ReadPhoneResponder $responder)
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function __invoke(Request $request)
     {
-        $brand = $request->attributes->get('brand');
-        $model = $request->attributes->get('model');
+        $phoneId = $request->attributes->get('id');
 
-        $phone = $this->phoneRepository->findOneBy([
-            'brand' => $brand,
-            'model' => $model
-        ]);
+        $phone = $this->phoneRepository->findOneById($phoneId);
 
         if (!$phone) {
-            throw new NotFoundHttpException(sprintf('Resource not found with brand "%s" and model "%s"', $brand, $model));
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $phoneId));
         }
 
-        return $responder($phone);
+        $json = $this->serializer->serialize($phone, 'json',['groups' => ['phone']]);
+
+        return new Response($json, Response::HTTP_OK);
     }
 }

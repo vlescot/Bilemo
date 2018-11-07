@@ -21,11 +21,6 @@ class User implements UserInterface, EquatableInterface
     private $roles;
 
     /**
-     * @var int
-     */
-    private $createdAt;
-
-    /**
      * @var string
      */
     private $username;
@@ -40,10 +35,22 @@ class User implements UserInterface, EquatableInterface
      */
     private $email;
 
+    /**
+     * @var int
+     */
+    private $createdAt;
+
+    /**
+     * @var int
+     */
+    private $updatedAt;
+
+
     public function __construct()
     {
         $this->id = Uuid::uuid4();
         $this->createdAt = time();
+        $this->updatedAt = time();
     }
 
     public function registration(
@@ -54,6 +61,15 @@ class User implements UserInterface, EquatableInterface
     ) {
         $this->roles = $roles;
         $this->username = $username;
+        $this->password = $password;
+        $this->email = $email;
+    }
+
+    public function update(
+        string $password,
+        string $email
+    ) {
+        $this->updatedAt = time();
         $this->password = $password;
         $this->email = $email;
     }
@@ -80,6 +96,14 @@ class User implements UserInterface, EquatableInterface
     public function getCreatedAt(): int
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUpdatedAt(): int
+    {
+        return $this->updatedAt;
     }
 
     /**

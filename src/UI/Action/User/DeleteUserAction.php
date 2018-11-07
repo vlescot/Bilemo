@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/user/{username}",
+ *     "/api/user/{id}",
  *     name="user_delete",
  *     methods={"DELETE"}
  * )
@@ -43,12 +43,12 @@ final class DeleteUserAction
      */
     public function __invoke(Request $request)
     {
-        $username = $request->attributes->get('username');
+        $userId = $request->attributes->get('id');
 
-        $user = $this->userRepository->findOneBy(['username' => $username]);
+        $user = $this->userRepository->findOneById($userId);
 
         if (!$user) {
-            throw new NotFoundHttpException(sprintf('Resource not found with username "%s"', $username));
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $userId));
         }
 
         $this->userRepository->remove($user);

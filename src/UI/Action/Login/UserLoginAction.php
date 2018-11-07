@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "user/token",
+ *     "/api/token/user",
  *     name="user_token",
  *     methods={"POST"}
  * )
@@ -19,5 +19,6 @@ final class UserLoginAction
 {
     public function __invoke()
     {
+        // Supported by Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator
     }
 }

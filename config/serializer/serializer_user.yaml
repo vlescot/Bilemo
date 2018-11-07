@@ -1,8 +1,10 @@
 App\Domain\Entity\User:
     attributes:
         username:
-            groups: ['user']
+            groups: ['user_list', 'user']
         email:
-            groups: ['user']
+            groups: ['user_list', 'user']
         createdAt:
-            groups: ['user']
+            groups: ['user_list']
+        phoneNumber:
+            groups: ['user_list']

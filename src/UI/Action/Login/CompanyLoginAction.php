@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/company/token",
+ *     "/api/token/company",
  *     name="company_token",
  *     methods={"POST"}
  * )
@@ -19,5 +19,6 @@ final class CompanyLoginAction
 {
     public function __invoke()
     {
+        // Supported by Lexik\Bundle\JWTAuthenticationBundle\Security\Guard\JWTTokenAuthenticator
     }
 }

@@ -1,14 +1,14 @@
 App\Domain\Entity\Phone:
     attributes:
         createdAt:
-            groups: ['catalogue', 'phone']
+            groups: ['phone']
         brand:
-            groups: ['catalogue', 'phone']
+            groups: ['phone_list', 'phone']
         model:
-            groups: ['catalogue', 'phone']
+            groups: ['phone_list', 'phone']
         description:
-            groups: ['catalogue', 'phone']
+            groups: ['phone_list', 'phone']
         price:
-            groups: ['catalogue', 'phone']
+            groups: ['phone']
         stock:
-            groups: ['catalogue', 'phone']
+            groups: ['phone']

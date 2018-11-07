@@ -6,12 +6,7 @@ namespace App\App\Pagination;
 final class PaginatedCollection
 {
     /**
-     * @var array
-     */
-    private $phone;
-
-    /**
-     * @var
+     * @var int
      */
     private $total;
 
@@ -26,16 +21,22 @@ final class PaginatedCollection
     private $_links = [];
 
     /**
+     * @var array
+     */
+    private $phones;
+
+
+    /**
      * PaginatedCollection constructor.
      *
-     * @param array $phone
+     * @param array $phones
      * @param int $total
      */
-    public function __construct(array $phone, int $total)
+    public function __construct(array $phones, int $total)
     {
-        $this->phone = $phone;
+        $this->phones = $phones;
         $this->total = $total;
-        $this->limit = \count($phone);
+        $this->limit = \count($phones);
     }
 
     /**
@@ -76,6 +77,6 @@ final class PaginatedCollection
      */
     public function getPhones(): array
     {
-        return $this->phone;
+        return $this->phones;
     }
 }
