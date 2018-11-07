@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/phone",
+ *     "/api/phones",
  *     name="phone_create",
  *     methods={"POST"}
  * )
@@ -91,9 +91,7 @@ final class CreatePhoneAction
         $jsonPhone = $this->serializer->serialize($phone, 'json', ['groups' => ['phone']]);
 
         return new Response($jsonPhone, Response::HTTP_CREATED, [
-                'location' => $this->urlGenerator->generate('phone_read', [
-                    'id' => $phone->getId()
-                ])
+                'location' => $this->urlGenerator->generate('phone_read', ['id' => $phone->getId()] )
             ]
         );
     }

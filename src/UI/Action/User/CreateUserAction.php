@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/user",
+ *     "/api/users",
  *     name="user_create",
  *     methods={"POST"}
  * )
@@ -90,9 +90,7 @@ final class CreateUserAction
         $jsonUser = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
 
         return new Response($jsonUser, Response::HTTP_CREATED, [
-                'location' => $this->urlGenerator->generate('user_read', [
-                    'id' => $user->getId()
-                ])
+                'location' => $this->urlGenerator->generate('user_read', ['id' => $user->getId()] )
             ]
         );
     }

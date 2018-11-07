@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/user/{id}",
+ *     "/api/users/{id}",
  *     name="user_read",
  *     methods={"GET"}
  * )

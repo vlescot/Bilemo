@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/phone/{id}",
+ *     "/api/phones/{id}",
  *     name="phone_update",
  *     methods={"PUT"}
  * )

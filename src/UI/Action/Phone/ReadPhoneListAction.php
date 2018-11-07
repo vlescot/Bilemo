@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/phone",
+ *     "/api/phones",
  *     name="phones_list",
  *     methods={"GET"}
  * )

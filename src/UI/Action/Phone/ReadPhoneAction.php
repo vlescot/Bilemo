@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\App\Serializer\Normalizer\ApiNormalizer;
+use App\App\Normalizer\ApiNormalizer;
 use App\Domain\Repository\PhoneRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/phone/{id}",
+ *     "/api/phones/{id}",
  *     name="phone_read",
  *     methods={"GET"}
  * )

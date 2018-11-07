@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/user",
+ *     "/api/users",
  *     name="users_list",
  *     methods={"GET"}
  * )

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/user/{id}",
+ *     "/api/users/{id}",
  *     name="user_delete",
  *     methods={"DELETE"}
  * )

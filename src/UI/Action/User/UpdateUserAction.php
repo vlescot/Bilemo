@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/user/{id}",
+ *     "/api/users/{id}",
  *     name="user_update",
  *     methods={"PUT"}
  * )
@@ -105,9 +105,7 @@ final class UpdateUserAction
         $jsonUser = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
 
         return new Response($jsonUser, Response::HTTP_OK, [
-            'Location' => $this->urlGenerator->generate('user_read', [
-                'id' => $user->getId()
-            ])
+            'Location' => $this->urlGenerator->generate('user_read', ['id' => $user->getId()] )
         ]);
     }
 }
