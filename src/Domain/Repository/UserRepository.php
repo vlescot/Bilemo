@@ -22,10 +22,11 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     }
 
     /**
-     * @param int $id
+     * @param string $id
+     *
      * @return null|object
      */
-    public function findOneById(string $id)
+    public function findOneById(string $id): ? User
     {
         return parent::findOneBy(['id' => $id]);
     }

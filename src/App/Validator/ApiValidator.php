@@ -8,6 +8,10 @@ use App\App\Error\ApiException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * Class ApiValidator
+ * @package App\App\Validator
+ */
 final class ApiValidator
 {
     /**
@@ -25,6 +29,11 @@ final class ApiValidator
         $this->validator = $validator;
     }
 
+    /**
+     * @param $value
+     * @param null $constraints
+     * @param null $groups
+     */
     public function validate($value, $constraints = null, $groups = null)
     {
         $violations = $this->validator->validate($value, $constraints, $groups);

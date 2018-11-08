@@ -40,6 +40,11 @@ nelmio_api_doc:
                         type: integer
                     stock:
                         type: integer
+                    _link:
+                        type: object
+                        properties:
+                          href:
+                            type: string
             User:
                 type: object
                 properties:
@@ -49,10 +54,15 @@ nelmio_api_doc:
                         type: string
                     email:
                         type: string
+                    _link:
+                        type: object
+                        properties:
+                          href:
+                            type: string
 
         paths:
         # AUTHENTICATION
-            '/api/user/token':
+            '/api/token/user':
                 post:
                     tags:
                         - Authentication
@@ -71,7 +81,7 @@ nelmio_api_doc:
                         - application/json
                     parameters:
                         - in: body
-                          name: body
+                          name: JSON
                           description: Parameters needed to get your access_token
                           required: true
                           schema:
@@ -88,7 +98,7 @@ nelmio_api_doc:
                           description: Bad request - Invalid JSON
                         '401':
                           description: Bad credentials
-            '/api/company/token':
+            '/api/token/company':
                 post:
                     tags:
                         - Authentication
@@ -107,7 +117,7 @@ nelmio_api_doc:
                         - application/json
                     parameters:
                         - in: body
-                          name: body
+                          name: JSON
                           description: Parameters needed to get your access_token
                           required: true
                           schema:
@@ -125,7 +135,7 @@ nelmio_api_doc:
                         '401':
                           description: Bad credentials
         # PHONE
-            '/api/phone':
+            '/api/phones':
                 get:
                     tags:
                         - Phone
@@ -192,7 +202,7 @@ nelmio_api_doc:
                         required: true
                         type: string
                       - in: body
-                        name: body
+                        name: JSON
                         description: Phone object that needs to be added
                         required: true
                         schema:
@@ -219,7 +229,7 @@ nelmio_api_doc:
                         description: BAD REQUEST - There was a validation error | Invalid JSON format sent
                       '401':
                         description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
-            '/api/phone/{brand}-{model}':
+            '/api/phones/{id}':
                 get:
                     tags:
                         - Phone
@@ -233,13 +243,8 @@ nelmio_api_doc:
                         required: true
                         type: string
                       - in: path
-                        name: brand
-                        description: Brand of mobile to return
-                        required: true
-                        type: string
-                      - in: path
-                        name: model
-                        description: Model of mobile to return
+                        name: id
+                        description: id of mobile to return
                         required: true
                         type: string
                     responses:
@@ -266,17 +271,12 @@ nelmio_api_doc:
                         required: true
                         type: string
                       - in: path
-                        name: brand
-                        description: Brand of mobile to return
-                        required: true
-                        type: string
-                      - in: path
-                        name: model
-                        description: Model of mobile to return
+                        name: id
+                        description: id of mobile to return
                         required: true
                         type: string
                       - in: body
-                        name: body
+                        name: JSON
                         description: Phone object that needs to be updated
                         required: true
                         schema:
@@ -314,13 +314,8 @@ nelmio_api_doc:
                         required: true
                         type: string
                       - in: path
-                        name: brand
-                        description: Brand of mobile to return
-                        required: true
-                        type: string
-                      - in: path
-                        name: model
-                        description: Model of mobile to return
+                        name: id
+                        description: id of mobile to return
                         required: true
                         type: string
                     responses:
@@ -331,7 +326,7 @@ nelmio_api_doc:
                       '404':
                         description: RESOURCE NOT FOUND
         # USER
-            '/api/user':
+            '/api/users':
                 get:
                     tags:
                         - User
@@ -368,7 +363,7 @@ nelmio_api_doc:
                         required: true
                         type: string
                       - in: body
-                        name: body
+                        name: JSON
                         description: User object that needs to be added
                         required: true
                         schema:
@@ -391,7 +386,7 @@ nelmio_api_doc:
                         description: BAD REQUEST - There was a validation error | Invalid JSON format sent
                       '401':
                         description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
-            '/api/user/{username}':
+            '/api/users/{id}':
                 get:
                     tags:
                         - User
@@ -405,8 +400,8 @@ nelmio_api_doc:
                         required: true
                         type: string
                       - in: path
-                        name: username
-                        description: Username of user to return
+                        name: id
+                        description: id of user to return
                         required: true
                         type: string
                     responses:
@@ -433,12 +428,12 @@ nelmio_api_doc:
                         required: true
                         type: string
                       - in: path
-                        name: username
-                        description: Username of user to return
+                        name: id
+                        description: id of user to return
                         required: true
                         type: string
                       - in: body
-                        name: body
+                        name: JSON
                         description: User object that needs to be updated
                         required: true
                         schema:
@@ -474,8 +469,8 @@ nelmio_api_doc:
                         required: true
                         type: string
                       - in: path
-                        name: username
-                        description: Username of user to return
+                        name: id
+                        description: id of user to return
                         required: true
                         type: string
                     responses:

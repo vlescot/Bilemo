@@ -9,6 +9,10 @@ use App\Domain\Repository\Interfaces\RepositoryAllowPaginationInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * Class PaginationFactory
+ * @package App\App\Pagination
+ */
 final class PaginationFactory
 {
     /**
@@ -58,7 +62,7 @@ final class PaginationFactory
         Request $request,
         string $route,
         array $routeParams = []
-    ) {
+    ): PaginatedCollection {
         $this->route = $route;
         $this->routeParams = $routeParams;
 
@@ -108,7 +112,7 @@ final class PaginationFactory
      *
      * @return string
      */
-    private function createLinkUrl(int $targetPage)
+    private function createLinkUrl(int $targetPage) : string
     {
         return $this->router->generate(
             $this->route,

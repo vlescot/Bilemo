@@ -5,8 +5,10 @@ namespace App\Domain\DataFixtures;
 
 use Symfony\Component\Yaml\Yaml;
 
-// TODO VERIFIER LES REFERENCES DANS TOUTES LES ENTITES, CERTAINES VONT DEVENIR INUTILES
-
+/**
+ * Trait LoadDataFixtureTrait
+ * @package App\Domain\DataFixtures
+ */
 trait LoadDataFixtureTrait
 {
     /**

@@ -56,7 +56,6 @@ class Phone
      * @param string $description
      * @param int $price
      * @param int $stock
-     * @throws \Exception
      */
     public function __construct(
         string $brand,

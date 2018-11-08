@@ -44,7 +44,7 @@ App\Domain\Entity\User:
                 groups:
                     - user
             - Email:
-                message: Thid e-mail is not valid
+                message: This e-mail is not valid
                 groups:
                     - user
 

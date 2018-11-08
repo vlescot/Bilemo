@@ -8,18 +8,20 @@ use App\App\Error\ApiError;
 use App\App\Error\ApiException;
 use App\Domain\DTO\UserDTO;
 use App\Domain\Repository\UserRepository;
+use App\UI\Responder\UpdateResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/user/{id}",
+ *     "/api/users/{id}",
  *     name="user_update",
  *     methods={"PUT"}
  * )
@@ -50,31 +52,40 @@ final class UpdateUserAction
     private $urlGenerator;
 
     /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
+
+    /**
      * UpdateUserAction constructor.
      *
      * @param SerializerInterface $serializer
      * @param ApiValidator $apiValidator
      * @param UserRepository $userRepository
      * @param UrlGeneratorInterface $urlGenerator
+     * @param UserPasswordEncoderInterface $passwordEncoder
      */
     public function __construct(
         SerializerInterface $serializer,
         ApiValidator $apiValidator,
         UserRepository $userRepository,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        UserPasswordEncoderInterface $passwordEncoder
     ) {
         $this->serializer = $serializer;
         $this->apiValidator = $apiValidator;
         $this->userRepository = $userRepository;
         $this->urlGenerator = $urlGenerator;
+        $this->passwordEncoder = $passwordEncoder;
     }
+
 
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, UpdateResponder $responder): Response
     {
         $json = $request->getContent();
 
@@ -93,9 +104,11 @@ final class UpdateUserAction
             throw new ApiException($apiError);
         }
 
+        $password = $this->passwordEncoder->encodePassword($user, $userDTO->password);
+
         $user->update(
-            $userDTO->email,
-            $userDTO->password
+            $password,
+            $userDTO->email
         );
 
         $this->apiValidator->validate($user, null, ['user']);
@@ -104,10 +117,6 @@ final class UpdateUserAction
 
         $jsonUser = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
 
-        return new Response($jsonUser, Response::HTTP_OK, [
-            'Location' => $this->urlGenerator->generate('user_read', [
-                'id' => $user->getId()
-            ])
-        ]);
+        return $responder($jsonUser, $user);
     }
 }

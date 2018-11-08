@@ -7,6 +7,10 @@ use App\Domain\Entity\Phone;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * Class PhoneFixtures
+ * @package App\Domain\DataFixtures
+ */
 final class PhoneFixtures extends Fixture
 {
     use LoadDataFixtureTrait;

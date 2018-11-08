@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\App\Pagination;
 
+/**
+ * Class PaginatedCollection
+ * @package App\App\Pagination
+ */
 final class PaginatedCollection
 {
     /**

@@ -4,9 +4,14 @@ declare(strict_types=1);
 namespace App\App\Error;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\AuthenticationEvents;
 
 // TODO Vérifier si ApiError est pertinant ou peux être inclus dans ApiExcetion
+
+/**
+ * Class ApiError
+ *
+ * @package App\App\Error
+ */
 final class ApiError
 {
     const TYPE_VALIDATION_ERROR = 'There was a validation error';
@@ -61,7 +66,7 @@ final class ApiError
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return array_merge(
             [
@@ -76,7 +81,7 @@ final class ApiError
     /**
      * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -84,7 +89,7 @@ final class ApiError
     /**
      * @return mixed|string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return$this->message;
     }

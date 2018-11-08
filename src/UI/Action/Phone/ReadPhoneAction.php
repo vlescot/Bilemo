@@ -3,22 +3,17 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\App\Serializer\Normalizer\ApiNormalizer;
 use App\Domain\Repository\PhoneRepository;
-use Psr\Log\LoggerInterface;
+use App\UI\Responder\ReadResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/phone/{id}",
+ *     "/api/phones/{id}",
  *     name="phone_read",
  *     methods={"GET"}
  * )
@@ -55,9 +50,11 @@ final class ReadPhoneAction
 
     /**
      * @param Request $request
-     * @return mixed
+     * @param ReadResponder $responder
+     *
+     * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, ReadResponder $responder): Response
     {
         $phoneId = $request->attributes->get('id');
 
@@ -67,8 +64,8 @@ final class ReadPhoneAction
             throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $phoneId));
         }
 
-        $json = $this->serializer->serialize($phone, 'json',['groups' => ['phone']]);
+        $json = $this->serializer->serialize($phone, 'json', ['groups' => ['phone']]);
 
-        return new Response($json, Response::HTTP_OK);
+        return $responder($json);
     }
 }

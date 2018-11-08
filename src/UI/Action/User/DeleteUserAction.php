@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\UI\Action\User;
 
 use App\Domain\Repository\UserRepository;
+use App\UI\Responder\DeleteResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -11,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/user/{id}",
+ *     "/api/users/{id}",
  *     name="user_delete",
  *     methods={"DELETE"}
  * )
@@ -41,7 +42,7 @@ final class DeleteUserAction
      *
      * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, DeleteResponder $responder): Response
     {
         $userId = $request->attributes->get('id');
 
@@ -53,6 +54,6 @@ final class DeleteUserAction
 
         $this->userRepository->remove($user);
 
-        return new Response(null, Response::HTTP_NO_CONTENT);
+        return $responder();
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\UI\Action\Phone;
 
 use App\Domain\Repository\PhoneRepository;
+use App\UI\Responder\DeleteResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -11,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/phone/{id}",
+ *     "/api/phones/{id}",
  *     name="phone_delete",
  *     methods={"DELETE"}
  * )
@@ -41,7 +42,7 @@ final class DeletePhoneAction
      *
      * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, DeleteResponder $responder): Response
     {
         $phoneId = $request->attributes->get('id');
 
@@ -53,6 +54,6 @@ final class DeletePhoneAction
 
         $this->phoneRepository->remove($phone);
 
-        return new Response(null, Response::HTTP_NO_CONTENT);
+        return $responder();
     }
 }

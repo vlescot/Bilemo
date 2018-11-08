@@ -5,6 +5,7 @@ namespace App\UI\Action\Phone;
 
 use App\App\Pagination\PaginationFactory;
 use App\Domain\Repository\PhoneRepository;
+use App\UI\Responder\ReadResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,7 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/phone",
+ *     "/api/phones",
  *     name="phones_list",
  *     methods={"GET"}
  * )
@@ -56,10 +57,11 @@ final class ReadPhoneListAction
 
     /**
      * @param Request $request
+     * @param ReadResponder $responder
      *
      * @return Response
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, ReadResponder $responder): Response
     {
         $route = $request->attributes->get('_route');
 
@@ -74,6 +76,6 @@ final class ReadPhoneListAction
 
         // TODO header-> 'Content-type'=> application/hal+json
         // Pour chacune des routes avec des liens hal
-        return new Response($json, Response::HTTP_OK);
+        return $responder($json);
     }
 }

@@ -6,6 +6,7 @@ namespace App\UI\Action\User;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
 use App\Domain\Repository\UserRepository;
+use App\UI\Responder\ReadResponder;
 use Swagger\Annotations as SWG;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/user/{id}",
+ *     "/api/users/{id}",
  *     name="user_read",
  *     methods={"GET"}
  * )
@@ -60,15 +61,12 @@ final class ReadUserAction extends AbstractController
 
     /**
      * @param Request $request
+     * @param ReadResponder $responder
      *
      * @return Response
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, ReadResponder $responder): Response
     {
-//        $this->isGranted('ROLE_SELF_USER', $request);
-
         $userId = $request->attributes->get('id');
 
         $user = $this->userRepository->findOneById($userId);
@@ -79,6 +77,6 @@ final class ReadUserAction extends AbstractController
 
         $json = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
 
-        return new Response($json, Response::HTTP_OK);
+        return $responder($json);
     }
 }

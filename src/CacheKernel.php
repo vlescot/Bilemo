@@ -5,9 +5,16 @@ namespace App;
 
 use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
 
+/**
+ * Class CacheKernel
+ * @package App
+ */
 class CacheKernel extends HttpCache
 {
-    protected function getOptions()
+    /**
+     * @return array
+     */
+    protected function getOptions(): array
     {
         // TODO cache options
         return [

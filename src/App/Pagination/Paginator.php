@@ -5,6 +5,10 @@ namespace App\App\Pagination;
 
 use App\Domain\Repository\Interfaces\RepositoryAllowPaginationInterface;
 
+/**
+ * Class Paginator
+ * @package App\App\Pagination
+ */
 final class Paginator
 {
     /**
@@ -60,7 +64,7 @@ final class Paginator
     /**
      * @return array
      */
-    public function getCurrentPageResults()
+    public function getCurrentPageResults(): array
     {
         return $this->currentPageResults;
     }
@@ -68,7 +72,7 @@ final class Paginator
     /**
      * @return int
      */
-    public function getNbResults(): int // Total items
+    public function getNbResults(): int
     {
         return $this->nbResults;
     }
@@ -84,7 +88,7 @@ final class Paginator
     /**
      * @return bool
      */
-    public function hasNextPage()
+    public function hasNextPage(): bool
     {
         return $this->currentPage * $this->maxPerPage < $this->nbResults;
     }
@@ -92,7 +96,7 @@ final class Paginator
     /**
      * @return bool
      */
-    public function hasPreviousPage()
+    public function hasPreviousPage(): bool
     {
         return $this->currentPage > 1;
     }

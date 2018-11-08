@@ -3,14 +3,16 @@ declare(strict_types=1);
 
 namespace App\App\Security;
 
-use App\App\Error\ApiError;
-use App\App\Error\ApiException;
 use App\Domain\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class UserVoter
+ * @package App\App\Security
+ */
 final class UserVoter implements VoterInterface
 {
     const ROLES = [
@@ -39,8 +41,10 @@ final class UserVoter implements VoterInterface
      *
      * @return bool
      */
-    public function supports(array $attributes, $subject)
+    public function supports(array $attributes, $subject): bool
     {
+//        dump('voter');
+//        dump(\count(array_intersect($attributes, self::ROLES)) > 0);
         if (!$subject instanceof Request) {
             return false;
         }
@@ -53,9 +57,7 @@ final class UserVoter implements VoterInterface
      * @param mixed $subject
      * @param array $attributes
      *
-     * @return int
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return bool|int
      */
     public function vote(TokenInterface $token, $subject, array $attributes)
     {
@@ -63,15 +65,15 @@ final class UserVoter implements VoterInterface
             return false;
         }
 
-        $username = $subject->attributes->get('username');
+        $id = $subject->attributes->get('id');
 
         $querierUser = $token->getUser();
-        $queringUser = $this->userRepository->loadUserByUsername($username);
+        $queringUser = $this->userRepository->findOneById($id);
 
         if (!$queringUser) {
             return false;
         }
-        dump('voter');
+
         return $this->allowAccess($querierUser, $queringUser);
     }
 
@@ -81,7 +83,7 @@ final class UserVoter implements VoterInterface
      *
      * @return int
      */
-    private function allowAccess(UserInterface $querierUser, UserInterface $queringUser)
+    private function allowAccess(UserInterface $querierUser, UserInterface $queringUser): int
     {
         if ($queringUser->isEqualTo($querierUser)) {
             return VoterInterface::ACCESS_GRANTED;

@@ -28,7 +28,7 @@ security:
             pattern: ^/api/doc
             security: false
         user_login:
-            pattern: ^/api/user/token
+            pattern: ^/api/token/user
             provider: user_provider
             stateless: true
             anonymous: ~
@@ -37,7 +37,7 @@ security:
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         company_login:
-            pattern: ^/api/company/token
+            pattern: ^/api/token/company
             provider: company_provider
             stateless: true
             anonymous: ~
@@ -57,11 +57,10 @@ security:
         - { path: ^/api/user/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/api/phone/,        roles: ROLE_USER,     methods: [GET] }
-        - { path: ^/api/phone/,        roles: ROLE_COMPANY,  methods: [PUT, DELETE] }
-        - { path: ^/api/phone,          roles: ROLE_USER,     methods: [GET] }
-        - { path: ^/api/phone,          roles: ROLE_COMPANY,  methods: [POST] }
+        - { path: ^/api/phones/,        roles: ROLE_USER,     methods: [GET] }
+        - { path: ^/api/phones/,        roles: ROLE_COMPANY,  methods: [PUT, DELETE] }
+        - { path: ^/api/phones,          roles: ROLE_USER,     methods: [GET] }
+        - { path: ^/api/phones,          roles: ROLE_COMPANY,  methods: [POST] }
 
-        - { path: ^/api/user/,         roles: ROLE_SELF_USER, methods: [GET] }
-        - { path: ^/api/user/,         roles: ROLE_COMPANY, methods: [PUT, DELETE] }
-        - { path: ^/api/user,           roles: ROLE_COMPANY,  methods: [GET, POST] }
+        - { path: ^/api/users/,         roles: ROLE_SELF_USER, methods: [GET, PUT, DELETE] }
+        - { path: ^/api/users,           roles: ROLE_COMPANY,  methods: [GET, POST] }

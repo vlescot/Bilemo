@@ -3,15 +3,16 @@ declare(strict_types=1);
 
 namespace App\App\Normalizer;
 
-use App\App\Pagination\PaginatedCollection;
 use App\Domain\Entity\Phone;
 use App\Domain\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Validator\Constraints\DateTime;
 
+/**
+ * Class ApiNormalizer
+ * @package App\App\Normalizer
+ */
 final class ApiNormalizer implements NormalizerInterface
 {
     /**
@@ -30,7 +31,7 @@ final class ApiNormalizer implements NormalizerInterface
     private $class;
 
     /**
-     * LinkNormalizer constructor.
+     * ApiNormalizer constructor.
      *
      * @param UrlGeneratorInterface $urlGenerator
      * @param ObjectNormalizer $normalizer
@@ -60,11 +61,11 @@ final class ApiNormalizer implements NormalizerInterface
 
         switch ($this->class) {
             case Phone::class:
-                $data['_link'] = ['href' => $this->generatePhoneRoute($object)];
+                $data['_link'] = ['href' => $this->generateRoute($object, 'phone')];
                 break;
 
             case User::class:
-                $data['_link'] = ['href' => $this->generateUserRoute($object)];
+                $data['_link'] = ['href' => $this->generateRoute($object, 'user')];
                 break;
         }
 
@@ -72,27 +73,17 @@ final class ApiNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param Phone $phone
+     * @param $entity
+     * @param string $class
      *
      * @return string
      */
-    public function generatePhoneRoute(Phone $phone)
+    public function generateRoute($entity, string $class): string
     {
-        return $this->urlGenerator->generate('phone_read', [
-            'brand' => $phone->getBrand(),
-            'model' => $phone->getModel()
-        ], UrlGeneratorInterface::ABSOLUTE_URL);
-    }
+        $routeName = $class . '_read';
 
-    /**
-     * @param User $user
-     *
-     * @return string
-     */
-    public function generateUserRoute(User $user)
-    {
-        return $this->urlGenerator->generate('user_read', [
-            'username' => $user->getUsername()
+        return $this->urlGenerator->generate($routeName, [
+            'id' => $entity->getId()
         ], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
@@ -102,9 +93,8 @@ final class ApiNormalizer implements NormalizerInterface
      *
      * @return bool
      */
-    public function supportsNormalization($data, $format = null)
+    public function supportsNormalization($data, $format = null): bool
     {
-//        dump('Api Normalizer');dump($data);
         if (!\is_object($data)) {
             return false;
         }

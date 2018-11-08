@@ -7,8 +7,8 @@ use App\App\Validator\ApiValidator;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
 use App\Domain\DTO\PhoneDTO;
-use App\Domain\Entity\Phone;
 use App\Domain\Repository\PhoneRepository;
+use App\UI\Responder\UpdateResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/phone/{id}",
+ *     "/api/phones/{id}",
  *     name="phone_update",
  *     methods={"PUT"}
  * )
@@ -71,9 +71,11 @@ final class UpdatePhoneAction
 
     /**
      * @param Request $request
-     * @return mixed
+     * @param UpdateResponder $responder
+     *
+     * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, UpdateResponder $responder): Response
     {
         $json = $request->getContent();
 
@@ -104,8 +106,6 @@ final class UpdatePhoneAction
 
         $jsonPhone = $this->serializer->serialize($phone, 'json', ['groups' => ['phone']]);
 
-        return new Response($jsonPhone, Response::HTTP_OK, [
-            'Location' => $this->urlGenerator->generate('phone_read', ['id' => $phone->getId()] )
-        ]);
+        return $responder($jsonPhone, $phone);
     }
 }

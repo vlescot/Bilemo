@@ -8,6 +8,10 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * Class UserFixtures
+ * @package App\Domain\DataFixtures
+ */
 final class UserFixtures extends Fixture
 {
     use LoadDataFixtureTrait;
@@ -40,7 +44,6 @@ final class UserFixtures extends Fixture
             $password = $this->passwordEncoder->encodePassword($userEntity, $user['Password']);
 
             $userEntity->registration(
-                $user['Roles'],
                 $user['Username'],
                 $password,
                 $user['Email']

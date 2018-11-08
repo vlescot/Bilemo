@@ -8,6 +8,7 @@ use App\App\Error\ApiError;
 use App\App\Error\ApiException;
 use App\Domain\Entity\Phone;
 use App\Domain\Repository\PhoneRepository;
+use App\UI\Responder\CreateResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/phone",
+ *     "/api/phones",
  *     name="phone_create",
  *     methods={"POST"}
  * )
@@ -70,10 +71,11 @@ final class CreatePhoneAction
 
     /**
      * @param Request $request
+     * @param CreateResponder $responder
      *
      * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, CreateResponder $responder): Response
     {
         $json = $request->getContent();
 
@@ -88,13 +90,10 @@ final class CreatePhoneAction
 
         $this->phoneRepository->save($phone);
 
-        $jsonPhone = $this->serializer->serialize($phone, 'json', ['groups' => ['phone']]);
+        $jsonPhone = $this->serializer->serialize($phone, 'json', [
+            'groups' => ['phone']
+        ]);
 
-        return new Response($jsonPhone, Response::HTTP_CREATED, [
-                'location' => $this->urlGenerator->generate('phone_read', [
-                    'id' => $phone->getId()
-                ])
-            ]
-        );
+        return $responder($jsonPhone, $phone);
     }
 }

@@ -11,6 +11,10 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+/**
+ * Class PhoneRepository
+ * @package App\Domain\Repository
+ */
 class PhoneRepository extends ServiceEntityRepository implements RepositoryAllowPaginationInterface, RepositoryAllowFilteringInterface
 {
     /**
@@ -25,16 +29,19 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
 
     /**
      * @param string $id
+     *
      * @return null|object
      */
-    public function findOneById(string $id)
+    public function findOneById(string $id): ? Phone
     {
         return parent::findOneBy(['id' => $id]);
     }
 
     /**
      * @param array $filters
+     *
      * @return int
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countAll(array $filters = []): int
@@ -102,7 +109,7 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getOneUpdateDate(string $brand, string $model)
+    public function getOneUpdateDate(string $brand, string $model): ? int
     {
         return $this->createQueryBuilder('p')
             ->select('p.updatedAt')
@@ -120,11 +127,11 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
     }
 
     /**
-     * @return mixed
+     * @return int|null
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getLastUpdateDate()
+    public function getLastUpdateDate(): ? int
     {
         return $this->createQueryBuilder('p')
             ->select('MAX(p.updatedAt) as lastUpdate')

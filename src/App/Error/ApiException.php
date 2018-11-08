@@ -5,6 +5,11 @@ namespace App\App\Error;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * Class ApiException
+ *
+ * @package App\App\Error
+ */
 final class ApiException extends HttpException
 {
     /**
@@ -29,9 +34,8 @@ final class ApiException extends HttpException
 
     /**
      * @return ApiError
-     *
      */
-    public function getApiError()
+    public function getApiError(): ApiError
     {
         return $this->apiError;
     }

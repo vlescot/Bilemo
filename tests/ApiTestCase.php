@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Domain\Entity\Company;
+use App\Domain\Entity\Phone;
 use App\Domain\Entity\User;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiTestCase extends WebTestCase
@@ -17,34 +16,6 @@ class ApiTestCase extends WebTestCase
         self::bootKernel();
     }
 
-    /**
-     * @param string $username
-     * @param string $password
-     */
-    protected function createUser(string $username, string $password)
-    {
-        $em = self::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
-
-        $userRepository = $em->getRepository(User::class);
-        $user = $userRepository->loadUserByUsername($username);
-
-        if (!$user) {
-            $passwordEncoder = self::$kernel->getContainer()->get('security.password_encoder');
-
-            $user = new User();
-            $password = $passwordEncoder->encodePassword($user, $password);
-
-            $user->registration(
-                ['ROLE_USER'],
-                $username,
-                $password,
-                $username . '@mail.com'
-            );
-
-            $em->persist($user);
-            $em->flush();
-        }
-    }
 
     /**
      * @param string $username
@@ -53,29 +24,18 @@ class ApiTestCase extends WebTestCase
      */
     protected function createAuthenticatedUser(string $username, string $password)
     {
-        $this->createUser($username, $password);
-
-        $content  = json_encode([
+        $body  = json_encode([
             'username' => $username,
             'password' => $password
         ]);
 
-
         $client = static::createClient();
-        $client->request(
-            'POST',
-            'user/token',
-            [],
-            [],
-            [],
-            $content
-        );
-
+        $client->request('POST','/api/token/user', [], [], [], $body);
 
         $data = json_decode($client->getResponse()->getContent(), true);
 
         $client = static::createClient();
-        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token'])); // $data[1] = string's token
+        $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token']));
 
         return $client;
     }
@@ -87,17 +47,8 @@ class ApiTestCase extends WebTestCase
             'password' => 'Bilemo'
         ]);
 
-
         $client = static::createClient();
-        $client->request(
-            'POST',
-            'company/token',
-            [],
-            [],
-            [],
-            $content
-        );
-
+        $client->request('POST','/api/token/company',[],[],[],$content);
 
         $data = json_decode($client->getResponse()->getContent(), true);
 
@@ -105,5 +56,30 @@ class ApiTestCase extends WebTestCase
         $client->setServerParameter('HTTP_Authorization', sprintf('Bearer %s', $data['token'])); // $data[1] = string's token
 
         return $client;
+    }
+
+    private function getRepository($entityName)
+    {
+        self::bootKernel();
+        $em = self::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        return $em->getRepository($entityName);
+    }
+
+    public function getPhoneId()
+    {
+        $repository = $this->getRepository(Phone::class);
+        $phone = $repository->findOneBy(['brand' => 'Samsung', 'model' => 'S100']);
+        return $phone->getId();
+    }
+
+    public function getUserId($username = null)
+    {
+        if (!$username) {
+            $username = 'User0';
+        }
+
+        $repository = $this->getRepository(User::class);
+        $user = $repository->findOneBy(['username' => $username]);
+        return $user->getId();
     }
 }

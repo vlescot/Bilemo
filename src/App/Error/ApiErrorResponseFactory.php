@@ -6,19 +6,20 @@ namespace App\App\Error;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class ApiErrorResponseFactory
+ * @package App\App\Error
+ */
 final class ApiErrorResponseFactory
 {
     /**
      * @param ApiError $apiError
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function createResponse(ApiError $apiError)
+    public function createResponse(ApiError $apiError): Response
     {
         $data = $apiError->toArray();
-        if ($data['type'] != 'about:blank') {
-            $data['type'] = /*$this->baseURL*/'localhost' . '/docs/errors#' . $data['type'];     // TODO Faire de type une URL vers la doc
-        }
 
         $response = new JsonResponse( //TODO JsonResponse or Response ???
             $data,

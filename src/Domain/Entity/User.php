@@ -8,6 +8,10 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class User
+ * @package App\Domain\Entity
+ */
 class User implements UserInterface, EquatableInterface
 {
     /**
@@ -49,22 +53,31 @@ class User implements UserInterface, EquatableInterface
     public function __construct()
     {
         $this->id = Uuid::uuid4();
+        $this->roles = ['ROLE_USER'];
         $this->createdAt = time();
         $this->updatedAt = time();
     }
 
+    /**
+     * @param array $roles
+     * @param string $username
+     * @param string $password
+     * @param string $email
+     */
     public function registration(
-        array $roles,
         string $username,
         string $password,
         string $email
     ) {
-        $this->roles = $roles;
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
     }
 
+    /**
+     * @param string $password
+     * @param string $email
+     */
     public function update(
         string $password,
         string $email
@@ -141,9 +154,13 @@ class User implements UserInterface, EquatableInterface
     public function eraseCredentials()
     {
         $this->password = null;
-        $this->token = null;
     }
 
+    /**
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
     public function isEqualTo(UserInterface $user)
     {
         return $this->id === $user->getId();

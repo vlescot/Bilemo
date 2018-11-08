@@ -33,7 +33,7 @@ App\Domain\Entity\Phone:
                 groups:
                     - phone
             - Length:
-                min: 3
+                min: 2
                 minMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou plus
                 max: 30
                 maxMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
