@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\App\Pagination\PaginationFactory;
+use App\App\Pagination\Interfaces\PaginationFactoryInterface;
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Responder\ReadResponder;
+use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +29,7 @@ final class ReadPhoneListAction
     private $phoneRepository;
 
     /**
-     * @var PaginationFactory
+     * @var PaginationFactoryInterface
      */
     private $paginationFactory;
 
@@ -39,15 +39,11 @@ final class ReadPhoneListAction
     private $serializer;
 
     /**
-     * ReadPhoneListAction constructor.
-     *
-     * @param PhoneRepository $phoneRepository
-     * @param PaginationFactory $paginationFactory
-     * @param SerializerInterface $serializer
+     * {@inheritdoc}
      */
     public function __construct(
         PhoneRepository $phoneRepository,
-        PaginationFactory $paginationFactory,
+        PaginationFactoryInterface $paginationFactory,
         SerializerInterface $serializer
     ) {
         $this->phoneRepository = $phoneRepository;
@@ -56,12 +52,9 @@ final class ReadPhoneListAction
     }
 
     /**
-     * @param Request $request
-     * @param ReadResponder $responder
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, ReadResponder $responder): Response
+    public function __invoke(Request $request, ReadResponderInterface $responder): Response
     {
         $route = $request->attributes->get('_route');
 

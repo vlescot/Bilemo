@@ -6,9 +6,11 @@ namespace App\UI\Action\Phone;
 use App\App\Validator\ApiValidator;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
+use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\Entity\Phone;
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Responder\CreateResponder;
+use App\UI\Action\Phone\Interfaces\CreatePhoneActionInterface;
+use App\UI\Responder\Interfaces\CreateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +28,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class CreatePhoneAction
  * @package App\UI\Action\Phone
  */
-final class CreatePhoneAction
+final class CreatePhoneAction implements CreatePhoneActionInterface
 {
     /**
      * @var SerializerInterface
@@ -49,16 +51,11 @@ final class CreatePhoneAction
     private $urlGenerator;
 
     /**
-     * CreatePhoneAction constructor.
-     *
-     * @param SerializerInterface $serializer
-     * @param ApiValidator $apiValidator
-     * @param PhoneRepository $phoneRepository
-     * @param UrlGeneratorInterface $urlGenerator
+     * {@inheritdoc}
      */
     public function __construct(
         SerializerInterface $serializer,
-        ApiValidator $apiValidator,
+        ApiValidatorInterface $apiValidator,
         PhoneRepository $phoneRepository,
         UrlGeneratorInterface $urlGenerator
     ) {
@@ -70,12 +67,9 @@ final class CreatePhoneAction
 
 
     /**
-     * @param Request $request
-     * @param CreateResponder $responder
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, CreateResponder $responder): Response
+    public function __invoke(Request $request, CreateResponderInterface $responder): Response
     {
         $json = $request->getContent();
 

@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\UI\Action\User;
 
 use App\Domain\Repository\UserRepository;
-use App\UI\Responder\DeleteResponder;
+use App\UI\Action\User\Interfaces\DeleteUserActionInterface;
+use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class DeleteUserAction
  * @package App\UI\Action\User
  */
-final class DeleteUserAction
+final class DeleteUserAction implements DeleteUserActionInterface
 {
     /**
      * @var UserRepository
@@ -28,9 +29,7 @@ final class DeleteUserAction
     private $userRepository;
 
     /**
-     * DeleteUserAction constructor.
-     *
-     * @param UserRepository $userRepository
+     * {@inheritdoc}
      */
     public function __construct(UserRepository $userRepository)
     {
@@ -38,11 +37,9 @@ final class DeleteUserAction
     }
 
     /**
-     * @param Request $request
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, DeleteResponder $responder): Response
+    public function __invoke(Request $request, DeleteResponderInterface $responder): Response
     {
         $userId = $request->attributes->get('id');
 

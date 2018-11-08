@@ -5,8 +5,6 @@ namespace App\App\Error;
 
 use Symfony\Component\HttpFoundation\Response;
 
-// TODO Vérifier si ApiError est pertinant ou peux être inclus dans ApiExcetion
-
 /**
  * Class ApiError
  *
@@ -36,13 +34,10 @@ final class ApiError
     /**
      * @var array
      */
-    private $extraData = array();
+    private $extraData = [];
 
     /**
-     * ApiError constructor.
-     *
-     * @param int $statusCode
-     * @param string $type
+     * {@inheritdoc}
      */
     public function __construct(int $statusCode, string $type = null)
     {
@@ -64,7 +59,7 @@ final class ApiError
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray(): array
     {
@@ -79,7 +74,7 @@ final class ApiError
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getStatusCode(): int
     {
@@ -87,7 +82,7 @@ final class ApiError
     }
 
     /**
-     * @return mixed|string
+     * {@inheritdoc}
      */
     public function getMessage(): string
     {
@@ -95,10 +90,9 @@ final class ApiError
     }
 
     /**
-     * @param $name
-     * @param $value
+     * {@inheritdoc}
      */
-    public function set($name, $value)
+    public function set(string $name, $value)
     {
         $this->extraData[$name] = $value;
     }

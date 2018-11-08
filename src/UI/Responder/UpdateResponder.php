@@ -5,10 +5,11 @@ namespace App\UI\Responder;
 
 use App\Domain\Entity\Phone;
 use App\Domain\Entity\User;
+use App\UI\Responder\Interfaces\UpdateResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class UpdateResponder
+final class UpdateResponder implements UpdateResponderInterface
 {
     /**
      * @var UrlGeneratorInterface
@@ -16,9 +17,7 @@ final class UpdateResponder
     private $urlGenerator;
 
     /**
-     * CreateResponder constructor.
-     *
-     * @param UrlGeneratorInterface $urlGenerator
+     * {@inheritdoc}
      */
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
@@ -26,10 +25,7 @@ final class UpdateResponder
     }
 
     /**
-     * @param string $json
-     * @param $entity
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function __invoke(string $json, $entity): Response
     {

@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace App\App\Pagination;
 
+use App\App\Pagination\Interfaces\PaginatorInterface;
 use App\Domain\Repository\Interfaces\RepositoryAllowPaginationInterface;
 
 /**
  * Class Paginator
  * @package App\App\Pagination
  */
-final class Paginator
+final class Paginator implements PaginatorInterface
 {
     /**
      * @var RepositoryAllowPaginationInterface
@@ -38,12 +39,7 @@ final class Paginator
 
 
     /**
-     * Paginator constructor.
-     *
-     * @param RepositoryAllowPaginationInterface $repository
-     * @param int $currentPage
-     * @param int $maxPerPage
-     * @param array $filters
+     * {@inheritdoc}
      */
     public function __construct(
         RepositoryAllowPaginationInterface $repository,
@@ -62,7 +58,7 @@ final class Paginator
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getCurrentPageResults(): array
     {
@@ -70,7 +66,7 @@ final class Paginator
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getNbResults(): int
     {
@@ -78,7 +74,7 @@ final class Paginator
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getNbPages(): int
     {
@@ -86,7 +82,7 @@ final class Paginator
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasNextPage(): bool
     {
@@ -94,7 +90,7 @@ final class Paginator
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasPreviousPage(): bool
     {
@@ -102,7 +98,7 @@ final class Paginator
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getNextPage(): int
     {
@@ -110,7 +106,7 @@ final class Paginator
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getPreviousPage(): int
     {

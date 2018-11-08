@@ -6,10 +6,12 @@ namespace App\UI\Action\User;
 use App\App\Validator\ApiValidator;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
+use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\DTO\UserDTO;
 use App\Domain\Entity\User;
 use App\Domain\Repository\UserRepository;
-use App\UI\Responder\CreateResponder;
+use App\UI\Action\User\Interfaces\CreateUserActionInterface;
+use App\UI\Responder\Interfaces\CreateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,7 +30,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class CreateUserAction
  * @package App\UI\Action\User
  */
-final class CreateUserAction
+final class CreateUserAction implements CreateUserActionInterface
 {
     /**
      * @var SerializerInterface
@@ -56,17 +58,11 @@ final class CreateUserAction
     private $passwordEncoder;
 
     /**
-     * CreateUserAction constructor.
-     *
-     * @param SerializerInterface $serializer
-     * @param ApiValidator $apiValidator
-     * @param UserRepository $userRepository
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param UserPasswordEncoderInterface $passwordEncoder
+     * {@inheritdoc}
      */
     public function __construct(
         SerializerInterface $serializer,
-        ApiValidator $apiValidator,
+        ApiValidatorInterface $apiValidator,
         UserRepository $userRepository,
         UrlGeneratorInterface $urlGenerator,
         UserPasswordEncoderInterface $passwordEncoder
@@ -80,12 +76,9 @@ final class CreateUserAction
 
 
     /**
-     * @param Request $request
-     * @param CreateResponder $responder
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, CreateResponder $responder): Response
+    public function __invoke(Request $request, CreateResponderInterface $responder): Response
     {
         $json = $request->getContent();
 
@@ -106,9 +99,6 @@ final class CreateUserAction
         );
 
         $this->apiValidator->validate($user, null, ['user']);
-
-        // TODO Verifeir si passEncoder
-//        dump($user);
 
         $this->userRepository->save($user);
 

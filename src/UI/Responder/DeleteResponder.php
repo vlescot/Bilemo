@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace App\UI\Responder;
 
+use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-final class DeleteResponder
+final class DeleteResponder implements DeleteResponderInterface
 {
     /**
-     * @return Response
+     * {@inheritdoc}
      */
     public function __invoke(): Response
     {

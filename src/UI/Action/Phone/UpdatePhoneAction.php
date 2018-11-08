@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\App\Validator\ApiValidator;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
+use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\DTO\PhoneDTO;
 use App\Domain\Repository\PhoneRepository;
+use App\UI\Action\Phone\Interfaces\UpdatePhoneActionInterface;
+use App\UI\Responder\Interfaces\UpdateResponderInterface;
 use App\UI\Responder\UpdateResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +29,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class UpdatePhoneAction
  * @package App\UI\Action\Phone
  */
-final class UpdatePhoneAction
+final class UpdatePhoneAction implements UpdatePhoneActionInterface
 {
     /**
      * @var SerializerInterface
@@ -35,7 +37,7 @@ final class UpdatePhoneAction
     private $serializer;
 
     /**
-     * @var ApiValidator
+     * @var ApiValidatorInterface
      */
     private $apiValidator;
 
@@ -50,16 +52,11 @@ final class UpdatePhoneAction
     private $urlGenerator;
 
     /**
-     * UpdatePhoneAction constructor.
-     *
-     * @param SerializerInterface $serializer
-     * @param ApiValidator $apiValidator
-     * @param PhoneRepository $phoneRepository
-     * @param UrlGeneratorInterface $urlGenerator
+     * {@inheritdoc}
      */
     public function __construct(
         SerializerInterface $serializer,
-        ApiValidator $apiValidator,
+        ApiValidatorInterface $apiValidator,
         PhoneRepository $phoneRepository,
         UrlGeneratorInterface $urlGenerator
     ) {
@@ -70,12 +67,9 @@ final class UpdatePhoneAction
     }
 
     /**
-     * @param Request $request
-     * @param UpdateResponder $responder
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, UpdateResponder $responder): Response
+    public function __invoke(Request $request, UpdateResponderInterface $responder): Response
     {
         $json = $request->getContent();
 

@@ -5,6 +5,8 @@ namespace App\App\Pagination;
 
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
+use App\App\Pagination\Interfaces\PaginatedCollectionInterface;
+use App\App\Pagination\Interfaces\PaginationFactoryInterface;
 use App\Domain\Repository\Interfaces\RepositoryAllowPaginationInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -13,7 +15,7 @@ use Symfony\Component\Routing\RouterInterface;
  * Class PaginationFactory
  * @package App\App\Pagination
  */
-final class PaginationFactory
+final class PaginationFactory implements PaginationFactoryInterface
 {
     /**
      * @var RouterInterface
@@ -36,10 +38,7 @@ final class PaginationFactory
     private $routeParams;
 
     /**
-     * PaginationFactory constructor.
-     *
-     * @param RouterInterface $router
-     * @param int $itemsPerPage
+     * {@inheritdoc}
      */
     public function __construct(
         RouterInterface $router,
@@ -50,19 +49,14 @@ final class PaginationFactory
     }
 
     /**
-     * @param RepositoryAllowPaginationInterface $repository
-     * @param Request $request
-     * @param string $route
-     * @param array $routeParams
-     *
-     * @return PaginatedCollection
+     * {@inheritdoc}
      */
     public function createCollection(
         RepositoryAllowPaginationInterface $repository,
         Request $request,
         string $route,
         array $routeParams = []
-    ): PaginatedCollection {
+    ): PaginatedCollectionInterface {
         $this->route = $route;
         $this->routeParams = $routeParams;
 

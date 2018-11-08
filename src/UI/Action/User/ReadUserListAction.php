@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\UI\Action\User;
 
 use App\Domain\Repository\UserRepository;
-use App\UI\Responder\ReadResponder;
+use App\UI\Action\User\Interfaces\ReadUserLiserActionInterface;
+use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -19,7 +20,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class UserAction
  * @package App\UI\Action\User
  */
-final class ReadUserListAction
+final class ReadUserListAction implements ReadUserLiserActionInterface
 {
     /**
      * @var UserRepository
@@ -33,10 +34,7 @@ final class ReadUserListAction
 
 
     /**
-     * UserAction constructor.
-     *
-     * @param UserRepository $userRepository
-     * @param SerializerInterface $serializer
+     * {@inheritdoc}
      */
     public function __construct(
         UserRepository $userRepository,
@@ -47,11 +45,9 @@ final class ReadUserListAction
     }
 
     /**
-     * @param ReadResponder $responder
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(ReadResponder $responder): Response
+    public function __invoke(ReadResponderInterface $responder): Response
     {
         $users = $this->userRepository->findAll();
 

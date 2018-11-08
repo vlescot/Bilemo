@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\UI\Action\Phone;
 
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Responder\DeleteResponder;
+use App\UI\Action\Phone\Interfaces\DeletePhoneActionInterface;
+use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class DeletePhoneAction
  * @package App\UI\Action\Phone
  */
-final class DeletePhoneAction
+final class DeletePhoneAction implements DeletePhoneActionInterface
 {
     /**
      * @var PhoneRepository
@@ -28,9 +29,7 @@ final class DeletePhoneAction
     private $phoneRepository;
 
     /**
-     * DeletePhoneAction constructor.
-     *
-     * @param PhoneRepository $phoneRepository
+     * {@inheritdoc}
      */
     public function __construct(PhoneRepository $phoneRepository)
     {
@@ -38,11 +37,9 @@ final class DeletePhoneAction
     }
 
     /**
-     * @param Request $request
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, DeleteResponder $responder): Response
+    public function __invoke(Request $request, DeleteResponderInterface $responder): Response
     {
         $phoneId = $request->attributes->get('id');
 

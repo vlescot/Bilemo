@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\UI\Action\Phone;
 
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Responder\ReadResponder;
+use App\UI\Action\Phone\Interfaces\ReadPhoneActionInterface;
+use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -21,7 +22,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class PhoneAction
  * @package App\UI\Action
  */
-final class ReadPhoneAction
+final class ReadPhoneAction implements ReadPhoneActionInterface
 {
     /**
      * @var PhoneRepository
@@ -35,10 +36,7 @@ final class ReadPhoneAction
 
 
     /**
-     * ReadPhoneAction constructor.
-     *
-     * @param PhoneRepository $phoneRepository
-     * @param SerializerInterface $serializer
+     * {@inheritdoc}
      */
     public function __construct(
         PhoneRepository $phoneRepository,
@@ -49,12 +47,9 @@ final class ReadPhoneAction
     }
 
     /**
-     * @param Request $request
-     * @param ReadResponder $responder
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, ReadResponder $responder): Response
+    public function __invoke(Request $request, ReadResponderInterface $responder): Response
     {
         $phoneId = $request->attributes->get('id');
 

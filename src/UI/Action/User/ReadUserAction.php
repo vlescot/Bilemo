@@ -3,12 +3,9 @@ declare(strict_types=1);
 
 namespace App\UI\Action\User;
 
-use App\App\Error\ApiError;
-use App\App\Error\ApiException;
 use App\Domain\Repository\UserRepository;
-use App\UI\Responder\ReadResponder;
-use Swagger\Annotations as SWG;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\UI\Action\User\Interfaces\ReadUserActionInterface;
+use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,7 +23,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class ReadUserAction
  * @package App\UI\Action\User
  */
-final class ReadUserAction extends AbstractController
+final class ReadUserAction implements ReadUserActionInterface
 {
     /**
      * @var AuthorizationCheckerInterface
@@ -44,10 +41,7 @@ final class ReadUserAction extends AbstractController
     private $serializer;
 
     /**
-     * ReadUserAction constructor.
-     *
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param UserRepository $userRepository
+     * {@inheritdoc}
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
@@ -60,12 +54,9 @@ final class ReadUserAction extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @param ReadResponder $responder
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, ReadResponder $responder): Response
+    public function __invoke(Request $request, ReadResponderInterface $responder): Response
     {
         $userId = $request->attributes->get('id');
 

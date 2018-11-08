@@ -5,10 +5,11 @@ namespace App\UI\Responder;
 
 use App\Domain\Entity\Phone;
 use App\Domain\Entity\User;
+use App\UI\Responder\Interfaces\CreateResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CreateResponder
+final class CreateResponder implements CreateResponderInterface
 {
     /**
      * @var UrlGeneratorInterface

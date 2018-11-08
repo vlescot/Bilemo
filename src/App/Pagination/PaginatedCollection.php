@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\App\Pagination;
 
+use App\App\Pagination\Interfaces\PaginatedCollectionInterface;
+
 /**
  * Class PaginatedCollection
  * @package App\App\Pagination
  */
-final class PaginatedCollection
+final class PaginatedCollection implements PaginatedCollectionInterface
 {
     /**
      * @var int
@@ -31,10 +33,7 @@ final class PaginatedCollection
 
 
     /**
-     * PaginatedCollection constructor.
-     *
-     * @param array $phones
-     * @param int $total
+     * {@inheritdoc}
      */
     public function __construct(array $phones, int $total)
     {
@@ -44,8 +43,7 @@ final class PaginatedCollection
     }
 
     /**
-     * @param $ref
-     * @param $url
+     * {@inheritdoc}
      */
     public function addLink($ref, $url)
     {
@@ -53,7 +51,7 @@ final class PaginatedCollection
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getTotal(): int
     {
@@ -61,7 +59,7 @@ final class PaginatedCollection
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getLimit(): int
     {
@@ -69,7 +67,7 @@ final class PaginatedCollection
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getLinks(): array
     {
@@ -77,7 +75,7 @@ final class PaginatedCollection
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getPhones(): array
     {

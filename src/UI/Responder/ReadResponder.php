@@ -3,14 +3,13 @@ declare(strict_types=1);
 
 namespace App\UI\Responder;
 
+use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ReadResponder
+final class ReadResponder implements ReadResponderInterface
 {
     /**
-     * @param string $json
-     *
-     * @return Response
+     * {@inheritdoc}
      */
     public function __invoke(string $json): Response
     {

@@ -5,6 +5,7 @@ namespace App\App\Validator;
 
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
+use App\App\Validator\Interfaces\ApiValidatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -12,7 +13,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * Class ApiValidator
  * @package App\App\Validator
  */
-final class ApiValidator
+final class ApiValidator implements ApiValidatorInterface
 {
     /**
      * @var ValidatorInterface
@@ -20,9 +21,7 @@ final class ApiValidator
     private $validator;
 
     /**
-     * Validator constructor.
-     *
-     * @param ValidatorInterface $validator
+     * {@inheritdoc}
      */
     public function __construct(ValidatorInterface $validator)
     {
@@ -30,9 +29,7 @@ final class ApiValidator
     }
 
     /**
-     * @param $value
-     * @param null $constraints
-     * @param null $groups
+     * {@inheritdoc}
      */
     public function validate($value, $constraints = null, $groups = null)
     {

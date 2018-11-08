@@ -6,15 +6,16 @@ namespace App\UI\Action\User;
 use App\App\Validator\ApiValidator;
 use App\App\Error\ApiError;
 use App\App\Error\ApiException;
+use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\DTO\UserDTO;
 use App\Domain\Repository\UserRepository;
-use App\UI\Responder\UpdateResponder;
+use App\UI\Action\User\Interfaces\UpdateUserActionInterface;
+use App\UI\Responder\Interfaces\UpdateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -29,7 +30,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class UpdateUserAction
  * @package App\UI\Action\User
  */
-final class UpdateUserAction
+final class UpdateUserAction implements UpdateUserActionInterface
 {
     /**
      * @var SerializerInterface
@@ -57,17 +58,11 @@ final class UpdateUserAction
     private $passwordEncoder;
 
     /**
-     * UpdateUserAction constructor.
-     *
-     * @param SerializerInterface $serializer
-     * @param ApiValidator $apiValidator
-     * @param UserRepository $userRepository
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param UserPasswordEncoderInterface $passwordEncoder
+     * {@inheritdoc}
      */
     public function __construct(
         SerializerInterface $serializer,
-        ApiValidator $apiValidator,
+        ApiValidatorInterface $apiValidator,
         UserRepository $userRepository,
         UrlGeneratorInterface $urlGenerator,
         UserPasswordEncoderInterface $passwordEncoder
@@ -79,13 +74,10 @@ final class UpdateUserAction
         $this->passwordEncoder = $passwordEncoder;
     }
 
-
     /**
-     * @param Request $request
-     *
-     * @return Response
+     * {@inheritdoc}
      */
-    public function __invoke(Request $request, UpdateResponder $responder): Response
+    public function __invoke(Request $request, UpdateResponderInterface $responder): Response
     {
         $json = $request->getContent();
 
