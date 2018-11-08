@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Interface ApiErrorFactoryInterface
  * @package App\App\Error\Interfaces
  */
-interface ApiErrorFactoryResponseInterface
+interface ApiErrorResponseFactoryInterface
 {
     /**
      * @param ApiError $apiError

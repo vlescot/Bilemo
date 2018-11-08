@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\App\Error;
 
-use App\App\Error\Interfaces\ApiErrorFactoryResponseInterface;
+use App\App\Error\Interfaces\ApiErrorResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class ApiErrorResponseFactory
  * @package App\App\Error
  */
-final class ApiErrorResponseFactory implements ApiErrorFactoryResponseInterface
+final class ApiErrorResponseFactory implements ApiErrorResponseFactoryInterface
 {
     /**
      * {@inheritdoc}

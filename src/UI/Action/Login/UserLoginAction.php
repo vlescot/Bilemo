@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Login;
 
+use App\UI\Action\Login\Interfaces\LoginActionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -15,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class UserLoginAction
  * @package App\UI\Action\User
  */
-final class UserLoginAction
+final class UserLoginAction implements LoginActionInterface
 {
     public function __invoke()
     {
