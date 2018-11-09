@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\UI\Action\User\Interfaces;
+
 use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\Repository\UserRepository;
 use App\UI\Responder\Interfaces\CreateResponderInterface;
@@ -34,11 +35,11 @@ interface CreateUserActionInterface
         UserPasswordEncoderInterface $passwordEncoder
     );
 
-     /**
-      * @param Request $request
-      * @param CreateResponderInterface $responder
-      *
-      * @return Response
-      */
+    /**
+     * @param Request $request
+     * @param CreateResponderInterface $responder
+     *
+     * @return Response
+     */
     public function __invoke(Request $request, CreateResponderInterface $responder): Response;
 }

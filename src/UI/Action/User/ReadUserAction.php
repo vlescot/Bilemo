@@ -60,14 +60,30 @@ final class ReadUserAction implements ReadUserActionInterface
     {
         $userId = $request->attributes->get('id');
 
-        $user = $this->userRepository->findOneById($userId);
+        $userLastUpdateDate = $this->userRepository->getOneUpdateDate($userId);
 
-        if (!$user) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $userId));
+        if (!$userLastUpdateDate) {
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'User', $userId));
         }
+
+        $lastModified = new \DateTime();
+        $lastModified->setTimestamp(intval($userLastUpdateDate));
+
+        $response = new Response();
+        $response->setLastModified($lastModified);
+        $response->setPublic();
+
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
+
+        $user = $this->userRepository->findOneById($userId);
 
         $json = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
 
-        return $responder($json);
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response->setContent($json);
+
+//        return $responder($json);
     }
 }

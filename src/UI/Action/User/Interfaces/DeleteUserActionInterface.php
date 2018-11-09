@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\UI\Action\User\Interfaces;
+
 use App\Domain\Repository\UserRepository;
 use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;

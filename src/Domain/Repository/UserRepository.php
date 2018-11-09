@@ -5,6 +5,7 @@ namespace App\Domain\Repository;
 
 use App\Domain\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,6 +45,39 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->setParameter('username', $username)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param string $id
+     * @return int|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getOneUpdateDate(string $id): ? string
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.updatedAt')
+            ->where('u.id LIKE :id')
+            ->setParameters(['id' => $id])
+            ->setCacheable(true)
+            ->getQuery()
+            ->useResultCache(true)
+            ->useQueryCache(true)
+            ->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+    }
+
+    /**
+     * @return int|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getLastUpdateDate(): ? string
+    {
+        return $this->createQueryBuilder('u')
+            ->select('MAX(u.updatedAt) as lastUpdate')
+            ->setCacheable(true)
+            ->getQuery()
+            ->useResultCache(true)
+            ->useQueryCache(true)
+            ->getSingleScalarResult();
     }
 
     /**

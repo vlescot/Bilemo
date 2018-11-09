@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route(
  *     "/api/token/user",
  *     name="user_token",
+ *     requirements={"entity" = "#user#i | #company#i"},
  *     methods={"POST"}
  * )
  *

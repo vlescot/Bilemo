@@ -53,14 +53,31 @@ final class ReadPhoneAction implements ReadPhoneActionInterface
     {
         $phoneId = $request->attributes->get('id');
 
-        $phone = $this->phoneRepository->findOneById($phoneId);
+        $phoneLastUpdateDate = $this->phoneRepository->getOneUpdateDate($phoneId);
 
-        if (!$phone) {
+        if (!$phoneLastUpdateDate) {
             throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $phoneId));
         }
 
+        $lastModified = new \DateTime();
+        $lastModified->setTimestamp(intval($phoneLastUpdateDate));
+
+        $response = new Response();
+        $response->setLastModified($lastModified);
+        $response->setPublic();
+
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
+
+
+        $phone = $this->phoneRepository->findOneById($phoneId);
+
         $json = $this->serializer->serialize($phone, 'json', ['groups' => ['phone']]);
 
-        return $responder($json);
+        $response->setStatusCode(200);
+        return $response->setContent($json);
+
+//        return $responder($json);
     }
 }

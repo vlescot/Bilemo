@@ -52,11 +52,27 @@ final class ReadPhoneListAction implements ReadPhoneListActionInterface
         $this->serializer = $serializer;
     }
 
+
     /**
      * {@inheritdoc}
      */
     public function __invoke(Request $request, ReadResponderInterface $responder): Response
     {
+        // TODO Find a way to cache Phones list. The request accepts parameters (page and filters), given a changing content
+
+//        $timestamp = $this->phoneRepository->getLastUpdateDate();
+//
+//        $lastModified = new \DateTime();
+//        $lastModified->setTimestamp(intval($timestamp));
+//
+//        $response = new Response();
+//        $response->setLastModified($lastModified);
+//        $response->setPublic();
+//
+//        if ($response->isNotModified($request)) {
+//            return $response;
+//        }
+
         $route = $request->attributes->get('_route');
 
         $paginatedCollection = $this->paginationFactory->createCollection(
@@ -65,11 +81,11 @@ final class ReadPhoneListAction implements ReadPhoneListActionInterface
             $route
         );
 
-        $json = $this->serializer->serialize($paginatedCollection, 'json', ['groups' => ['phone_list']]);
+        $json = $this->serializer->serialize($paginatedCollection, 'json', ['groups' => ['phones_list']]);
 
 
         // TODO header-> 'Content-type'=> application/hal+json
         // Pour chacune des routes avec des liens hal
-        return $responder($json);
+        return $response = $responder($json);
     }
 }

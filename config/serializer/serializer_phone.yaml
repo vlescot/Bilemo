@@ -3,11 +3,11 @@ App\Domain\Entity\Phone:
         createdAt:
             groups: ['phone']
         brand:
-            groups: ['phone_list', 'phone']
+            groups: ['phones_list', 'phone']
         model:
-            groups: ['phone_list', 'phone']
+            groups: ['phones_list', 'phone']
         description:
-            groups: ['phone_list', 'phone']
+            groups: ['phones_list', 'phone']
         price:
             groups: ['phone']
         stock:

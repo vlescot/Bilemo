@@ -1,10 +1,10 @@
 App\App\Pagination\PaginatedCollection:
     attributes:
         total:
-            groups: ['phone_list']
+            groups: ['phones_list']
         limit:
-            groups: ['phone_list']
+            groups: ['phones_list']
         _links:
-            groups: ['phone_list']
+            groups: ['phones_list']
         phones:
-            groups: ['phone_list']
+            groups: ['phones_list']

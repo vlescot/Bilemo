@@ -109,16 +109,12 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getOneUpdateDate(string $brand, string $model): ? int
+    public function getOneUpdateDate(string $id): ? string
     {
         return $this->createQueryBuilder('p')
             ->select('p.updatedAt')
-            ->where('p.brand LIKE :brand')
-            ->andWhere('p.model LIKE :model')
-            ->setParameters([
-                'brand' => $brand,
-                'model' => $model
-            ])
+            ->where('p.id LIKE :id')
+            ->setParameters(['id' => $id])
             ->setCacheable(true)
             ->getQuery()
             ->useResultCache(true)
@@ -131,7 +127,7 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getLastUpdateDate(): ? int
+    public function getLastUpdateDate(): ? string
     {
         return $this->createQueryBuilder('p')
             ->select('MAX(p.updatedAt) as lastUpdate')
