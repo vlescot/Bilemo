@@ -148,11 +148,20 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
     }
 
     /**
-     * @param Phone $phone
+     * @param string $id
+     * @return bool
      */
-    public function remove(Phone $phone)
+    public function remove(string $id)
     {
+        $phone = $this->findOneById($id);
+
+        if (null === $phone) {
+            return false;
+        }
+
         $this->_em->remove($phone);
         $this->_em->flush();
+
+        return true;
     }
 }

@@ -90,11 +90,21 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     }
 
     /**
-     * @param User $user
+     * @param string $id
+     *
+     * @return bool
      */
-    public function remove(User $user)
+    public function remove(string $id)
     {
+        $user = $this->findOneById($id);
+
+        if (null === $user) {
+            return false;
+        }
+
         $this->_em->remove($user);
         $this->_em->flush();
+
+        return true;
     }
 }

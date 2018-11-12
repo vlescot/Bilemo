@@ -40,6 +40,11 @@ class User implements UserInterface, EquatableInterface
     private $email;
 
     /**
+     * @var string
+     */
+    private $phoneNumber;
+
+    /**
      * @var int
      */
     private $createdAt;
@@ -59,32 +64,37 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @param array $roles
      * @param string $username
      * @param string $password
      * @param string $email
+     * @param string $phoneNumber
      */
     public function registration(
         string $username,
         string $password,
-        string $email
+        string $email,
+        string $phoneNumber
     ) {
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
+        $this->phoneNumber = $phoneNumber;
     }
 
     /**
      * @param string $password
      * @param string $email
+     * @param string $phoneNumber
      */
     public function update(
         string $password,
-        string $email
+        string $email,
+        string $phoneNumber
     ) {
         $this->updatedAt = time();
         $this->password = $password;
         $this->email = $email;
+        $this->phoneNumber = $phoneNumber;
     }
 
     /**
@@ -141,6 +151,14 @@ class User implements UserInterface, EquatableInterface
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber(): string
+    {
+        return $this->phoneNumber;
     }
 
     /**

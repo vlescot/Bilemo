@@ -46,7 +46,8 @@ final class UserFixtures extends Fixture
             $userEntity->registration(
                 $user['Username'],
                 $password,
-                $user['Email']
+                $user['Email'],
+                '0' . rand(00000000, 999999999)
             );
 
             $this->addReference($reference, $userEntity);

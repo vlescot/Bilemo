@@ -41,15 +41,11 @@ final class DeleteUserAction implements DeleteUserActionInterface
      */
     public function __invoke(Request $request, DeleteResponderInterface $responder): Response
     {
-        $userId = $request->attributes->get('id');
+        $id = $request->attributes->get('id');
 
-        $user = $this->userRepository->findOneById($userId);
-
-        if (!$user) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $userId));
+        if (!$this->userRepository->remove($id)) {
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'User', $id));
         }
-
-        $this->userRepository->remove($user);
 
         return $responder();
     }

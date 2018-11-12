@@ -15,6 +15,7 @@
         <field name="updatedAt" type="integer" />
         <field name="username" type="string" unique="true" />
         <field name="password" type="string" />
+        <field name="phoneNumber" type="string" />
         <field name="email" type="string" unique="true" />
 
     </entity>

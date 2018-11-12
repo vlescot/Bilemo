@@ -41,15 +41,11 @@ final class DeletePhoneAction implements DeletePhoneActionInterface
      */
     public function __invoke(Request $request, DeleteResponderInterface $responder): Response
     {
-        $phoneId = $request->attributes->get('id');
+        $id = $request->attributes->get('id');
 
-        $phone = $this->phoneRepository->findOneById($phoneId);
-
-        if (!$phone) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with brand "%s"', 'Phone', $phoneId));
+        if (!$this->phoneRepository->remove($id)) {
+            throw new NotFoundHttpException(sprintf('Resource %s not found with brand "%s"', 'Phone', $id));
         }
-
-        $this->phoneRepository->remove($phone);
 
         return $responder();
     }

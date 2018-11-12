@@ -22,22 +22,30 @@ final class UserDTO
     /**
      * @var string
      */
+    public $phoneNumber;
+
+    /**
+     * @var string
+     */
     public $password;
 
     /**
      * UserDTO constructor.
      *
-     * @param string $username
      * @param string $email
+     * @param string $phoneNumber
      * @param string $password
+     * @param string|null $username
      */
     public function __construct(
         string $email,
+        string $phoneNumber,
         string $password,
         string $username = null
     ) {
-        $this->username = $username;
         $this->email = $email;
+        $this->phoneNumber = $phoneNumber;
         $this->password = $password;
+        $this->username = $username;
     }
 }

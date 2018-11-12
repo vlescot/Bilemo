@@ -54,6 +54,8 @@ nelmio_api_doc:
                         type: string
                     email:
                         type: string
+                    phoneNumber:
+                        type: string
                     _link:
                         type: object
                         properties:
@@ -375,6 +377,8 @@ nelmio_api_doc:
                               type: string
                             email:
                               type: string
+                            phoneNumber:
+                              type: string
                     responses:
                       '201':
                         description: CREATED
@@ -442,6 +446,8 @@ nelmio_api_doc:
                             password:
                               type: string
                             email:
+                              type: string
+                            phoneNumber:
                               type: string
                     responses:
                       '201':

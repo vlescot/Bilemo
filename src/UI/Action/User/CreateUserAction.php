@@ -95,7 +95,8 @@ final class CreateUserAction implements CreateUserActionInterface
         $user->registration(
             $userDTO->username,
             $password,
-            $userDTO->email
+            $userDTO->email,
+            $userDTO->phoneNumber
         );
 
         $this->apiValidator->validate($user, null, ['user']);

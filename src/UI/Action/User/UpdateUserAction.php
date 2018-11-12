@@ -100,7 +100,8 @@ final class UpdateUserAction implements UpdateUserActionInterface
 
         $user->update(
             $password,
-            $userDTO->email
+            $userDTO->email,
+            $userDTO->phoneNumber
         );
 
         $this->apiValidator->validate($user, null, ['user']);
