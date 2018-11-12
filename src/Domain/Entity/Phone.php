@@ -24,9 +24,9 @@ class Phone
     private $updatedAt;
 
     /**
-     * @var string
+     * @var Manufacturer
      */
-    private $brand;
+    private $manufacturer;
 
     /**
      * @var string
@@ -51,14 +51,15 @@ class Phone
     /**
      * Phone constructor.
      *
-     * @param string $brand
+     * @param Manufacturer $manufacturer
      * @param string $model
      * @param string $description
      * @param int $price
      * @param int $stock
+     * @throws \Exception
      */
     public function __construct(
-        string $brand,
+        Manufacturer $manufacturer,
         string $model,
         string $description,
         int $price,
@@ -67,7 +68,8 @@ class Phone
         $this->id = Uuid::uuid4();
         $this->createdAt = time();
         $this->updatedAt = time();
-        $this->brand = $brand;
+
+        $this->setManufacturer($manufacturer);
         $this->model = $model;
         $this->description = $description;
         $this->price = $price;
@@ -88,6 +90,12 @@ class Phone
         $this->description = $description;
         $this->price = $price;
         $this->stock = $stock;
+    }
+
+    public function setManufacturer(Manufacturer $manufacturer)
+    {
+        $this->manufacturer = $manufacturer;
+        $manufacturer->addPhone($this);
     }
 
     /**
@@ -115,11 +123,11 @@ class Phone
     }
 
     /**
-     * @return string
+     * @return Manufacturer
      */
-    public function getBrand(): string
+    public function getManufacturer(): Manufacturer
     {
-        return $this->brand;
+        return $this->manufacturer;
     }
 
     /**

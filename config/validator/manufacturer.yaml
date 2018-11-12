@@ -1,0 +1,21 @@
+App\Domain\Entity\Manufacturer:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [id]
+            message: This manufacturer "{{ value }}" already exists on database'
+            groups:
+                - phone
+
+    properties:
+        name:
+            - NotBlank:
+                message: Manufacturer doit avoir un nom
+                groups:
+                    - phone
+            - Length:
+                min: 3
+                minMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou plus
+                max: 30
+                maxMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
+                groups:
+                    - phone

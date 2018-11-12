@@ -44,7 +44,7 @@ final class DeletePhoneAction implements DeletePhoneActionInterface
         $id = $request->attributes->get('id');
 
         if (!$this->phoneRepository->remove($id)) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with brand "%s"', 'Phone', $id));
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $id));
         }
 
         return $responder();

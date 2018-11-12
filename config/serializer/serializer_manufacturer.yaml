@@ -1,0 +1,4 @@
+App\Domain\Entity\Manufacturer:
+    attributes:
+        name:
+            groups: ['phones_list', 'phone']

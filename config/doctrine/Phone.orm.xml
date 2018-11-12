@@ -11,13 +11,14 @@
     >
         <id name="id" type="uuid" />
         
-        <unique-constraints>
-            <unique-constraint columns="brand,model" name="brand_model" />
-        </unique-constraints>
-        
         <field name="createdAt" type="integer" />
         <field name="updatedAt" type="integer" />
-        <field name="brand" type="string" />
+        <many-to-one field="manufacturer" target-entity="App\Domain\Entity\Manufacturer" inversed-by="phones">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <join-column nullable="false" />
+        </many-to-one>
         <field name="model" type="string" />
         <field name="description" type="text" />
         <field name="price" type="integer" />

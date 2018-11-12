@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\App\Normalizer;
+namespace App\App\Serializer;
 
 use App\Domain\Entity\Phone;
 use App\Domain\Entity\User;

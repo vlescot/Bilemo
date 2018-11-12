@@ -2,7 +2,7 @@ App\Domain\Entity\Phone:
     attributes:
         createdAt:
             groups: ['phone']
-        brand:
+        manufacturer:
             groups: ['phones_list', 'phone']
         model:
             groups: ['phones_list', 'phone']

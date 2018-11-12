@@ -30,8 +30,8 @@ nelmio_api_doc:
                 properties:
                     createdAt:
                         type: string
-                    brand:
-                        type: string
+                    manufacturer:
+                        $ref: "#/definitions/Manufacturer"
                     model:
                         type: string
                     description:
@@ -45,6 +45,11 @@ nelmio_api_doc:
                         properties:
                           href:
                             type: string
+            Manufacturer:
+                type: object
+                properties:
+                    name:
+                        type: string
             User:
                 type: object
                 properties:
@@ -155,8 +160,8 @@ nelmio_api_doc:
                         description: The page number to show
                         type: integer
                       - in: query
-                        name: brand
-                        description: Search by phone brand name
+                        name: manufacturer
+                        description: Search by phone manufacturer name
                         type: string
                       - in: query
                         name: model
@@ -210,8 +215,8 @@ nelmio_api_doc:
                         schema:
                           type: object
                           properties:
-                            brand:
-                              type: string
+                            manufacturer:
+                              $ref: "#/definitions/Manufacturer"
                             model:
                               type: string
                             description:

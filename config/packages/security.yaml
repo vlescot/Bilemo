@@ -46,7 +46,7 @@ security:
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         main:
-            pattern: ^/
+            pattern: ^/api
             provider: chain_provider
             stateless: true
             guard:

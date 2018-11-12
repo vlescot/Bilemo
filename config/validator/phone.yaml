@@ -2,8 +2,8 @@ App\Domain\Entity\Phone:
 
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            fields: [brand, model]
-            message: 'This model with this brand already exists on database'
+            fields: [manufacturer, model]
+            message: This model with this manufacturer already exists on database
             groups:
                 - phone
 
@@ -14,22 +14,17 @@ App\Domain\Entity\Phone:
                 groups:
                     - phone
 
-        brand:
+        manufacturer:
+            - Valid:
+                groups:
+                    - phone
             - NotBlank:
-                message: Brand ne peut pas être vide
+                message: Manufacturer can't be empty
                 groups:
                     - phone
-            - Length:
-                min: 3
-                minMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou plus
-                max: 30
-                maxMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
-                groups:
-                    - phone
-
         model:
             - NotBlank:
-                message: Model ne peut pas être vide
+                message: Model can't be empty
                 groups:
                     - phone
             - Length:
@@ -37,6 +32,7 @@ App\Domain\Entity\Phone:
                 minMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou plus
                 max: 30
                 maxMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
+
                 groups:
                     - phone
 
