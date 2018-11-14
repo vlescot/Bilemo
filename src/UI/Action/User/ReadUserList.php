@@ -4,32 +4,25 @@ declare(strict_types=1);
 namespace App\UI\Action\User;
 
 use App\Domain\Repository\UserRepository;
-use App\UI\Action\User\Interfaces\ReadUserActionInterface;
+use App\UI\Action\User\Interfaces\ReadUserListInterface;
 use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/users/{id}",
- *     name="user_read",
+ *     "/api/users",
+ *     name="users_list",
  *     methods={"GET"}
  * )
  *
- * Class ReadUserAction
+ * Class UserAction
  * @package App\UI\Action\User
  */
-final class ReadUserAction implements ReadUserActionInterface
+final class ReadUserList implements ReadUserListInterface
 {
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
     /**
      * @var UserRepository
      */
@@ -44,11 +37,9 @@ final class ReadUserAction implements ReadUserActionInterface
      * {@inheritdoc}
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
         UserRepository $userRepository,
         SerializerInterface $serializer
     ) {
-        $this->authorizationChecker = $authorizationChecker;
         $this->userRepository = $userRepository;
         $this->serializer = $serializer;
     }
@@ -58,16 +49,9 @@ final class ReadUserAction implements ReadUserActionInterface
      */
     public function __invoke(Request $request, ReadResponderInterface $responder): Response
     {
-        $userId = $request->attributes->get('id');
-
-        $userLastUpdateDate = $this->userRepository->getOneUpdateDate($userId);
-
-        if (!$userLastUpdateDate) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'User', $userId));
-        }
-
+        $timestamp = $this->userRepository->getLastUpdateDate();
         $lastModified = new \DateTime();
-        $lastModified->setTimestamp(intval($userLastUpdateDate));
+        $lastModified->setTimestamp(intval($timestamp));
 
         $response = new Response();
         $response->setLastModified($lastModified);
@@ -77,11 +61,11 @@ final class ReadUserAction implements ReadUserActionInterface
             return $response;
         }
 
-        $user = $this->userRepository->findOneById($userId);
+        $users = $this->userRepository->findAll();
 
-        $json = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
+        $json  = $this->serializer->serialize($users, 'json', ['groups' => ['users_list']]);
 
-        $response->setStatusCode(Response::HTTP_OK);
+        $response->setStatusCode(200);
         return $response->setContent($json);
 
 //        return $responder($json);

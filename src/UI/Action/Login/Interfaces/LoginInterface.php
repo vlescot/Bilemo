@@ -7,7 +7,7 @@ namespace App\UI\Action\Login\Interfaces;
  * Interface LoginActionInterface
  * @package App\UI\Action\Login\Interfaces
  */
-interface LoginActionInterface
+interface LoginInterface
 {
     public function __invoke();
 }

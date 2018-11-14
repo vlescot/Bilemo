@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User;
+namespace App\UI\Action\Phone;
 
-use App\Domain\Repository\UserRepository;
-use App\UI\Action\User\Interfaces\DeleteUserActionInterface;
+use App\Domain\Repository\PhoneRepository;
+use App\UI\Action\Phone\Interfaces\DeletePhoneInterface;
 use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,27 +13,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/users/{id}",
- *     name="user_delete",
+ *     "/api/phones/{id}",
+ *     name="phone_delete",
  *     methods={"DELETE"}
  * )
  *
- * Class DeleteUserAction
- * @package App\UI\Action\User
+ * Class DeletePhoneAction
+ * @package App\UI\Action\Phone
  */
-final class DeleteUserAction implements DeleteUserActionInterface
+final class DeletePhone implements DeletePhoneInterface
 {
     /**
-     * @var UserRepository
+     * @var PhoneRepository
      */
-    private $userRepository;
+    private $phoneRepository;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(PhoneRepository $phoneRepository)
     {
-        $this->userRepository = $userRepository;
+        $this->phoneRepository = $phoneRepository;
     }
 
     /**
@@ -43,8 +43,8 @@ final class DeleteUserAction implements DeleteUserActionInterface
     {
         $id = $request->attributes->get('id');
 
-        if (!$this->userRepository->remove($id)) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'User', $id));
+        if (!$this->phoneRepository->remove($id)) {
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $id));
         }
 
         return $responder();

@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Interface ReadPhoneListActionInterface
  * @package App\UI\Action\Phone\Interfaces
  */
-interface ReadPhoneListActionInterface
+interface ReadPhoneListInterface
 {
     /**
      * ReadPhoneListActionInterface constructor.

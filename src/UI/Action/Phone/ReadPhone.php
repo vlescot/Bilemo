@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\UI\Action\Phone;
 
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Action\Phone\Interfaces\ReadPhoneActionInterface;
+use App\UI\Action\Phone\Interfaces\ReadPhoneInterface;
 use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class PhoneAction
  * @package App\UI\Action
  */
-final class ReadPhoneAction implements ReadPhoneActionInterface
+final class ReadPhone implements ReadPhoneInterface
 {
     /**
      * @var PhoneRepository

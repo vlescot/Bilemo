@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Interface ReadPhoneActionInterface
  * @package App\UI\Action\Phone\Interfaces
  */
-interface ReadPhoneActionInterface
+interface ReadPhoneInterface
 {
     /**
      * ReadPhoneActionInterface constructor.

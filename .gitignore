@@ -18,7 +18,7 @@ php-cs-fixer
 
 [Others]
 /.web-server-pid
-TryAction.php
+TryThings.php
 
 [JWT AUTHENTICATION]
 /config/jwt/*.pem

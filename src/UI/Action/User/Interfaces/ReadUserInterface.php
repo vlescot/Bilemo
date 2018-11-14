@@ -7,30 +7,15 @@ use App\Domain\Repository\UserRepository;
 use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * Interface ReadUserListActionInterface
- * @package App\UI\Action\User\Interfaces
- */
-interface ReadUserListActionInterface
+interface ReadUserInterface
 {
-    /**
-     * ReadUserListActionInterface constructor.
-     *
-     * @param UserRepository $userRepository
-     * @param SerializerInterface $serializer
-     */
     public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker,
         UserRepository $userRepository,
         SerializerInterface $serializer
     );
-
-    /**
-     * @param Request $request
-     * @param ReadResponderInterface $responder
-     *
-     * @return Response
-     */
     public function __invoke(Request $request, ReadResponderInterface $responder): Response;
 }
