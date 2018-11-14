@@ -1,0 +1,13 @@
+Actions:
+    resource: '../src/UI/Action'
+    type: annotation
+    defaults: { _format: 'json' }
+
+app.swagger:
+    path: /api/doc.json
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger }
+app.swagger_ui:
+    path: /api/doc
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }

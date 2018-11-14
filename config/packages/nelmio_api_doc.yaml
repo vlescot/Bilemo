@@ -1,0 +1,511 @@
+nelmio_api_doc:
+
+    areas:
+        path_patterns:  [^/api/doc]
+
+    documentation:
+        info:
+            title: Bilemo Api Doc
+            description: Welcome to the BileMo API documentation
+            version: 1.0.0
+
+        tags:
+            - name: Authentication
+              description: Authentication and access token provider
+            - name: Phone
+              description: Manage the phone catalog
+            - name: User
+              description: Manage the users's account and, get and update details about the user for himself
+
+        definitions:
+            Authentication :
+                type: object
+                properties:
+                    username:
+                        type: string
+                    password:
+                        type: string
+            Phone:
+                type: object
+                properties:
+                    createdAt:
+                        type: string
+                    manufacturer:
+                        $ref: "#/definitions/Manufacturer"
+                    model:
+                        type: string
+                    description:
+                        type: string
+                    price:
+                        type: integer
+                    stock:
+                        type: integer
+                    _link:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+            Manufacturer:
+                type: object
+                properties:
+                    name:
+                        type: string
+            User:
+                type: object
+                properties:
+                    createdAt:
+                        type: string
+                    username:
+                        type: string
+                    email:
+                        type: string
+                    phoneNumber:
+                        type: string
+                    _link:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+
+        paths:
+        # AUTHENTICATION
+            '/api/token/user':
+                post:
+                    tags:
+                        - Authentication
+                    summary: User authentication and token provider
+                    description: |
+                        You have to fill those parameters with the credentials you got from Bilemo:
+                        ``````
+                        {
+                          "username": "{YourApplicationName}",
+                          "password": "{YourPassword}"
+                        }
+                        ``````
+                    consumes:
+                        - application/json
+                    produces:
+                        - application/json
+                    parameters:
+                        - in: body
+                          name: JSON
+                          description: Parameters needed to get your access_token
+                          required: true
+                          schema:
+                            $ref: "#/definitions/Authentication"
+                    responses:
+                        '200':
+                          description: OK
+                          schema:
+                            type: object
+                            properties:
+                                token:
+                                    type: string
+                        '400':
+                          description: Bad request - Invalid JSON
+                        '401':
+                          description: Bad credentials
+            '/api/token/company':
+                post:
+                    tags:
+                        - Authentication
+                    summary: Company authentication and token provider
+                    description: |
+                        You have to fill those parameters with the credentials you got from Bilemo:
+                        ``````
+                        {
+                          "username": "{YourCompanyName}",
+                          "password": "{YourPassword}"
+                        }
+                        ``````
+                    consumes:
+                        - application/json
+                    produces:
+                        - application/json
+                    parameters:
+                        - in: body
+                          name: JSON
+                          description: Parameters needed to get your access_token
+                          required: true
+                          schema:
+                            $ref: "#/definitions/Authentication"
+                    responses:
+                        '200':
+                          description: OK
+                          schema:
+                            type: object
+                            properties:
+                                token:
+                                    type: string
+                        '400':
+                          description: Bad request - Invalid JSON
+                        '401':
+                          description: Bad credentials
+        # PHONE
+            '/api/phones':
+                get:
+                    tags:
+                        - Phone
+                    summary: Gets phones list
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for User & Company)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: query
+                        name: page
+                        description: The page number to show
+                        type: integer
+                      - in: query
+                        name: manufacturer
+                        description: Search by phone manufacturer name
+                        type: string
+                      - in: query
+                        name: model
+                        description: Search by phone model name
+                        type: string
+                    responses:
+                      '200':
+                        description: OK
+                        schema:
+                          type: object
+                          properties:
+                            total:
+                              type: integer
+                            limit:
+                              type: integer
+                            links:
+                              type: object
+                              properties:
+                                first:
+                                  type: string
+                                self:
+                                  type: string
+                                next:
+                                  type: string
+                                last:
+                                  type: string
+                            phones:
+                              type: array
+                              items:
+                                $ref: "#/definitions/Phone"
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                post:
+                    tags:
+                        - Phone
+                    summary: Create a new phone
+                    consumes:
+                      - application/json
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for Company ONLY)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: body
+                        name: JSON
+                        description: Phone object that needs to be added
+                        required: true
+                        schema:
+                          type: object
+                          properties:
+                            manufacturer:
+                              $ref: "#/definitions/Manufacturer"
+                            model:
+                              type: string
+                            description:
+                              type: string
+                            price:
+                              type: integer
+                            stock:
+                              type: integer
+                    responses:
+                      '201':
+                        description: CREATED
+                        headers:
+                          Location :
+                            type: string
+                            description: Link to the new resource
+                      '400':
+                        description: BAD REQUEST - There was a validation error | Invalid JSON format sent
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+            '/api/phones/{id}':
+                get:
+                    tags:
+                        - Phone
+                    summary: Gets details about a specific phone
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for User & Company)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: path
+                        name: id
+                        description: id of mobile to return
+                        required: true
+                        type: string
+                    responses:
+                      '200':
+                        description: OK
+                        schema:
+                          $ref: "#/definitions/Phone"
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
+                put:
+                    tags:
+                        - Phone
+                    summary: Update a specific phone
+                    consumes:
+                      - application/json
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for Company ONLY)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: path
+                        name: id
+                        description: id of mobile to return
+                        required: true
+                        type: string
+                      - in: body
+                        name: JSON
+                        description: Phone object that needs to be updated
+                        required: true
+                        schema:
+                          type: object
+                          properties:
+                            description:
+                              type: string
+                            price:
+                              type: integer
+                            stock:
+                              type: integer
+                    responses:
+                      '201':
+                        description: CREATED
+                        headers:
+                          Location :
+                            type: string
+                            description: Link to the new resource
+                      '400':
+                        description: BAD REQUEST - There was a validation error | Invalid JSON format sent
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
+                delete:
+                    tags:
+                        - Phone
+                    summary: Delete a specific phone
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for Company ONLY)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: path
+                        name: id
+                        description: id of mobile to return
+                        required: true
+                        type: string
+                    responses:
+                      '204':
+                        description: NO CONTENT
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
+        # USER
+            '/api/users':
+                get:
+                    tags:
+                        - User
+                    summary: Gets users list
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for Company ONLY)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                    responses:
+                      '200':
+                        description: OK
+                        schema:
+                          type: array
+                          items:
+                              $ref: "#/definitions/User"
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                post:
+                    tags:
+                        - User
+                    summary: Create a new user
+                    consumes:
+                      - application/json
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for Company ONLY)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: body
+                        name: JSON
+                        description: User object that needs to be added
+                        required: true
+                        schema:
+                          type: object
+                          properties:
+                            username:
+                              type: string
+                            password:
+                              type: string
+                            email:
+                              type: string
+                            phoneNumber:
+                              type: string
+                    responses:
+                      '201':
+                        description: CREATED
+                        headers:
+                          Location :
+                            type: string
+                            description: Link to the new resource
+                      '400':
+                        description: BAD REQUEST - There was a validation error | Invalid JSON format sent
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+            '/api/users/{id}':
+                get:
+                    tags:
+                        - User
+                    summary: Gets details about a specific user
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for Company, and User for himself)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: path
+                        name: id
+                        description: id of user to return
+                        required: true
+                        type: string
+                    responses:
+                      '200':
+                        description: OK
+                        schema:
+                          $ref: "#/definitions/User"
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
+                put:
+                    tags:
+                        - User
+                    summary: Update a specific user
+                    consumes:
+                      - application/json
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for Company, and User for himself)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: path
+                        name: id
+                        description: id of user to return
+                        required: true
+                        type: string
+                      - in: body
+                        name: JSON
+                        description: User object that needs to be updated
+                        required: true
+                        schema:
+                          type: object
+                          properties:
+                            password:
+                              type: string
+                            email:
+                              type: string
+                            phoneNumber:
+                              type: string
+                    responses:
+                      '201':
+                        description: CREATED
+                        headers:
+                          Location :
+                            type: string
+                            description: Link to the new resource
+                      '400':
+                        description: BAD REQUEST - There was a validation error | Invalid JSON format sent
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
+                delete:
+                    tags:
+                        - User
+                    summary: Delete a specific user
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: Authorization (Access for Company, and User for himself)
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                      - in: path
+                        name: id
+                        description: id of user to return
+                        required: true
+                        type: string
+                    responses:
+                      '204':
+                        description: NO CONTENT
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
+            # Documentation
+            '/api/doc':
+                get:
+                    summary: Bilemo Api Documentation
+                    produces:
+                      - text/html
+                    responses:
+                      '200':
+                        description: OK
+
+            '/api/doc.json':
+                get:
+                    summary: Bilemo Api Documentation formated in JSON
+                    produces:
+                      - application/json
+                    responses:
+                      '200':
+                        description: OK

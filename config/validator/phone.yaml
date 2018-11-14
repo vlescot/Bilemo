@@ -1,0 +1,70 @@
+App\Domain\Entity\Phone:
+
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [manufacturer, model]
+            message: This model with this manufacturer already exists on database
+            groups:
+                - phone
+
+    properties:
+
+        createdAt:
+            - NotBlank:
+                groups:
+                    - phone
+
+        manufacturer:
+            - Valid:
+                groups:
+                    - phone
+            - NotBlank:
+                message: Manufacturer can't be empty
+                groups:
+                    - phone
+        model:
+            - NotBlank:
+                message: Model can't be empty
+                groups:
+                    - phone
+            - Length:
+                min: 2
+                minMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou plus
+                max: 30
+                maxMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
+
+                groups:
+                    - phone
+
+        description:
+            - NotBlank:
+                message: La description ne peut pas être vide
+                groups:
+                    - phone
+            - Length:
+                min: 10
+                minMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
+                groups:
+                    - phone
+
+        price:
+            - NotBlank:
+                message: Price ne peut pas être vide
+                groups:
+                    - phone
+            - Type:
+                type: numeric
+                message: Le champs price avec la valeur {{ value }} doit être du type numeric
+                groups:
+                    - phone
+
+        stock:
+            - NotBlank:
+                message: Stock ne peut pas être vide
+                groups:
+                    - phone
+            - Type:
+                type: integer
+                message: Le champs stock avec la valeur {{ value }} doit être du type numeric
+                groups:
+                    - phone

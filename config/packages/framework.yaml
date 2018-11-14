@@ -1,0 +1,12 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    csrf_protection: true
+
+    validation:
+        enabled: true
+
+    session:
+        handler_id: ~
+
+    php_errors:
+        log: true

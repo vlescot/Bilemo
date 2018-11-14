@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity
+        name="App\Domain\Entity\Manufacturer"
+        table="bm_manufacturer"
+        repository-class="App\Domain\Repository\ManufacturerRepository"
+    >
+        <id name="id" type="uuid" />
+        <field name="name" type="string" unique="true" />
+        <one-to-many field="phones" target-entity="App\Domain\Entity\Phone" mapped-by="manufacturer" />
+
+    </entity>
+
+</doctrine-mapping>
