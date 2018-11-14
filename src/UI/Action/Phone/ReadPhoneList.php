@@ -5,7 +5,7 @@ namespace App\UI\Action\Phone;
 
 use App\App\Pagination\Interfaces\PaginationFactoryInterface;
 use App\Domain\Repository\PhoneRepository;
-use App\UI\Action\Phone\Interfaces\ReadPhoneListActionInterface;
+use App\UI\Action\Phone\Interfaces\ReadPhoneListInterface;
 use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class ReadPhoneListAction
  * @package App\UI\Action
  */
-final class ReadPhoneListAction implements ReadPhoneListActionInterface
+final class ReadPhoneList implements ReadPhoneListInterface
 {
     /**
      * @var PhoneRepository

@@ -1,25 +1,25 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\Phone\Interfaces;
+namespace App\UI\Action\User\Interfaces;
 
-use App\Domain\Repository\PhoneRepository;
+use App\Domain\Repository\UserRepository;
 use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface DeletePhoneActionInterface
- * @package App\UI\Action\Phone\Interfaces
+ * Interface DeleteUserActionInterface
+ * @package App\UI\Action\User\Interfaces
  */
-interface DeletePhoneActionInterface
+interface DeleteUserInterface
 {
     /**
-     * DeletePhoneActionInterface constructor.
+     * DeleteUserActionInterface constructor.
      *
-     * @param PhoneRepository $phoneRepository
+     * @param UserRepository $userRepository
      */
-    public function __construct(PhoneRepository $phoneRepository);
+    public function __construct(UserRepository $userRepository);
 
     /**
      * @param Request $request

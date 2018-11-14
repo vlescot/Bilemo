@@ -9,7 +9,7 @@ use App\App\ErrorException\ApiException;
 use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\DTO\UserDTO;
 use App\Domain\Repository\UserRepository;
-use App\UI\Action\User\Interfaces\UpdateUserActionInterface;
+use App\UI\Action\User\Interfaces\UpdateUserInterface;
 use App\UI\Responder\Interfaces\UpdateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Class UpdateUserAction
  * @package App\UI\Action\User
  */
-final class UpdateUserAction implements UpdateUserActionInterface
+final class UpdateUser implements UpdateUserInterface
 {
     /**
      * @var SerializerInterface

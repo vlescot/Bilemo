@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Interface UpdatePhoneActionInterface
  * @package App\UI\Action\Phone\Interfaces
  */
-interface UpdatePhoneActionInterface
+interface UpdatePhoneInterface
 {
     /**
      * UpdatePhoneActionInterface constructor.

@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Interface CreateUserActionInterface
  * @package App\UI\Action\User\Interfaces
  */
-interface CreateUserActionInterface
+interface CreateUserInterface
 {
     /**
      * CreateUserActionInterface constructor.
