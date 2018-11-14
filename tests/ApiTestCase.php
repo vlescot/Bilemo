@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiTestCase extends WebTestCase
 {
+
     public function setUp()
     {
         parent::setUp();
@@ -22,6 +23,7 @@ class ApiTestCase extends WebTestCase
      * @param string $password
      * @return \Symfony\Bundle\FrameworkBundle\Client
      */
+
     protected function createAuthenticatedUser(string $username, string $password)
     {
         $body  = json_encode([
@@ -39,6 +41,7 @@ class ApiTestCase extends WebTestCase
 
         return $client;
     }
+
 
     protected function createAuthenticatedCompany()
     {
@@ -58,6 +61,7 @@ class ApiTestCase extends WebTestCase
         return $client;
     }
 
+
     private function getRepository($entityName)
     {
         self::bootKernel();
@@ -65,12 +69,14 @@ class ApiTestCase extends WebTestCase
         return $em->getRepository($entityName);
     }
 
+
     public function getPhoneId()
     {
         $repository = $this->getRepository(Phone::class);
-        $phone = $repository->findOneBy(['brand' => 'Samsung', 'model' => 'S100']);
+        $phone = $repository->findOneBy(['model' => 'S100']);
         return $phone->getId();
     }
+
 
     public function getUserId($username = null)
     {

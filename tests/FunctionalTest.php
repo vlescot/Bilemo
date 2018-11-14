@@ -5,6 +5,7 @@ namespace App\Tests;
 
 use Symfony\Component\HttpFoundation\Response;
 
+
 /**
  * Class SecurityTest
  * @package App\Tests
@@ -15,6 +16,7 @@ final class FunctionalTest extends ApiTestCase
     {
         parent::setUp();
     }
+
 
     /**
      * @param string $uri
@@ -37,6 +39,7 @@ final class FunctionalTest extends ApiTestCase
         static::assertArrayHasKey('token', json_decode($response->getContent(), true));
     }
 
+
     /**
      * @param string $uri
      * @param array $credentials
@@ -57,6 +60,7 @@ final class FunctionalTest extends ApiTestCase
     }
 
 
+
     /**
      * @param string $uri
      * @param string $method
@@ -71,6 +75,7 @@ final class FunctionalTest extends ApiTestCase
         $client->request($method, $uri, [], [], [], $body);
         static::assertSame(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
+
 
 
     /**
@@ -92,6 +97,7 @@ final class FunctionalTest extends ApiTestCase
     }
 
 
+
     /**
      * @param string $uri
      * @param string $method
@@ -110,6 +116,7 @@ final class FunctionalTest extends ApiTestCase
         static::assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
+
     /**
      * @param string $uri
      * @param string $method
@@ -123,6 +130,7 @@ final class FunctionalTest extends ApiTestCase
 
         static::assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
+
 
     /**
      * @param string $uri
@@ -138,6 +146,7 @@ final class FunctionalTest extends ApiTestCase
 
         static::assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
+
 
     /**
      * @param string $uri
@@ -156,6 +165,7 @@ final class FunctionalTest extends ApiTestCase
     }
 
 
+
     /**
      * @return \Generator
      */
@@ -164,6 +174,7 @@ final class FunctionalTest extends ApiTestCase
         yield ['/api/token/company', ['Bilemo', 'Bilemo']];
         yield ['/api/token/user', ['User0', 'password0']];
     }
+
 
     /**
      * @return \Generator
@@ -174,6 +185,7 @@ final class FunctionalTest extends ApiTestCase
         yield ['/api/token/user', ['User0', 'password0AA']];
     }
 
+
     /**
      * @return \Generator
      */
@@ -183,7 +195,9 @@ final class FunctionalTest extends ApiTestCase
         $userId = $this->getUserId();
 
         $postPhone = [
-            'brand' => 'Huawai',
+            'manufacturer' => [
+                'name' => 'Huawai'
+            ],
             'model' => 'P1',
             'description' => 'The best cheapest phone',
             'price' => 399,
@@ -200,11 +214,13 @@ final class FunctionalTest extends ApiTestCase
             'username' => 'userForTest',
             'password' => 'passwordForTest',
             'email' => 'emailForTest@mail.com',
+            'phoneNumber' => '0' . rand(000000000, 999999999)
         ];
 
         $putUser = [
             'password' => 'updatePassword',
             'email' => 'updateEmail@mail.com',
+            'phoneNumber' => '0'. rand(000000000, 999999999)
         ];
 
 
@@ -220,6 +236,7 @@ final class FunctionalTest extends ApiTestCase
         yield ['/api/users/'. $userId, 'DELETE',    null                    , Response::HTTP_NO_CONTENT];
     }
 
+
     /**
      * @return \Generator
      */
@@ -233,10 +250,10 @@ final class FunctionalTest extends ApiTestCase
         $phoneId = $this->getPhoneId();
         $userId = $this->getUserId($username);
 
-
         $putUser = [
             'password' => $updatePassword,
             'email' => 'updateEmail@mail.com',
+            'phoneNumber' => '0'. rand(000000000, 999999999)
         ];
 
         yield ['/api/phones',               'GET',      null     , $credentials, Response::HTTP_OK];
@@ -245,6 +262,7 @@ final class FunctionalTest extends ApiTestCase
         yield ['/api/users/'. $userId,      'PUT',      json_encode($putUser), $credentials, Response::HTTP_OK];
         yield ['/api/users/'. $userId,      'DELETE',   null     , [$username, $updatePassword], Response::HTTP_NO_CONTENT];
     }
+
 
     /**
      * @return \Generator
@@ -262,6 +280,7 @@ final class FunctionalTest extends ApiTestCase
         yield ['/api/users/'. $userId, 'GET', null];
     }
 
+
     /**
      * @return \Generator
      */
@@ -272,6 +291,7 @@ final class FunctionalTest extends ApiTestCase
         yield ['/api/phones', 'GET',];
         yield ['/api/phones/'. $phoneId, 'GET'];
     }
+
 
     /**
      * @return \Generator

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\App\Error\ApiError;
-use App\App\Error\ApiException;
+use App\App\ErrorException\ApiError;
+use App\App\ErrorException\ApiException;
 use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\DTO\PhoneDTO;
 use App\Domain\Repository\PhoneRepository;
@@ -78,7 +78,7 @@ final class UpdatePhoneAction implements UpdatePhoneActionInterface
         $phone = $this->phoneRepository->findOneById($phoneId);
 
         if (!$phone) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s" and model "%s"', 'Phone', $phoneId));
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $phoneId));
         }
 
         try {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\UI\Action\Phone;
 
 use App\App\Validator\ApiValidator;
-use App\App\Error\ApiError;
-use App\App\Error\ApiException;
+use App\App\ErrorException\ApiError;
+use App\App\ErrorException\ApiException;
 use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\Entity\Phone;
 use App\Domain\Repository\PhoneRepository;

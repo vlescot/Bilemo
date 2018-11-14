@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\App\Validator;
 
-use App\App\Error\ApiError;
-use App\App\Error\ApiException;
+use App\App\ErrorException\ApiError;
+use App\App\ErrorException\ApiException;
 use App\App\Validator\Interfaces\ApiValidatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

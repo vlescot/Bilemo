@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\App\Error;
+namespace App\App\ErrorException;
 
-use App\App\Error\Interfaces\ApiErrorResponseFactoryInterface;
+use App\App\ErrorException\Interfaces\ApiErrorResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

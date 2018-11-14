@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\App\Error\Interfaces;
+namespace App\App\ErrorException\Interfaces;
 
-use App\App\Error\ApiError;
+use App\App\ErrorException\ApiError;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

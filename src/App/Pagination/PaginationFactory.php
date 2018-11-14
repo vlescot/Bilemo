@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\App\Pagination;
 
-use App\App\Error\ApiError;
-use App\App\Error\ApiException;
+use App\App\ErrorException\ApiError;
+use App\App\ErrorException\ApiException;
 use App\App\Pagination\Interfaces\PaginatedCollectionInterface;
 use App\App\Pagination\Interfaces\PaginationFactoryInterface;
 use App\Domain\Repository\Interfaces\RepositoryAllowPaginationInterface;

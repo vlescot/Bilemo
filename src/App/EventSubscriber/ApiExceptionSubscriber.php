@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\App\EventSubscriber;
 
-use App\App\Error\ApiError;
-use App\App\Error\ApiException;
-use App\App\Error\ApiErrorResponseFactory;
+use App\App\ErrorException\ApiError;
+use App\App\ErrorException\ApiException;
+use App\App\ErrorException\ApiErrorResponseFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
