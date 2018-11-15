@@ -95,7 +95,6 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
         $json = $request->getContent();
         $entityId = $request->attributes->get('id');
 
-        // TODO ApiRepositoryInterface findOneById
         $repository = $this->em->getRepository($entityName);
         $entity = $repository->findOneById($entityId);
 
@@ -114,7 +113,6 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
             $dto->password = $this->passwordEncoder->encodePassword($entity, $dto->password);
         }
 
-        // TODO EntityInterface->update
         $params = $this->parametersBuilder->BuildParameters($dto, $entityName, 'update');
         call_user_func_array([$entity, 'update'], $params);
 

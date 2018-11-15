@@ -38,7 +38,6 @@ final class DeleteEntityFactory implements DeleteEntityFactoryInterface
         $repository = $this->em->getRepository($entityName);
         $id = $request->attributes->get('id');
 
-        // TODO ApiReposityInterface->remove
         if (!$repository->remove($id)) {
             throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', self::ENTITY_STRING[$entityName], $id));
         }
