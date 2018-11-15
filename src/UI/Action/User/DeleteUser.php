@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\UI\Action\User;
 
-use App\Domain\Repository\UserRepository;
+use App\Domain\Entity\User;
 use App\UI\Action\User\Interfaces\DeleteUserInterface;
+use App\UI\Factory\Interfaces\DeleteEntityFactoryInterface;
 use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,16 +24,16 @@ use Symfony\Component\Routing\Annotation\Route;
 final class DeleteUser implements DeleteUserInterface
 {
     /**
-     * @var UserRepository
+     * @var DeleteEntityFactoryInterface
      */
-    private $userRepository;
+    private $deleteFactory;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(DeleteEntityFactoryInterface $deleteFactory)
     {
-        $this->userRepository = $userRepository;
+        $this->deleteFactory = $deleteFactory;
     }
 
     /**
@@ -41,11 +41,7 @@ final class DeleteUser implements DeleteUserInterface
      */
     public function __invoke(Request $request, DeleteResponderInterface $responder): Response
     {
-        $id = $request->attributes->get('id');
-
-        if (!$this->userRepository->remove($id)) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'User', $id));
-        }
+        $this->deleteFactory->delete($request, User::class);
 
         return $responder();
     }

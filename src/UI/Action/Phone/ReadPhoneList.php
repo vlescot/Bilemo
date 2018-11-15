@@ -66,11 +66,6 @@ final class ReadPhoneList implements ReadPhoneListInterface
             $route
         );
 
-        $json = $this->serializer->serialize($paginatedCollection, 'json', ['groups' => ['phones_list']]);
-
-
-        // TODO header-> 'Content-type'=> application/hal+json
-        // Pour chacune des routes avec des liens hal
-        return $responder($json);
+        return $responder($paginatedCollection, 'phones_list');
     }
 }

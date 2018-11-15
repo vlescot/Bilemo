@@ -58,17 +58,27 @@ class Phone
      * @param int $stock
      * @throws \Exception
      */
-    public function __construct(
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4();
+        $this->createdAt = time();
+        $this->updatedAt = time();
+    }
+
+    /**
+     * @param Manufacturer $manufacturer
+     * @param string $model
+     * @param string $description
+     * @param int $price
+     * @param int $stock
+     */
+    public function create(
         Manufacturer $manufacturer,
         string $model,
         string $description,
         int $price,
         int $stock
     ) {
-        $this->id = Uuid::uuid4();
-        $this->createdAt = time();
-        $this->updatedAt = time();
-
         $this->setManufacturer($manufacturer);
         $this->model = $model;
         $this->description = $description;

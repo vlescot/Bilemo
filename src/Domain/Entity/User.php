@@ -69,7 +69,7 @@ class User implements UserInterface, EquatableInterface
      * @param string $email
      * @param string $phoneNumber
      */
-    public function registration(
+    public function create(
         string $username,
         string $password,
         string $email,
@@ -87,9 +87,9 @@ class User implements UserInterface, EquatableInterface
      * @param string $phoneNumber
      */
     public function update(
-        string $password,
-        string $email,
-        string $phoneNumber
+        string $password = null,
+        string $email = null,
+        string $phoneNumber = null
     ) {
         $this->updatedAt = time();
         $this->password = $password;

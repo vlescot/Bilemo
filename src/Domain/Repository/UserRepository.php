@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Domain\Repository;
 
 use App\Domain\Entity\User;
+use App\Domain\Repository\Interfaces\ApiRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Symfony\Bridge\Doctrine\RegistryInterface;

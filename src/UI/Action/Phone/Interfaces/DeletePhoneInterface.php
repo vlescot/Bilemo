@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone\Interfaces;
 
-use App\Domain\Repository\PhoneRepository;
+use App\UI\Factory\Interfaces\DeleteEntityFactoryInterface;
 use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 interface DeletePhoneInterface
 {
     /**
-     * DeletePhoneActionInterface constructor.
+     * DeletePhoneInterface constructor.
      *
-     * @param PhoneRepository $phoneRepository
+     * @param DeleteEntityFactoryInterface $deleteFactory
      */
-    public function __construct(PhoneRepository $phoneRepository);
+    public function __construct(DeleteEntityFactoryInterface $deleteFactory);
 
     /**
      * @param Request $request

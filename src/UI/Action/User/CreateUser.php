@@ -3,22 +3,13 @@ declare(strict_types=1);
 
 namespace App\UI\Action\User;
 
-use App\App\Validator\ApiValidator;
-use App\App\ErrorException\ApiError;
-use App\App\ErrorException\ApiException;
-use App\App\Validator\Interfaces\ApiValidatorInterface;
-use App\Domain\DTO\UserDTO;
 use App\Domain\Entity\User;
-use App\Domain\Repository\UserRepository;
 use App\UI\Action\User\Interfaces\CreateUserInterface;
+use App\UI\Factory\Interfaces\CreateEntityFactoryInterface;
 use App\UI\Responder\Interfaces\CreateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
@@ -33,45 +24,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class CreateUser implements CreateUserInterface
 {
     /**
-     * @var SerializerInterface
+     * @var CreateEntityFactoryInterface
      */
-    private $serializer;
-
-    /**
-     * @var ApiValidator
-     */
-    private $apiValidator;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
+    private $createFactory;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        SerializerInterface $serializer,
-        ApiValidatorInterface $apiValidator,
-        UserRepository $userRepository,
-        UrlGeneratorInterface $urlGenerator,
-        UserPasswordEncoderInterface $passwordEncoder
-    ) {
-        $this->serializer = $serializer;
-        $this->apiValidator = $apiValidator;
-        $this->userRepository = $userRepository;
-        $this->urlGenerator = $urlGenerator;
-        $this->passwordEncoder = $passwordEncoder;
+    public function __construct(CreateEntityFactoryInterface $createFactory)
+    {
+        $this->createFactory = $createFactory;
     }
 
 
@@ -80,33 +42,8 @@ final class CreateUser implements CreateUserInterface
      */
     public function __invoke(Request $request, CreateResponderInterface $responder): Response
     {
-        $json = $request->getContent();
+        $user = $this->createFactory->create($request, User::class);
 
-        try {
-            $userDTO = $this->serializer->deserialize($json, UserDTO::class, 'json');
-        } catch (NotEncodableValueException $e) {
-            $apiError = new ApiError(Response::HTTP_BAD_REQUEST, ApiError::TYPE_INVALID_REQUEST_BODY_FORMAT);
-            throw new ApiException($apiError);
-        }
-
-        $user = new User();
-        $password = $this->passwordEncoder->encodePassword($user, $userDTO->password);
-
-        $user->registration(
-            $userDTO->username,
-            $password,
-            $userDTO->email,
-            $userDTO->phoneNumber
-        );
-
-        $this->apiValidator->validate($user, null, ['user']);
-
-        $this->userRepository->save($user);
-
-        $jsonUser = $this->serializer->serialize($user, 'json', [
-            'groups' => ['user']
-        ]);
-
-        return $responder($jsonUser, $user);
+        return $responder($user, 'user', 'user_read');
     }
 }

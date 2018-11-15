@@ -3,14 +3,12 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\Domain\Repository\PhoneRepository;
+use App\Domain\Entity\Phone;
 use App\UI\Action\Phone\Interfaces\ReadPhoneInterface;
-use App\UI\Responder\Interfaces\ReadResponderInterface;
+use App\UI\Factory\Interfaces\ReadEntityFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
@@ -25,59 +23,23 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class ReadPhone implements ReadPhoneInterface
 {
     /**
-     * @var PhoneRepository
+     * @var ReadEntityFactoryInterface
      */
-    private $phoneRepository;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
+    private $readFactory;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        PhoneRepository $phoneRepository,
-        SerializerInterface $serializer
-    ) {
-        $this->phoneRepository = $phoneRepository;
-        $this->serializer = $serializer;
+    public function __construct(ReadEntityFactoryInterface $readFactory)
+    {
+        $this->readFactory = $readFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function __invoke(Request $request, ReadResponderInterface $responder): Response
+    public function __invoke(Request $request): Response
     {
-        $phoneId = $request->attributes->get('id');
-
-        $phoneLastUpdateDate = $this->phoneRepository->getOneUpdateDate($phoneId);
-
-        if (!$phoneLastUpdateDate) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $phoneId));
-        }
-
-        $lastModified = new \DateTime();
-        $lastModified->setTimestamp(intval($phoneLastUpdateDate));
-
-        $response = new Response();
-        $response->setLastModified($lastModified);
-        $response->setPublic();
-
-        if ($response->isNotModified($request)) {
-            return $response;
-        }
-
-
-        $phone = $this->phoneRepository->findOneById($phoneId);
-
-        $json = $this->serializer->serialize($phone, 'json', ['groups' => ['phone']]);
-
-        $response->setStatusCode(200);
-        return $response->setContent($json);
-
-//        return $responder($json);
+        return $this->readFactory->read($request, Phone::class);
     }
 }
