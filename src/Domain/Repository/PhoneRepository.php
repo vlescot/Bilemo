@@ -15,7 +15,9 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * Class PhoneRepository
  * @package App\Domain\Repository
  */
-class PhoneRepository extends ServiceEntityRepository implements RepositoryAllowPaginationInterface, RepositoryAllowFilteringInterface
+class PhoneRepository extends ServiceEntityRepository implements
+    RepositoryAllowPaginationInterface,
+    RepositoryAllowFilteringInterface
 {
     /**
      * PhoneRepository constructor.
@@ -102,10 +104,9 @@ class PhoneRepository extends ServiceEntityRepository implements RepositoryAllow
     }
 
     /**
-     * @param string $brand
-     * @param string $model
+     * @param string $id
      *
-     * @return mixed
+     * @return null|string
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\UI\Responder\Interfaces;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Interface ReadResponderInterface
@@ -12,9 +13,17 @@ use Symfony\Component\HttpFoundation\Response;
 interface ReadResponderInterface
 {
     /**
-     * @param string $json
+     * ReadResponderInterface constructor.
+     *
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(SerializerInterface $serializer);
+
+    /**
+     * @param $object
+     * @param string $serializationGroup
      *
      * @return Response
      */
-    public function __invoke(string $json): Response;
+    public function __invoke($object, string $serializationGroup): Response;
 }

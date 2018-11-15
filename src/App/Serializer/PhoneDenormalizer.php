@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\App\Serializer;
 
+use App\Domain\DTO\PhoneDTO;
+use App\Domain\Entity\Manufacturer;
 use App\Domain\Entity\Phone;
 use App\Domain\Repository\ManufacturerRepository;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -47,16 +49,19 @@ final class PhoneDenormalizer implements DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $phone = $this->normalizer->denormalize($data, Phone::class, 'json');
+        $phoneDTO = $this->normalizer->denormalize($data, PhoneDTO::class, 'json');
 
-        $manufacturerName = $data['manufacturer']['name'];
-        $manufacturer = $this->manufacturerRepository->findOneByName($manufacturerName);
+        if (isset($data['manufacturer']['name'])) {
+            $manufacturerName = $data['manufacturer']['name'];
 
-        if (null !== $manufacturer) {
-            $phone->setManufacturer($manufacturer);
+            $manufacturer = $this->manufacturerRepository->findOneByName($manufacturerName);
+
+            if (null === $manufacturer) {
+                $phoneDTO->manufacturer = new Manufacturer($manufacturerName);
+            }
         }
 
-        return $phone;
+        return $phoneDTO;
     }
 
     /**
@@ -68,6 +73,6 @@ final class PhoneDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return Phone::class === $type;
+        return PhoneDTO::class === $type;
     }
 }

@@ -161,6 +161,9 @@ final class FunctionalTest extends ApiTestCase
         $client = $this->createAuthenticatedCompany();
         $client->request($method, $uri, [] , [] , [] , $body);
 
+        if ($client->getResponse()->getStatusCode()===400){
+            dump(json_decode($client->getResponse()->getContent(), true));
+        }
         static::assertSame($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 

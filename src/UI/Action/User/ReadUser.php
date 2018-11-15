@@ -3,15 +3,12 @@ declare(strict_types=1);
 
 namespace App\UI\Action\User;
 
-use App\Domain\Repository\UserRepository;
+use App\Domain\Entity\User;
 use App\UI\Action\User\Interfaces\ReadUserInterface;
-use App\UI\Responder\Interfaces\ReadResponderInterface;
+use App\UI\Factory\Interfaces\ReadEntityFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
@@ -26,64 +23,23 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class ReadUser implements ReadUserInterface
 {
     /**
-     * @var AuthorizationCheckerInterface
+     * @var ReadEntityFactoryInterface
      */
-    private $authorizationChecker;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private $readFactory;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
-        UserRepository $userRepository,
-        SerializerInterface $serializer
-    ) {
-        $this->authorizationChecker = $authorizationChecker;
-        $this->userRepository = $userRepository;
-        $this->serializer = $serializer;
+    public function __construct(ReadEntityFactoryInterface $readFactory)
+    {
+        $this->readFactory = $readFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function __invoke(Request $request, ReadResponderInterface $responder): Response
+    public function __invoke(Request $request): Response
     {
-        $userId = $request->attributes->get('id');
-
-        $userLastUpdateDate = $this->userRepository->getOneUpdateDate($userId);
-
-        if (!$userLastUpdateDate) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'User', $userId));
-        }
-
-        $lastModified = new \DateTime();
-        $lastModified->setTimestamp(intval($userLastUpdateDate));
-
-        $response = new Response();
-        $response->setLastModified($lastModified);
-        $response->setPublic();
-
-        if ($response->isNotModified($request)) {
-            return $response;
-        }
-
-        $user = $this->userRepository->findOneById($userId);
-
-        $json = $this->serializer->serialize($user, 'json', ['groups' => ['user']]);
-
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response->setContent($json);
-
-//        return $responder($json);
+        return $this->readFactory->read($request, User::class);
     }
 }

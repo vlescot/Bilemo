@@ -3,10 +3,14 @@ App\Domain\Entity\User:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: [username]
-            message: 'This username already exists on database'
+            message: This username {{ value }} already exists on database
             groups:
                 - user
-
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [email]
+            message: This email {{ value }} already exists on database
+            groups:
+                - user
 
     properties:
 

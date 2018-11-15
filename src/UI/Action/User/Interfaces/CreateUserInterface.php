@@ -3,14 +3,10 @@ declare(strict_types=1);
 
 namespace App\UI\Action\User\Interfaces;
 
-use App\App\Validator\Interfaces\ApiValidatorInterface;
-use App\Domain\Repository\UserRepository;
+use App\UI\Factory\Interfaces\CreateEntityFactoryInterface;
 use App\UI\Responder\Interfaces\CreateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Interface CreateUserActionInterface
@@ -19,21 +15,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 interface CreateUserInterface
 {
     /**
-     * CreateUserActionInterface constructor.
+     * CreateUserInterface constructor.
      *
-     * @param SerializerInterface $serializer
-     * @param ApiValidatorInterface $apiValidator
-     * @param UserRepository $userRepository
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param CreateEntityFactoryInterface $createFactory
      */
-    public function __construct(
-        SerializerInterface $serializer,
-        ApiValidatorInterface $apiValidator,
-        UserRepository $userRepository,
-        UrlGeneratorInterface $urlGenerator,
-        UserPasswordEncoderInterface $passwordEncoder
-    );
+    public function __construct(CreateEntityFactoryInterface $createFactory);
 
     /**
      * @param Request $request

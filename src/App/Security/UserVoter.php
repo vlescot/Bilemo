@@ -43,8 +43,6 @@ final class UserVoter implements VoterInterface
      */
     public function supports(array $attributes, $subject): bool
     {
-//        dump('voter');
-//        dump(\count(array_intersect($attributes, self::ROLES)) > 0);
         if (!$subject instanceof Request) {
             return false;
         }

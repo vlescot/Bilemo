@@ -43,7 +43,7 @@ final class UserFixtures extends Fixture
 
             $password = $this->passwordEncoder->encodePassword($userEntity, $user['Password']);
 
-            $userEntity->registration(
+            $userEntity->create(
                 $user['Username'],
                 $password,
                 $user['Email'],

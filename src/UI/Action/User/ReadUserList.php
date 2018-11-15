@@ -5,7 +5,6 @@ namespace App\UI\Action\User;
 
 use App\Domain\Repository\UserRepository;
 use App\UI\Action\User\Interfaces\ReadUserListInterface;
-use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,7 +46,7 @@ final class ReadUserList implements ReadUserListInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(Request $request, ReadResponderInterface $responder): Response
+    public function __invoke(Request $request): Response
     {
         $timestamp = $this->userRepository->getLastUpdateDate();
         $lastModified = new \DateTime();
@@ -67,7 +66,5 @@ final class ReadUserList implements ReadUserListInterface
 
         $response->setStatusCode(200);
         return $response->setContent($json);
-
-//        return $responder($json);
     }
 }

@@ -29,13 +29,15 @@ final class PhoneFixtures extends Fixture implements DependentFixtureInterface
             foreach ($phones as $phone) {
                 $manufacturer = $this->getReference($phone['Manufacturer']);
 
-                $phoneEntity = new Phone(
+                $phoneEntity = new Phone();
+                $phoneEntity->create(
                     $manufacturer,
                     $phone['Model'] . $nb,
                     $phone['Description'],
                     $phone['Price'],
                     $phone['Stock']
                 );
+
                 $nb++;
 
                 $manager->persist($phoneEntity);

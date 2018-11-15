@@ -3,20 +3,13 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\App\Validator\ApiValidator;
-use App\App\ErrorException\ApiError;
-use App\App\ErrorException\ApiException;
-use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\Entity\Phone;
-use App\Domain\Repository\PhoneRepository;
 use App\UI\Action\Phone\Interfaces\CreatePhoneInterface;
+use App\UI\Factory\Interfaces\CreateEntityFactoryInterface;
 use App\UI\Responder\Interfaces\CreateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
@@ -31,38 +24,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 final class CreatePhone implements CreatePhoneInterface
 {
     /**
-     * @var SerializerInterface
+     * @var CreateEntityFactoryInterface
      */
-    private $serializer;
-
-    /**
-     * @var ApiValidator
-     */
-    private $apiValidator;
-
-    /**
-     * @var PhoneRepository
-     */
-    private $phoneRepository;
-
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
+    private $createFactory;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(
-        SerializerInterface $serializer,
-        ApiValidatorInterface $apiValidator,
-        PhoneRepository $phoneRepository,
-        UrlGeneratorInterface $urlGenerator
-    ) {
-        $this->serializer = $serializer;
-        $this->apiValidator = $apiValidator;
-        $this->phoneRepository = $phoneRepository;
-        $this->urlGenerator = $urlGenerator;
+    public function __construct(CreateEntityFactoryInterface $createFactory)
+    {
+        $this->createFactory = $createFactory;
     }
 
 
@@ -71,23 +42,8 @@ final class CreatePhone implements CreatePhoneInterface
      */
     public function __invoke(Request $request, CreateResponderInterface $responder): Response
     {
-        $json = $request->getContent();
+        $phone = $this->createFactory->create($request, Phone::class);
 
-        try {
-            $phone = $this->serializer->deserialize($json, Phone::class, 'json');
-        } catch (NotEncodableValueException $e) {
-            $apiError = new ApiError(Response::HTTP_BAD_REQUEST, ApiError::TYPE_INVALID_REQUEST_BODY_FORMAT);
-            throw new ApiException($apiError);
-        }
-
-        $this->apiValidator->validate($phone, null, ['phone']);
-
-        $this->phoneRepository->save($phone);
-
-        $jsonPhone = $this->serializer->serialize($phone, 'json', [
-            'groups' => ['phone']
-        ]);
-
-        return $responder($jsonPhone, $phone);
+        return $responder($phone, 'phone', 'phone_read');
     }
 }

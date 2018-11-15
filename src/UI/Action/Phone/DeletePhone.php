@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\UI\Action\Phone;
 
-use App\Domain\Repository\PhoneRepository;
+use App\Domain\Entity\Phone;
 use App\UI\Action\Phone\Interfaces\DeletePhoneInterface;
+use App\UI\Factory\Interfaces\DeleteEntityFactoryInterface;
 use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,16 +24,16 @@ use Symfony\Component\Routing\Annotation\Route;
 final class DeletePhone implements DeletePhoneInterface
 {
     /**
-     * @var PhoneRepository
+     * @var DeleteEntityFactoryInterface
      */
-    private $phoneRepository;
+    private $deleteFactory;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(PhoneRepository $phoneRepository)
+    public function __construct(DeleteEntityFactoryInterface $deleteFactory)
     {
-        $this->phoneRepository = $phoneRepository;
+        $this->deleteFactory = $deleteFactory;
     }
 
     /**
@@ -41,11 +41,7 @@ final class DeletePhone implements DeletePhoneInterface
      */
     public function __invoke(Request $request, DeleteResponderInterface $responder): Response
     {
-        $id = $request->attributes->get('id');
-
-        if (!$this->phoneRepository->remove($id)) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $id));
-        }
+        $this->deleteFactory->delete($request, Phone::class);
 
         return $responder();
     }
