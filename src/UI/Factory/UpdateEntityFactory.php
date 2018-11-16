@@ -16,7 +16,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -53,11 +52,6 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
     private $em;
 
     /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
      * @var ParametersBuilderInterface
      */
     private $parametersBuilder;
@@ -74,14 +68,12 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
         SerializerInterface $serializer,
         ApiValidatorInterface $apiValidator,
         EntityManagerInterface $em,
-        UrlGeneratorInterface $urlGenerator,
         ParametersBuilderInterface $parametersBuilder,
         UserPasswordEncoderInterface $passwordEncoder
     ) {
         $this->serializer = $serializer;
         $this->apiValidator = $apiValidator;
         $this->em = $em;
-        $this->urlGenerator = $urlGenerator;
         $this->parametersBuilder = $parametersBuilder;
         $this->passwordEncoder = $passwordEncoder;
     }

@@ -6,7 +6,6 @@ namespace App\UI\Action\Phone\Interfaces;
 use App\App\Pagination\Interfaces\PaginationFactoryInterface;
 use App\Domain\Repository\PhoneRepository;
 use App\UI\Responder\Interfaces\ReadResponderInterface;
-use App\UI\Responder\ReadResponder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;

@@ -7,7 +7,6 @@ use App\App\ParametersBuilder\Interfaces\ParametersBuilderInterface;
 use App\App\Validator\Interfaces\ApiValidatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -23,7 +22,6 @@ interface UpdateEntityFactoryInterface
      * @param SerializerInterface $serializer
      * @param ApiValidatorInterface $apiValidator
      * @param EntityManagerInterface $em
-     * @param UrlGeneratorInterface $urlGenerator
      * @param ParametersBuilderInterface $parametersBuilder
      * @param UserPasswordEncoderInterface $passwordEncoder
      */
@@ -31,7 +29,6 @@ interface UpdateEntityFactoryInterface
         SerializerInterface $serializer,
         ApiValidatorInterface $apiValidator,
         EntityManagerInterface $em,
-        UrlGeneratorInterface $urlGenerator,
         ParametersBuilderInterface $parametersBuilder,
         UserPasswordEncoderInterface $passwordEncoder
     );
