@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"GET"}
  * )
  *
- * Class PhoneAction
+ * Class ReadPhone
  * @package App\UI\Action
  */
 final class ReadPhone implements ReadPhoneInterface

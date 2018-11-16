@@ -124,7 +124,7 @@ class PhoneRepository extends ServiceEntityRepository implements
     }
 
     /**
-     * @return int|null
+     * @return null|string
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */

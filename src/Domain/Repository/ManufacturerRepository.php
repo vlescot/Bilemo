@@ -25,7 +25,8 @@ final class ManufacturerRepository extends ServiceEntityRepository
 
     /**
      * @param string $name
-     * @return bool
+     * @return mixed
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByName(string $name)
@@ -33,10 +34,7 @@ final class ManufacturerRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->where('m.name LIKE :name')
             ->setParameter('name', $name)
-//            ->setCacheable(true)
             ->getQuery()
-//            ->useResultCache(true)
-//            ->useQueryCache(true)
             ->getOneOrNullResult();
     }
 }

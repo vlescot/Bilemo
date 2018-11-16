@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Domain\Repository;
 
 use App\Domain\Entity\User;
-use App\Domain\Repository\Interfaces\ApiRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -24,13 +23,13 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     }
 
     /**
-     * @param string $id
+     * @param string $userId
      *
      * @return null|object
      */
-    public function findOneById(string $id): ? User
+    public function findOneById(string $userId): ? User
     {
-        return parent::findOneBy(['id' => $id]);
+        return parent::findOneBy(['id' => $userId]);
     }
 
     /**
@@ -49,16 +48,17 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     }
 
     /**
-     * @param string $id
-     * @return int|null
+     * @param string $userId
+     * @return null|string
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getOneUpdateDate(string $id): ? string
+    public function getOneUpdateDate(string $userId): ? string
     {
         return $this->createQueryBuilder('u')
             ->select('u.updatedAt')
             ->where('u.id LIKE :id')
-            ->setParameters(['id' => $id])
+            ->setParameters(['id' => $userId])
             ->setCacheable(true)
             ->getQuery()
             ->useResultCache(true)
@@ -67,7 +67,8 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     }
 
     /**
-     * @return int|null
+     * @return null|string
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getLastUpdateDate(): ? string
@@ -91,13 +92,13 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     }
 
     /**
-     * @param string $id
+     * @param string $userId
      *
      * @return bool
      */
-    public function remove(string $id)
+    public function remove(string $userId): bool
     {
-        $user = $this->findOneById($id);
+        $user = $this->findOneById($userId);
 
         if (null === $user) {
             return false;

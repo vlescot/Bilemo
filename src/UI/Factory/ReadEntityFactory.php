@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Class ReadEntityFactory
+ * @package App\UI\Factory
+ */
 final class ReadEntityFactory implements ReadEntityFactoryInterface
 {
     private const ENTITY_STRING = [

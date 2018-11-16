@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface UpdatePhoneActionInterface
+ * Interface UpdatePhoneInterface
  * @package App\UI\Action\Phone\Interfaces
  */
 interface UpdatePhoneInterface

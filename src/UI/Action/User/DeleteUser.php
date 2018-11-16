@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"DELETE"}
  * )
  *
- * Class DeleteUserAction
+ * Class DeleteUser
  * @package App\UI\Action\User
  */
 final class DeleteUser implements DeleteUserInterface

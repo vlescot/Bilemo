@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface DeleteUserActionInterface
+ * Interface DeleteUserInterface
  * @package App\UI\Action\User\Interfaces
  */
 interface DeleteUserInterface
@@ -21,11 +21,11 @@ interface DeleteUserInterface
      */
     public function __construct(DeleteEntityFactoryInterface $deleteFactory);
 
-        /**
-         * @param Request $request
-         * @param DeleteResponderInterface $responder
-         *
-         * @return Response
-         */
+    /**
+     * @param Request $request
+     * @param DeleteResponderInterface $responder
+     *
+     * @return Response
+     */
     public function __invoke(Request $request, DeleteResponderInterface $responder): Response;
 }

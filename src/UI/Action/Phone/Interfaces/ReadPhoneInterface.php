@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface ReadPhoneActionInterface
+ * Interface ReadPhoneInterface
  * @package App\UI\Action\Phone\Interfaces
  */
 interface ReadPhoneInterface

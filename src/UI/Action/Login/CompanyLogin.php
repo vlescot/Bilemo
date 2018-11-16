@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"POST"}
  * )
  *
- * Class CompanyLoginAction
+ * Class CompanyLogin
  * @package App\UI\Action
  */
 final class CompanyLogin implements LoginInterface

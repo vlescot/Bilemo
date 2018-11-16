@@ -12,13 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Interface ReadPhoneListActionInterface
+ * Interface ReadPhoneListInterface
  * @package App\UI\Action\Phone\Interfaces
  */
 interface ReadPhoneListInterface
 {
     /**
-     * ReadPhoneListActionInterface constructor.
+     * ReadPhoneListInterface constructor.
      *
      * @param PhoneRepository $phoneRepository
      * @param PaginationFactoryInterface $paginationFactory

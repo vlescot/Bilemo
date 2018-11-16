@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface DeletePhoneActionInterface
+ * Interface DeletePhoneInterface
  * @package App\UI\Action\Phone\Interfaces
  */
 interface DeletePhoneInterface

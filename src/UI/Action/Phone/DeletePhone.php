@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"DELETE"}
  * )
  *
- * Class DeletePhoneAction
+ * Class DeletePhone
  * @package App\UI\Action\Phone
  */
 final class DeletePhone implements DeletePhoneInterface

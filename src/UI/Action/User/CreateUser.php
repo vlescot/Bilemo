@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"POST"}
  * )
  *
- * Class CreateUserAction
+ * Class CreateUser
  * @package App\UI\Action\User
  */
 final class CreateUser implements CreateUserInterface

@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"PUT"}
  * )
  *
- * Class UpdatePhoneAction
+ * Class UpdatePhone
  * @package App\UI\Action\Phone
  */
 final class UpdatePhone implements UpdatePhoneInterface

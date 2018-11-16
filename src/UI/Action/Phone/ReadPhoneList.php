@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  *     methods={"GET"}
  * )
  *
- * Class ReadPhoneListAction
+ * Class ReadPhoneList
  * @package App\UI\Action
  */
 final class ReadPhoneList implements ReadPhoneListInterface

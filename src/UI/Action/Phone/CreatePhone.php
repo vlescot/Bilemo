@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"POST"}
  * )
  *
- * Class CreatePhoneAction
+ * Class CreatePhone
  * @package App\UI\Action\Phone
  */
 final class CreatePhone implements CreatePhoneInterface

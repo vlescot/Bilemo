@@ -10,6 +10,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class DeleteEntityFactory
+ * @package App\UI\Factory
+ */
 final class DeleteEntityFactory implements DeleteEntityFactoryInterface
 {
     private const ENTITY_STRING = [
@@ -36,10 +40,10 @@ final class DeleteEntityFactory implements DeleteEntityFactoryInterface
     public function delete(Request $request, string $entityName)
     {
         $repository = $this->em->getRepository($entityName);
-        $id = $request->attributes->get('id');
+        $entityId = $request->attributes->get('id');
 
-        if (!$repository->remove($id)) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', self::ENTITY_STRING[$entityName], $id));
+        if (!$repository->remove($entityId)) {
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', self::ENTITY_STRING[$entityName], $entityId));
         }
     }
 }

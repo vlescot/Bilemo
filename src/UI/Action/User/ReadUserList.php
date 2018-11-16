@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  *     methods={"GET"}
  * )
  *
- * Class UserAction
+ * Class User
  * @package App\UI\Action\User
  */
 final class ReadUserList implements ReadUserListInterface

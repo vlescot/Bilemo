@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface CreateUserActionInterface
+ * Interface CreateUserInterface
  * @package App\UI\Action\User\Interfaces
  */
 interface CreateUserInterface

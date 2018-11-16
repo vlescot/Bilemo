@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"GET"}
  * )
  *
- * Class ReadUserAction
+ * Class ReadUser
  * @package App\UI\Action\User
  */
 final class ReadUser implements ReadUserInterface

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Interface ReadUserListActionInterface
+ * Interface ReadUserListInterface
  * @package App\UI\Action\User\Interfaces
  */
 interface ReadUserListInterface

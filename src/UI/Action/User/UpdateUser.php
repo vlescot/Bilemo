@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"PUT"}
  * )
  *
- * Class UpdateUserAction
+ * Class UpdateUser
  * @package App\UI\Action\User
  */
 final class UpdateUser implements UpdateUserInterface
