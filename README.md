@@ -29,6 +29,7 @@ This application is built with Symfony ~4.0 and [ADR (Action-Domain-Responder)](
     ```php bin/console doctrine:schema:update --force```\
     ```php bin/console doctrine:fixtures:load --append```
  4. Generate the JWTAuthentication SSH keys \
+    ```mkdir config/jwt``` \
     ```openssl genrsa -out config/jwt/private.pem -aes256 4096``` \
     ```openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem``` 
 
