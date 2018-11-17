@@ -91,7 +91,7 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
         $entity = $repository->findOneById($entityId);
 
         if (!$entity) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', self::ENTITY_STRING[$entity], $entityId));
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', self::ENTITY_STRING[$entityName], $entityId));
         }
 
         try {

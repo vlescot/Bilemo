@@ -9,12 +9,34 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiTestCase extends WebTestCase
 {
-
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
         self::bootKernel();
+    }
+
+
+    /**
+     * @param array $expectedContent
+     * @param array $responseContent
+     */
+    protected function assertResponseContent(array $expectedContent, array $responseContent)
+    {
+        foreach ($expectedContent as $attributes => $type) {
+            if (\is_array($type)) {
+                static::assertArrayHasKey($attributes, $responseContent);
+
+                if (\is_int(key($type))) {
+                    $this->assertResponseContent($type[0], $responseContent[$attributes][0]);
+                } else {
+                    $this->assertResponseContent($type, $responseContent[$attributes]);
+                }
+            } else {
+                static::assertArrayHasKey($attributes, $responseContent);
+                static::assertInternalType($type, $responseContent[$attributes]);
+            }
+        }
     }
 
 
@@ -24,7 +46,7 @@ class ApiTestCase extends WebTestCase
      * @return \Symfony\Bundle\FrameworkBundle\Client
      */
 
-    protected function createAuthenticatedUser(string $username, string $password)
+    protected function getAuthenticatedUserClient(string $username, string $password)
     {
         $body  = json_encode([
             'username' => $username,
@@ -32,7 +54,7 @@ class ApiTestCase extends WebTestCase
         ]);
 
         $client = static::createClient();
-        $client->request('POST','/api/token/user', [], [], [], $body);
+        $client->request('POST', '/api/token/user', [], [], [], $body);
 
         $data = json_decode($client->getResponse()->getContent(), true);
 
@@ -43,7 +65,7 @@ class ApiTestCase extends WebTestCase
     }
 
 
-    protected function createAuthenticatedCompany()
+    protected function getAuthenticatedCompanyClient()
     {
         $content  = json_encode([
             'username' => 'Bilemo',
@@ -51,7 +73,7 @@ class ApiTestCase extends WebTestCase
         ]);
 
         $client = static::createClient();
-        $client->request('POST','/api/token/company',[],[],[],$content);
+        $client->request('POST', '/api/token/company', [], [], [], $content);
 
         $data = json_decode($client->getResponse()->getContent(), true);
 
@@ -70,15 +92,19 @@ class ApiTestCase extends WebTestCase
     }
 
 
-    public function getPhoneId()
+    protected function getPhoneId(string $model = null)
     {
+        if (!$model) {
+            $model = 'S100';
+        }
+
         $repository = $this->getRepository(Phone::class);
-        $phone = $repository->findOneBy(['model' => 'S100']);
+        $phone = $repository->findOneBy(['model' => $model]);
         return $phone->getId();
     }
 
 
-    public function getUserId($username = null)
+    protected function getUserId($username = null)
     {
         if (!$username) {
             $username = 'User0';
@@ -87,5 +113,11 @@ class ApiTestCase extends WebTestCase
         $repository = $this->getRepository(User::class);
         $user = $repository->findOneBy(['username' => $username]);
         return $user->getId();
+    }
+
+    protected function getEntityBy(string $entity, array $params)
+    {
+        $repository = $this->getRepository($entity);
+        return $repository->findOneBy($params);
     }
 }
