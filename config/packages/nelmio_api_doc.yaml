@@ -296,8 +296,8 @@ nelmio_api_doc:
                             stock:
                               type: integer
                     responses:
-                      '201':
-                        description: CREATED
+                      '200':
+                        description: OK
                         headers:
                           Location :
                             type: string
@@ -455,8 +455,8 @@ nelmio_api_doc:
                             phoneNumber:
                               type: string
                     responses:
-                      '201':
-                        description: CREATED
+                      '200':
+                        description: OK
                         headers:
                           Location :
                             type: string
