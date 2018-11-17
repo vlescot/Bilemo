@@ -24,7 +24,13 @@ This application is built with Symfony ~4.0 and [ADR (Action-Domain-Responder)](
  1. Clone or download the repository into your environment.  
     ```https://github.com/vlescot/bilemo.git  ```
  2. Change the files  *.env.dist* and *phpunit.xml.dist* with your own data :  
- 3. Install the database and inject the fixtures.
+ 3. Install the database and inject the fixtures :\
+    ``` php bin/console doctrine:database:create ``` \
+    ```php bin/console doctrine:schema:update --force```\
+    ```php bin/console doctrine:fixtures:load --append```
+ 4. Generate the JWTAuthentication SSH keys \
+    ```openssl genrsa -out config/jwt/private.pem -aes256 4096``` \
+    ```openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem``` 
 
  
  ## Test the application
@@ -48,4 +54,4 @@ This application is built with Symfony ~4.0 and [ADR (Action-Domain-Responder)](
  
 &nbsp; 
 &nbsp;
-That's all ! :smile:
+Enjoy ! :smile:
