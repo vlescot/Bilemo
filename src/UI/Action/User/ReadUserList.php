@@ -65,6 +65,7 @@ final class ReadUserList implements ReadUserListInterface
         $json  = $this->serializer->serialize($users, 'json', ['groups' => ['users_list']]);
 
         $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'application/hal+json');
         return $response->setContent($json);
     }
 }

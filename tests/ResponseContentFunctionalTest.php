@@ -32,13 +32,22 @@ final class ResponseContentFunctionalTest extends ApiTestCase
                     ],
                     'model' => 'string',
                     'description' => 'string',
-                    '_link' => [
-                        'href' => 'string'
+                    '_links' => [
+                        'self' => [
+                            'href' => 'string'
+                        ],
+                        'update' => [
+                            'href' => 'string'
+                        ],
+                        'delete' => [
+                            'href' => 'string'
+                        ]
                     ],
                 ]
             ],
         ];
 
+        static::assertSame('application/hal+json', $client->getResponse()->headers->get('Content-Type'));
         $this->assertResponseContent($expectedContent, $responseContent);
     }
 
@@ -54,12 +63,21 @@ final class ResponseContentFunctionalTest extends ApiTestCase
                 'username' => 'string',
                 'email' => 'string',
                 'createdAt' => 'string',
-                '_link' => [
-                    'href' => 'string'
+                '_links' => [
+                    'self' => [
+                        'href' => 'string'
+                    ],
+                    'update' => [
+                        'href' => 'string'
+                    ],
+                    'delete' => [
+                        'href' => 'string'
+                    ]
                 ],
             ]
         ];
 
+        static::assertSame('application/hal+json', $client->getResponse()->headers->get('Content-Type'));
         $this->assertResponseContent($expectedResponse, $responseContent);
     }
 
@@ -79,11 +97,20 @@ final class ResponseContentFunctionalTest extends ApiTestCase
             'description' => 'string',
             'price' => 'int',
             'stock' => 'int',
-            '_link' => [
-                'href' => 'string'
+            '_links' => [
+                'self' => [
+                    'href' => 'string'
+                ],
+                'update' => [
+                    'href' => 'string'
+                ],
+                'delete' => [
+                    'href' => 'string'
+                ]
             ],
         ];
 
+        static::assertSame('application/hal+json', $client->getResponse()->headers->get('Content-Type'));
         $this->assertResponseContent($expectedResponse, $responseContent);
     }
 
@@ -98,11 +125,20 @@ final class ResponseContentFunctionalTest extends ApiTestCase
             'username' => 'string',
             'email' => 'string',
             'phoneNumber' => 'string',
-            '_link' => [
-                'href' => 'string'
+            '_links' => [
+                'self' => [
+                    'href' => 'string'
+                ],
+                'update' => [
+                    'href' => 'string'
+                ],
+                'delete' => [
+                    'href' => 'string'
+                ]
             ],
         ];
 
+        static::assertSame('application/hal+json', $client->getResponse()->headers->get('Content-Type'));
         $this->assertResponseContent($expectedContent, $responseContent);
     }
 
@@ -121,7 +157,7 @@ final class ResponseContentFunctionalTest extends ApiTestCase
             'model' => $model,
             'description' => $description,
             'price' => $price,
-            'stock' => $stock
+            'stock' => $stock,
         ];
 
         $client = $this->getAuthenticatedCompanyClient();

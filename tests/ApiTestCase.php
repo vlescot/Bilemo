@@ -95,7 +95,7 @@ class ApiTestCase extends WebTestCase
     protected function getPhoneId(string $model = null)
     {
         if (!$model) {
-            $model = 'S100';
+            $model = 'G100';
         }
 
         $repository = $this->getRepository(Phone::class);
