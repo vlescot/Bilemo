@@ -74,6 +74,7 @@ final class ReadEntityFactory implements ReadEntityFactoryInterface
         $json = $this->serializer->serialize($phone, 'json', ['groups' => [self::ENTITY_STRING[$entityName]]]);
 
         $response->setStatusCode(Response::HTTP_OK);
+        $response->headers->set('Content-Type', 'application/hal+json');
         return $response->setContent($json);
     }
 }

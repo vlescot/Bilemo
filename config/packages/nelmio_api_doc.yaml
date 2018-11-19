@@ -40,11 +40,24 @@ nelmio_api_doc:
                         type: integer
                     stock:
                         type: integer
-                    _link:
+                    _links:
                         type: object
                         properties:
-                          href:
-                            type: string
+                          self:
+                            type: object
+                            properties:
+                              href:
+                                type: string
+                          update:
+                            type: object
+                            properties:
+                              href:
+                                type: string
+                          delete:
+                            type: object
+                            properties:
+                              href:
+                                type: string
             Manufacturer:
                 type: object
                 properties:
@@ -61,11 +74,24 @@ nelmio_api_doc:
                         type: string
                     phoneNumber:
                         type: string
-                    _link:
+                    _links:
                         type: object
                         properties:
-                          href:
-                            type: string
+                          self:
+                            type: objet
+                            properties:
+                              href:
+                                type: string
+                          update:
+                            type: objet
+                            properties:
+                              href:
+                                type: string
+                          delete:
+                            type: objet
+                            properties:
+                              href:
+                                type: string
 
         paths:
         # AUTHENTICATION
@@ -147,14 +173,17 @@ nelmio_api_doc:
                     tags:
                         - Phone
                     summary: Gets phones list
+                    description: '## Authorization: Access for _User_ and _Company_'
                     produces:
+                      - application/hal+json
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for User & Company)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: query
                         name: page
                         description: The page number to show
@@ -198,16 +227,18 @@ nelmio_api_doc:
                     tags:
                         - Phone
                     summary: Create a new phone
+                    description: '## Authorization: Access for _Company_ ONLY'
                     consumes:
                       - application/json
                     produces:
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for Company ONLY)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: body
                         name: JSON
                         description: Phone object that needs to be added
@@ -241,14 +272,17 @@ nelmio_api_doc:
                     tags:
                         - Phone
                     summary: Gets details about a specific phone
+                    description: '## Authorization: Access for _User_ and _Company_'
                     produces:
+                      - application/hal+json
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for User & Company)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: path
                         name: id
                         description: id of mobile to return
@@ -267,16 +301,19 @@ nelmio_api_doc:
                     tags:
                         - Phone
                     summary: Update a specific phone
+
+                    description: '## Authorization: Access for _Company_ ONLY'
                     consumes:
                       - application/json
                     produces:
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for Company ONLY)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: path
                         name: id
                         description: id of mobile to return
@@ -312,14 +349,16 @@ nelmio_api_doc:
                     tags:
                         - Phone
                     summary: Delete a specific phone
+                    description: '## Authorization: Access for _Company_ ONLY'
                     produces:
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for Company ONLY)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: path
                         name: id
                         description: id of mobile to return
@@ -338,14 +377,17 @@ nelmio_api_doc:
                     tags:
                         - User
                     summary: Gets users list
+                    description: '## Authorization: Access for _Company_ ONLY'
                     produces:
+                      - application/hal+json
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for Company ONLY)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                     responses:
                       '200':
                         description: OK
@@ -359,16 +401,18 @@ nelmio_api_doc:
                     tags:
                         - User
                     summary: Create a new user
+                    description: '## Authorization: Access for _Company_ ONLY'
                     consumes:
                       - application/json
                     produces:
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for Company ONLY)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: body
                         name: JSON
                         description: User object that needs to be added
@@ -400,14 +444,17 @@ nelmio_api_doc:
                     tags:
                         - User
                     summary: Gets details about a specific user
+                    description: '## Authorization: Access for _Company_, and _User for himself_'
                     produces:
+                      - application/hal+json
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for Company, and User for himself)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: path
                         name: id
                         description: id of user to return
@@ -426,16 +473,18 @@ nelmio_api_doc:
                     tags:
                         - User
                     summary: Update a specific user
+                    description: '## Authorization: Access for _Company_, and _User for himself_'
                     consumes:
                       - application/json
                     produces:
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for Company, and User for himself)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: path
                         name: id
                         description: id of user to return
@@ -471,14 +520,16 @@ nelmio_api_doc:
                     tags:
                         - User
                     summary: Delete a specific user
+                    description: '## Authorization: Access for _Company_, and _User for himself_'
                     produces:
                       - application/json
                     parameters:
                       - in: header
-                        name: Authorization (Access for Company, and User for himself)
+                        name: authorization
                         description: Bearer {YourAccessToken}
                         required: true
                         type: string
+                        default: Bearer TOKEN
                       - in: path
                         name: id
                         description: id of user to return

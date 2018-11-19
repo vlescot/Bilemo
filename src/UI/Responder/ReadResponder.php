@@ -29,6 +29,6 @@ final class ReadResponder implements ReadResponderInterface
     {
         $json = $this->serializer->serialize($object, 'json', ['groups' => [$serializationGroup]]);
 
-        return new Response($json, Response::HTTP_OK);
+        return new Response($json, Response::HTTP_OK, ['Content-Type' => 'application/hal+json'] );
     }
 }

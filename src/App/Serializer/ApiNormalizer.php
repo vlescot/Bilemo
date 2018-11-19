@@ -15,6 +15,11 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
  */
 final class ApiNormalizer implements NormalizerInterface
 {
+    private const ENTITY_STRING = [
+        Phone::class => 'phone',
+        User::class => 'user'
+    ];
+
     /**
      * @var UrlGeneratorInterface
      */
@@ -59,32 +64,35 @@ final class ApiNormalizer implements NormalizerInterface
             $data['createdAt'] = date('Y/m/d h:i A', $data['createdAt']);
         }
 
-        switch ($this->class) {
-            case Phone::class:
-                $data['_link'] = ['href' => $this->generateRoute($object, 'phone')];
-                break;
-
-            case User::class:
-                $data['_link'] = ['href' => $this->generateRoute($object, 'user')];
-                break;
-        }
+        $data['_links'] = $this->hal($object);
 
         return $data;
     }
 
+    private function hal($entity)
+    {
+        $routeNamePrefix = self::ENTITY_STRING[$this->class];
+
+        $links['self']['href'] = $this->generateRoute($entity, $routeNamePrefix .'_read');
+        $links['update']['href'] = $this->generateRoute($entity, $routeNamePrefix .'_update');
+        $links['delete']['href'] = $this->generateRoute($entity, $routeNamePrefix .'_delete');
+
+        return $links;
+    }
+
     /**
      * @param $entity
-     * @param string $class
+     * @param string $routeName
      *
      * @return string
      */
-    public function generateRoute($entity, string $class): string
+    private function generateRoute($entity, string $routeName): string
     {
-        $routeName = $class . '_read';
-
-        return $this->urlGenerator->generate($routeName, [
-            'id' => $entity->getId()
-        ], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->urlGenerator->generate(
+            $routeName,
+            ['id' => $entity->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
     }
 
     /**
