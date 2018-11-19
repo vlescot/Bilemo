@@ -87,20 +87,13 @@ class PhoneRepository extends ServiceEntityRepository implements
      */
     private function queryFilters(QueryBuilder $qb, array $filters = []): QueryBuilder
     {
-//        dump($filters);
-        if (array_key_exists('manufacturer', $filters) && array_key_exists('model', $filters)) {
-            $qb ->andWhere('p.model LIKE :model')
-                ->setParameter('model', $filters['model'])
-
-                ->leftJoin('p.manufacturer', 'm')
+        if (array_key_exists('manufacturer', $filters)) {
+            $qb ->leftJoin('p.manufacturer', 'm')
                 ->andWhere('m.name LIKE :manufacturer')
                 ->setParameter('manufacturer', $filters['manufacturer']);
+        }
 
-        } elseif (array_key_exists('manufacturer', $filters)) {
-            $qb                 ->leftJoin('p.manufacturer', 'm')
-                ->andWhere('m.name LIKE :manufacturer')
-                ->setParameter('manufacturer', $filters['manufacturer']);
-        } elseif (array_key_exists('model', $filters)) {
+        if (array_key_exists('model', $filters)) {
             $qb ->andWhere('p.model LIKE :model')
                 ->setParameter('model', $filters['model']);
         }
