@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class User
  * @package App\Domain\Entity
  */
-class User implements UserInterface, EquatableInterface
+class Client implements UserInterface, EquatableInterface
 {
     /**
      * @var UuidInterface
@@ -58,7 +58,7 @@ class User implements UserInterface, EquatableInterface
     public function __construct()
     {
         $this->id = Uuid::uuid4();
-        $this->roles = ['ROLE_USER'];
+        $this->roles = ['ROLE_CLIENT'];
         $this->createdAt = time();
         $this->updatedAt = time();
     }

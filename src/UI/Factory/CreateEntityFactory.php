@@ -8,9 +8,9 @@ use App\App\ErrorException\ApiException;
 use App\App\ParametersBuilder\Interfaces\ParametersBuilderInterface;
 use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\DTO\PhoneDTO;
-use App\Domain\DTO\UserDTO;
+use App\Domain\DTO\ClientDTO;
 use App\Domain\Entity\Phone;
-use App\Domain\Entity\User;
+use App\Domain\Entity\Client;
 use App\UI\Factory\Interfaces\CreateEntityFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,12 +23,12 @@ final class CreateEntityFactory implements CreateEntityFactoryInterface
 {
     private const ENTITY_DTO = [
         Phone::class => PhoneDTO::class,
-        User::class => UserDTO::class
+        Client::class => ClientDTO::class
     ];
 
     private const ENTITY_STRING = [
         Phone::class => 'phone',
-        User::class => 'user'
+        Client::class => 'client'
     ];
 
 

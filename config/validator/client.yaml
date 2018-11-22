@@ -1,16 +1,16 @@
-App\Domain\Entity\User:
+App\Domain\Entity\Client:
 
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: [username]
             message: This username {{ value }} already exists on database
             groups:
-                - user
+                - client
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: [email]
             message: This email {{ value }} already exists on database
             groups:
-                - user
+                - client
 
     properties:
 
@@ -18,14 +18,14 @@ App\Domain\Entity\User:
             - NotBlank:
                 message: The username is needed
                 groups:
-                    - user
+                    - client
             - Length:
                 min: 3
                 minMessage: The username must have minimum 3 caracters
                 max: 255
                 maxMessage: This username is too long
                 groups:
-                    - user
+                    - client
 
         password:
             - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
@@ -33,26 +33,26 @@ App\Domain\Entity\User:
             - NotBlank:
                 message: The passwors is needed
                 groups:
-                    - user
+                    - client
             - Length:
                 min: 8
                 minMessage: The password must have minimum 8 caracters
                 max: 64
                 maxMessage: This password is too long
                 groups:
-                    - user
+                    - client
 
         email:
             - NotBlank:
                 message: An e-mail is needed
                 groups:
-                    - user
+                    - client
             - Email:
                 message: This e-mail is not valid
                 groups:
-                    - user
+                    - client
 
         createdAt:
             - NotBlank:
                 groups:
-                    - user
+                    - client

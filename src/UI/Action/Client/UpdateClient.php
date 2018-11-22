@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User;
+namespace App\UI\Action\Client;
 
-use App\Domain\Entity\User;
-use App\UI\Action\User\Interfaces\UpdateUserInterface;
+use App\Domain\Entity\Client;
+use App\UI\Action\Client\Interfaces\UpdateClientInterface;
 use App\UI\Factory\Interfaces\UpdateEntityFactoryInterface;
 use App\UI\Responder\Interfaces\UpdateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,15 +13,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/users/{id}",
- *     name="user_update",
+ *     "/api/clients/{id}",
+ *     name="client_update",
  *     methods={"PUT"}
  * )
  *
- * Class UpdateUser
- * @package App\UI\Action\User
+ * Class UpdateClient
+ * @package App\UI\Action\Client
  */
-final class UpdateUser implements UpdateUserInterface
+final class UpdateClient implements UpdateClientInterface
 {
     /**
      * @var UpdateEntityFactoryInterface
@@ -41,8 +41,8 @@ final class UpdateUser implements UpdateUserInterface
      */
     public function __invoke(Request $request, UpdateResponderInterface $responder): Response
     {
-        $user = $this->updateFactory->update($request, User::class);
+        $client = $this->updateFactory->update($request, Client::class);
 
-        return $responder($user, 'user', 'user_read');
+        return $responder($client, 'client', 'client_read');
     }
 }

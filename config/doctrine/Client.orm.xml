@@ -5,9 +5,9 @@
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
     <entity
-            name="App\Domain\Entity\User"
-            table="bm_user"
-            repository-class="App\Domain\Repository\UserRepository"
+            name="App\Domain\Entity\Client"
+            table="bm_client"
+            repository-class="App\Domain\Repository\ClientRepository"
     >
         <id name="id" type="uuid" />
         <field name="roles" type="array" />

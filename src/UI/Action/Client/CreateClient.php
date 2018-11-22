@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User;
+namespace App\UI\Action\Client;
 
-use App\Domain\Entity\User;
-use App\UI\Action\User\Interfaces\CreateUserInterface;
+use App\Domain\Entity\Client;
+use App\UI\Action\Client\Interfaces\CreateClientInterface;
 use App\UI\Factory\Interfaces\CreateEntityFactoryInterface;
 use App\UI\Responder\Interfaces\CreateResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,15 +13,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/users",
- *     name="user_create",
+ *     "/api/clients",
+ *     name="client_create",
  *     methods={"POST"}
  * )
  *
- * Class CreateUser
- * @package App\UI\Action\User
+ * Class CreateClient
+ * @package App\UI\Action\Client
  */
-final class CreateUser implements CreateUserInterface
+final class CreateClient implements CreateClientInterface
 {
     /**
      * @var CreateEntityFactoryInterface
@@ -42,8 +42,8 @@ final class CreateUser implements CreateUserInterface
      */
     public function __invoke(Request $request, CreateResponderInterface $responder): Response
     {
-        $user = $this->createFactory->create($request, User::class);
+        $client = $this->createFactory->create($request, Client::class);
 
-        return $responder($user, 'user', 'user_read');
+        return $responder($client, 'client', 'client_read');
     }
 }

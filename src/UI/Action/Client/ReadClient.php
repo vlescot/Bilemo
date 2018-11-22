@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User;
+namespace App\UI\Action\Client;
 
-use App\Domain\Entity\User;
-use App\UI\Action\User\Interfaces\ReadUserInterface;
+use App\Domain\Entity\Client;
+use App\UI\Action\Client\Interfaces\ReadClientInterface;
 use App\UI\Factory\Interfaces\ReadEntityFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,15 +12,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/users/{id}",
- *     name="user_read",
+ *     "/api/clients/{id}",
+ *     name="client_read",
  *     methods={"GET"}
  * )
  *
- * Class ReadUser
- * @package App\UI\Action\User
+ * Class ReadClient
+ * @package App\UI\Action\Client
  */
-final class ReadUser implements ReadUserInterface
+final class ReadClient implements ReadClientInterface
 {
     /**
      * @var ReadEntityFactoryInterface
@@ -40,6 +40,6 @@ final class ReadUser implements ReadUserInterface
      */
     public function __invoke(Request $request): Response
     {
-        return $this->readFactory->read($request, User::class);
+        return $this->readFactory->read($request, Client::class);
     }
 }

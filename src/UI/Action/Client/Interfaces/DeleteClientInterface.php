@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User\Interfaces;
+namespace App\UI\Action\Client\Interfaces;
 
 use App\UI\Factory\Interfaces\DeleteEntityFactoryInterface;
 use App\UI\Responder\Interfaces\DeleteResponderInterface;
@@ -9,13 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface DeleteUserInterface
- * @package App\UI\Action\User\Interfaces
+ * Interface DeleteClientInterface
+ * @package App\UI\Action\Client\Interfaces
  */
-interface DeleteUserInterface
+interface DeleteClientInterface
 {
     /**
-     * DeleteUserInterface constructor.
+     * DeleteClientInterface constructor.
      *
      * @param DeleteEntityFactoryInterface $deleteFactory
      */

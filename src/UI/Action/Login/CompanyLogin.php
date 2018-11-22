@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * )
  *
  * Class CompanyLogin
- * @package App\UI\Action
+ * @package App\UI\Action\Login
  */
 final class CompanyLogin implements LoginInterface
 {

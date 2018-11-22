@@ -9,10 +9,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Class UserFixtures
+ * Class ClientFixtures
  * @package App\Domain\DataFixtures
  */
-final class UserFixtures extends Fixture
+final class ClientFixtures extends Fixture
 {
     use LoadDataFixtureTrait;
 
@@ -22,7 +22,7 @@ final class UserFixtures extends Fixture
     private $passwordEncoder;
 
     /**
-     * UserFixtures constructor.
+     * ClientFixtures constructor.
      *
      * @param UserPasswordEncoderInterface $passwordEncoder
      */
@@ -36,22 +36,22 @@ final class UserFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $users = $this->getDataFixture('User');
+        $clients = $this->getDataFixture('Client');
 
-        foreach ($users as $reference => $user) {
-            $userEntity = new Client();
+        foreach ($clients as $reference => $client) {
+            $clientEntity = new Client();
 
-            $password = $this->passwordEncoder->encodePassword($userEntity, $user['Password']);
+            $password = $this->passwordEncoder->encodePassword($clientEntity, $client['Password']);
 
-            $userEntity->create(
-                $user['Username'],
+            $clientEntity->create(
+                $client['Username'],
                 $password,
-                $user['Email'],
+                $client['Email'],
                 '0' . rand(00000000, 999999999)
             );
 
-            $this->addReference($reference, $userEntity);
-            $manager->persist($userEntity);
+            $this->addReference($reference, $clientEntity);
+            $manager->persist($clientEntity);
         }
 
         $manager->flush();

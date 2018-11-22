@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User\Interfaces;
+namespace App\UI\Action\Client\Interfaces;
 
 use App\UI\Factory\Interfaces\UpdateEntityFactoryInterface;
 use App\UI\Responder\Interfaces\UpdateResponderInterface;
@@ -9,13 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface UpdateUserInterface
- * @package App\UI\Action\User\Interfaces
+ * Interface UpdateClientInterface
+ * @package App\UI\Action\Client\Interfaces
  */
-interface UpdateUserInterface
+interface UpdateClientInterface
 {
     /**
-     * UpdateUserInterface constructor.
+     * UpdateClientInterface constructor.
      *
      * @param UpdateEntityFactoryInterface $updateFactory
      */

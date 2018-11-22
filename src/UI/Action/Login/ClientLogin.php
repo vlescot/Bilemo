@@ -8,15 +8,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/token/user",
- *     name="user_token",
+ *     "/api/token/client",
+ *     name="client_token",
  *     methods={"POST"}
  * )
  *
- * Class UserLogin
- * @package App\UI\Action\User
+ * Class ClientLogin
+ * @package App\UI\Action\Login
  */
-final class UserLogin implements LoginInterface
+final class ClientLogin implements LoginInterface
 {
     public function __invoke()
     {

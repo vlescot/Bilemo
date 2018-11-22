@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\UI\Factory;
 
 use App\Domain\Entity\Phone;
-use App\Domain\Entity\User;
+use App\Domain\Entity\Client;
 use App\UI\Factory\Interfaces\DeleteEntityFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +18,7 @@ final class DeleteEntityFactory implements DeleteEntityFactoryInterface
 {
     private const ENTITY_STRING = [
         Phone::class => 'phone',
-        User::class => 'user'
+        Client::class => 'client'
     ];
 
     /**

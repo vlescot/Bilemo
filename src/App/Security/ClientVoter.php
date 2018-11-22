@@ -10,13 +10,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class UserVoter
+ * Class ClientVoter
  * @package App\App\Security
  */
-final class UserVoter implements VoterInterface
+final class ClientVoter implements VoterInterface
 {
     const ROLES = [
-        'ROLE_SELF_USER',
+        'ROLE_SELF_CLIENT',
     ];
 
     /**
@@ -26,7 +26,7 @@ final class UserVoter implements VoterInterface
 
 
     /**
-     * UserVoter constructor.
+     * ClientVoter constructor.
      *
      * @param ClientRepository $userRepository
      */
