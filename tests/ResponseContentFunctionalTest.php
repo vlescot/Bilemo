@@ -4,17 +4,17 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\Domain\Entity\Phone;
-use App\Domain\Entity\User;
+use App\Domain\Entity\Client;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ResponseContentFunctionalTest extends ApiTestCase
 {
     public function testGETPhonesList()
     {
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('GET', '/api/phones');
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('GET', '/api/phones');
 
-        $responseContent = json_decode($client->getResponse()->getContent(), true);
+        $responseContent = json_decode($kernelClient->getResponse()->getContent(), true);
 
         $expectedContent = [
             'total' => 'int',
@@ -47,16 +47,16 @@ final class ResponseContentFunctionalTest extends ApiTestCase
             ],
         ];
 
-        static::assertSame('application/hal+json', $client->getResponse()->headers->get('Content-Type'));
+        static::assertSame('application/hal+json', $kernelClient->getResponse()->headers->get('Content-Type'));
         $this->assertResponseContent($expectedContent, $responseContent);
     }
 
-    public function testGETUsersList()
+    public function testGETClientsList()
     {
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('GET', '/api/users');
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('GET', '/api/clients');
 
-        $responseContent = json_decode($client->getResponse()->getContent(), true);
+        $responseContent = json_decode($kernelClient->getResponse()->getContent(), true);
 
         $expectedResponse = [
             0 => [
@@ -77,16 +77,16 @@ final class ResponseContentFunctionalTest extends ApiTestCase
             ]
         ];
 
-        static::assertSame('application/hal+json', $client->getResponse()->headers->get('Content-Type'));
+        static::assertSame('application/hal+json', $kernelClient->getResponse()->headers->get('Content-Type'));
         $this->assertResponseContent($expectedResponse, $responseContent);
     }
 
     public function testGETOnePhone()
     {
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('GET', '/api/phones/'. $this->getPhoneId());
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('GET', '/api/phones/'. $this->getPhoneId());
 
-        $responseContent = json_decode($client->getResponse()->getContent(), true);
+        $responseContent = json_decode($kernelClient->getResponse()->getContent(), true);
 
         $expectedResponse = [
             'createdAt' => 'string',
@@ -110,16 +110,16 @@ final class ResponseContentFunctionalTest extends ApiTestCase
             ],
         ];
 
-        static::assertSame('application/hal+json', $client->getResponse()->headers->get('Content-Type'));
+        static::assertSame('application/hal+json', $kernelClient->getResponse()->headers->get('Content-Type'));
         $this->assertResponseContent($expectedResponse, $responseContent);
     }
 
-    public function testGETOneUser()
+    public function testGETOneClient()
     {
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('GET', '/api/users/'. $this->getUserId());
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('GET', '/api/clients/'. $this->getClientId());
 
-        $responseContent = json_decode($client->getResponse()->getContent(), true);
+        $responseContent = json_decode($kernelClient->getResponse()->getContent(), true);
 
         $expectedContent = [
             'username' => 'string',
@@ -138,7 +138,7 @@ final class ResponseContentFunctionalTest extends ApiTestCase
             ],
         ];
 
-        static::assertSame('application/hal+json', $client->getResponse()->headers->get('Content-Type'));
+        static::assertSame('application/hal+json', $kernelClient->getResponse()->headers->get('Content-Type'));
         $this->assertResponseContent($expectedContent, $responseContent);
     }
 
@@ -160,11 +160,11 @@ final class ResponseContentFunctionalTest extends ApiTestCase
             'stock' => $stock,
         ];
 
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('POST', '/api/phones', [], [], [], json_encode($phone));
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('POST', '/api/phones', [], [], [], json_encode($phone));
 
-        static::assertSame(Response::HTTP_CREATED, $client->getResponse()->getStatusCode());
-        $phone = $this->getEntityBy(Phone::class, ['model' => $model]);
+        static::assertSame(Response::HTTP_CREATED, $kernelClient->getResponse()->getStatusCode());
+        $phone = $this->findBy(Phone::class, ['model' => $model]);
 
         static::assertSame($manufacturerName, $phone->getManufacturer()->getName());
         static::assertSame($model, $phone->getModel());
@@ -173,30 +173,30 @@ final class ResponseContentFunctionalTest extends ApiTestCase
         static::assertSame($stock, $phone->getStock());
     }
 
-    public function testPOSTUser()
+    public function testPOSTClient()
     {
         $username = 'usernameTest';
         $password = 'passwordTest';
         $email = 'usernameTest@mail.com';
         $phoneNumber = '0655443322';
 
-        $user = [
+        $client = [
             'username' => $username,
             'password' => $password,
             'email' => $email,
             'phoneNumber' => $phoneNumber
         ];
 
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('POST', '/api/users', [], [], [], json_encode($user));
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('POST', '/api/clients', [], [], [], json_encode($client));
 
-        static::assertSame(Response::HTTP_CREATED, $client->getResponse()->getStatusCode());
-        $user = $this->getEntityBy(User::class, ['username' => $username]);
+        static::assertSame(Response::HTTP_CREATED, $kernelClient->getResponse()->getStatusCode());
+        $client = $this->findBy(Client::class, ['username' => $username]);
 
-        static::assertSame($username, $user->getUsername());
-        static::assertNotSame($password, $user->getPassword());
-        static::assertSame($email, $user->getEmail());
-        static::assertSame($phoneNumber, $user->getPhoneNumber());
+        static::assertSame($username, $client->getUsername());
+        static::assertNotSame($password, $client->getPassword());
+        static::assertSame($email, $client->getEmail());
+        static::assertSame($phoneNumber, $client->getPhoneNumber());
     }
 
     public function testPUTPhone()
@@ -214,11 +214,11 @@ final class ResponseContentFunctionalTest extends ApiTestCase
 
         $phoneId = $this->getPhoneId($model);
 
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('PUT', '/api/phones/'. $phoneId, [], [], [], json_encode($phone));
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('PUT', '/api/phones/'. $phoneId, [], [], [], json_encode($phone));
 
-        static::assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $phone = $this->getEntityBy(Phone::class, ['model' => $model]);
+        static::assertSame(Response::HTTP_OK, $kernelClient->getResponse()->getStatusCode());
+        $phone = $this->findBy(Phone::class, ['model' => $model]);
 
         static::assertSame($model, $phone->getModel());
         static::assertSame($description, $phone->getDescription());
@@ -226,30 +226,29 @@ final class ResponseContentFunctionalTest extends ApiTestCase
         static::assertSame($stock, $phone->getStock());
     }
 
-    public function testPUTUser()
+    public function testPUTClient()
     {
         $username = 'usernameTest';
         $password = 'updatedPassword';
-        $email = 'updateUser@mail.com';
+        $email = 'updateClient@mail.com';
         $phoneNumber = '0566778899';
 
-        $user = [
+        $client = [
             'password' => $password,
             'email' => $email,
             'phoneNumber' => $phoneNumber
         ];
 
-        $userId = $this->getUserId($username);
+        $clientId = $this->getClientId($username);
 
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('PUT', '/api/users/'. $userId, [], [], [], json_encode($user));
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('PUT', '/api/clients/'. $clientId, [], [], [], json_encode($client));
 
-        static::assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        $user = $this->getEntityBy(User::class, ['username' => $username]);
-
-        static::assertNotSame($password, $user->getPassword());
-        static::assertSame($email, $user->getEmail());
-        static::assertSame($phoneNumber, $user->getPhoneNumber());
+        static::assertSame(Response::HTTP_OK, $kernelClient->getResponse()->getStatusCode());
+        $client = $this->findBy(Client::class, ['username' => $username]);
+        static::assertNotSame($password, $client->getPassword());
+        static::assertSame($email, $client->getEmail());
+        static::assertSame($phoneNumber, $client->getPhoneNumber());
     }
 
     public function testDELETEPhone()
@@ -257,26 +256,26 @@ final class ResponseContentFunctionalTest extends ApiTestCase
         $model = 'Nouveau model';
         $phoneId = $this->getPhoneId($model);
 
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('DELETE', '/api/phones/'. $phoneId);
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('DELETE', '/api/phones/'. $phoneId);
 
-        static::assertEquals(Response::HTTP_NO_CONTENT, $client->getResponse()->getStatusCode());
+        static::assertEquals(Response::HTTP_NO_CONTENT, $kernelClient->getResponse()->getStatusCode());
 
-        $client->request('GET', '/api/phones/'. $phoneId);
-        static::assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
+        $kernelClient->request('GET', '/api/phones/'. $phoneId);
+        static::assertEquals(Response::HTTP_NOT_FOUND, $kernelClient->getResponse()->getStatusCode());
     }
 
-    public function testDELETEUser()
+    public function testDELETEClient()
     {
         $username = 'usernameTest';
-        $userId = $this->getUserId($username);
+        $clientId = $this->getClientId($username);
 
-        $client = $this->getAuthenticatedCompanyClient();
-        $client->request('DELETE', '/api/users/'. $userId);
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request('DELETE', '/api/clients/'. $clientId);
 
-        static::assertEquals(Response::HTTP_NO_CONTENT, $client->getResponse()->getStatusCode());
+        static::assertEquals(Response::HTTP_NO_CONTENT, $kernelClient->getResponse()->getStatusCode());
 
-        $client->request('GET', '/api/users/'. $userId);
-        static::assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
+        $kernelClient->request('GET', '/api/clients/'. $clientId);
+        static::assertEquals(Response::HTTP_NOT_FOUND, $kernelClient->getResponse()->getStatusCode());
     }
 }

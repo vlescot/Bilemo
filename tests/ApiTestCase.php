@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\Domain\Entity\Phone;
-use App\Domain\Entity\User;
+use App\Domain\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiTestCase extends WebTestCase
 {
@@ -46,7 +47,7 @@ class ApiTestCase extends WebTestCase
      * @return \Symfony\Bundle\FrameworkBundle\Client
      */
 
-    protected function getAuthenticatedUserClient(string $username, string $password)
+    protected function getAuthenticatedClient(string $username, string $password)
     {
         $body  = json_encode([
             'username' => $username,
@@ -54,7 +55,7 @@ class ApiTestCase extends WebTestCase
         ]);
 
         $client = static::createClient();
-        $client->request('POST', '/api/token/user', [], [], [], $body);
+        $client->request('POST', '/api/token/client', [], [], [], $body);
 
         $data = json_decode($client->getResponse()->getContent(), true);
 
@@ -104,20 +105,27 @@ class ApiTestCase extends WebTestCase
     }
 
 
-    protected function getUserId($username = null)
+    protected function getClientId($username = null)
     {
         if (!$username) {
-            $username = 'User0';
+            $username = 'Client0';
         }
 
-        $repository = $this->getRepository(User::class);
-        $user = $repository->findOneBy(['username' => $username]);
-        return $user->getId();
+        $repository = $this->getRepository(Client::class);
+        $client = $repository->findOneBy(['username' => $username]);
+
+        return $client->getId();
     }
 
-    protected function getEntityBy(string $entity, array $params)
+    protected function findBy(string $entity, array $params)
     {
         $repository = $this->getRepository($entity);
         return $repository->findOneBy($params);
+    }
+
+    protected function showError(Response $response)
+    {
+        dump($response->getStatusCode());
+        dump($response->getContent());
     }
 }

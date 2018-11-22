@@ -73,7 +73,6 @@ class PhoneRepository extends ServiceEntityRepository implements
         return $this->queryFilters($qb, $filters)
             ->setCacheable(true)
             ->getQuery()
-            ->useResultCache(true)
             ->useQueryCache(true)
             ->getResult(Query::HYDRATE_OBJECT);
     }
@@ -116,7 +115,6 @@ class PhoneRepository extends ServiceEntityRepository implements
             ->setParameters(['id' => $id])
             ->setCacheable(true)
             ->getQuery()
-            ->useResultCache(true)
             ->useQueryCache(true)
             ->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
     }
@@ -132,7 +130,6 @@ class PhoneRepository extends ServiceEntityRepository implements
             ->select('MAX(p.updatedAt) as lastUpdate')
             ->setCacheable(true)
             ->getQuery()
-            ->useResultCache(true)
             ->useQueryCache(true)
             ->getSingleScalarResult();
     }

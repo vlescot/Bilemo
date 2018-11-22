@@ -1,24 +1,25 @@
 security:
     encoders:
-        App\Domain\Entity\User:
+        App\Domain\Entity\Client:
             algorithm: bcrypt
         Symfony\Component\Security\Core\User\UserInterface: plaintext
 
     role_hierarchy:
-        ROLE_COMPANY:   [ROLE_USER, ROLE_SELF_USER]
+        ROLE_COMPANY:   [ROLE_CLIENT, ROLE_SELF_CLIENT]
 
     providers:
         chain_provider:
             chain:
-                providers: [user_provider, company_provider]
-        user_provider:
+                providers: [client_provider, company_provider]
+        client_provider:
             entity:
-                class: App\Domain\Entity\User
+                class: App\Domain\Entity\Client
                 property: username
         company_provider:
             memory:
                 users:
                     Bilemo:  { password: 'Bilemo', roles: [ 'ROLE_COMPANY' ] }
+
 
     firewalls:
         dev:
@@ -27,19 +28,18 @@ security:
         doc:
             pattern: ^/api/doc
             security: false
-        user_login:
-            pattern: ^/api/token/user
-            provider: user_provider
+        client_login:
+            pattern: ^/api/token/client
+            provider: client_provider
             stateless: true
             anonymous: ~
             json_login:
-                check_path:               user_token
+                check_path:               client_token
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
         company_login:
             pattern: ^/api/token/company
             provider: company_provider
-            stateless: true
             anonymous: ~
             json_login:
                 check_path:               company_token
@@ -48,19 +48,18 @@ security:
         main:
             pattern: ^/api
             provider: chain_provider
-            stateless: true
             guard:
                 authenticators:
                     - lexik_jwt_authentication.security.guard.jwt_token_authenticator
 
     access_control:
-        - { path: ^/api/user/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/client/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/api/phones/,        roles: ROLE_USER,     methods: [GET] }
+        - { path: ^/api/phones/,        roles: ROLE_CLIENT,     methods: [GET] }
         - { path: ^/api/phones/,        roles: ROLE_COMPANY,  methods: [PUT, DELETE] }
-        - { path: ^/api/phones,          roles: ROLE_USER,     methods: [GET] }
+        - { path: ^/api/phones,          roles: ROLE_CLIENT,     methods: [GET] }
         - { path: ^/api/phones,          roles: ROLE_COMPANY,  methods: [POST] }
 
-        - { path: ^/api/users/,         roles: ROLE_SELF_USER, methods: [GET, PUT, DELETE] }
-        - { path: ^/api/users,           roles: ROLE_COMPANY,  methods: [GET, POST] }
+        - { path: ^/api/clients/,         roles: ROLE_SELF_CLIENT, methods: [GET, PUT, DELETE] }
+        - { path: ^/api/clients,           roles: ROLE_COMPANY,  methods: [GET, POST] }

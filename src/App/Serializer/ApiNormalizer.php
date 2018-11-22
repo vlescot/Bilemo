@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\App\Serializer;
 
 use App\Domain\Entity\Phone;
-use App\Domain\Entity\User;
+use App\Domain\Entity\Client;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -17,7 +17,7 @@ final class ApiNormalizer implements NormalizerInterface
 {
     private const ENTITY_STRING = [
         Phone::class => 'phone',
-        User::class => 'user'
+        Client::class => 'client'
     ];
 
     /**
@@ -64,12 +64,17 @@ final class ApiNormalizer implements NormalizerInterface
             $data['createdAt'] = date('Y/m/d h:i A', $data['createdAt']);
         }
 
-        $data['_links'] = $this->hal($object);
+        $data['_links'] = $this->generateHalLinks($object);
 
         return $data;
-    }
+    }   
 
-    private function hal($entity)
+    /**
+     * @param $entity
+     *
+     * @return array
+     */
+    private function generateHalLinks($entity): array
     {
         $routeNamePrefix = self::ENTITY_STRING[$this->class];
 
@@ -113,8 +118,8 @@ final class ApiNormalizer implements NormalizerInterface
                 $result = true;
                 break;
 
-            case User::class:
-                $this->class = User::class;
+            case Client::class:
+                $this->class = Client::class;
                 $result = true;
                 break;
 

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User;
+namespace App\UI\Action\Client;
 
-use App\Domain\Entity\User;
-use App\UI\Action\User\Interfaces\DeleteUserInterface;
+use App\Domain\Entity\Client;
+use App\UI\Action\Client\Interfaces\DeleteClientInterface;
 use App\UI\Factory\Interfaces\DeleteEntityFactoryInterface;
 use App\UI\Responder\Interfaces\DeleteResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,15 +13,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(
- *     "/api/users/{id}",
- *     name="user_delete",
+ *     "/api/clients/{id}",
+ *     name="client_delete",
  *     methods={"DELETE"}
  * )
  *
- * Class DeleteUser
- * @package App\UI\Action\User
+ * Class DeleteClient
+ * @package App\UI\Action\Client
  */
-final class DeleteUser implements DeleteUserInterface
+final class DeleteClient implements DeleteClientInterface
 {
     /**
      * @var DeleteEntityFactoryInterface
@@ -41,7 +41,7 @@ final class DeleteUser implements DeleteUserInterface
      */
     public function __invoke(Request $request, DeleteResponderInterface $responder): Response
     {
-        $this->deleteFactory->delete($request, User::class);
+        $this->deleteFactory->delete($request, Client::class);
 
         return $responder();
     }

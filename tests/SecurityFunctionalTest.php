@@ -84,11 +84,11 @@ final class SecurityFunctionalTest extends ApiTestCase
      * @param array $credentials
      * @param int $expectedResponse
      *
-     * @dataProvider roleSelfUserCanAccessRouteProvider
+     * @dataProvider roleSelfClientCanAccessRouteProvider
      */
-    public function test_user_ROLE_SELF_USER_can_access_route(string $uri, string $method, string $body = null, array $credentials, int $expectedResponse)
+    public function test_user_ROLE_SELF_CLIENT_can_access_route(string $uri, string $method, string $body = null, array $credentials, int $expectedResponse)
     {
-        $client = $this->getAuthenticatedUserClient($credentials[0], $credentials[1]);
+        $client = $this->getAuthenticatedClient($credentials[0], $credentials[1]);
 
         $client->request($method, $uri, [], [], [], $body);
 
@@ -102,14 +102,14 @@ final class SecurityFunctionalTest extends ApiTestCase
      * @param string $method
      * @param string|null $body
      *
-     * @dataProvider roleSelfUserCanNOTAccessRouteProvider
+     * @dataProvider roleSelfClientCanNOTAccessRouteProvider
      */
-    public function test_user_granted_ROLE_SELF_USER_can_not_access(string $uri, string $method, string $body = null)
+    public function test_user_granted_ROLE_SELF_CLIENT_can_not_access(string $uri, string $method, string $body = null)
     {
-        $username = 'User2';
+        $username = 'Client2';
         $password = 'password2';
 
-        $client = $this->getAuthenticatedUserClient($username, $password);
+        $client = $this->getAuthenticatedClient($username, $password);
         $client->request($method, $uri, [], [], [], $body);
 
         static::assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
@@ -120,11 +120,11 @@ final class SecurityFunctionalTest extends ApiTestCase
      * @param string $uri
      * @param string $method
      *
-     * @dataProvider roleUserCanAccessProvider
+     * @dataProvider roleClientCanAccessProvider
      */
     public function test_role_user_can_access(string $uri, string $method)
     {
-        $client = $this->getAuthenticatedUserClient('User0', 'password0');
+        $client = $this->getAuthenticatedClient('Client0', 'password0');
         $client->request($method, $uri);
 
         static::assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -136,11 +136,11 @@ final class SecurityFunctionalTest extends ApiTestCase
      * @param string $method
      * @param string $body
      *
-     * @dataProvider roleUserCanNOTAccessProvider
+     * @dataProvider roleClientCanNOTAccessProvider
      */
-    public function test_role_user_can_NOT_access(string $uri, string $method, string $body = null)
+    public function test_role_client_can_NOT_access(string $uri, string $method, string $body = null)
     {
-        $client = $this->getAuthenticatedUserClient('User2', 'password2');
+        $client = $this->getAuthenticatedClient('Client2', 'password2');
         $client->request($method, $uri, [], [], [], $body);
 
         static::assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
@@ -174,7 +174,7 @@ final class SecurityFunctionalTest extends ApiTestCase
     public function loginProvider()
     {
         yield ['/api/token/company', ['Bilemo', 'Bilemo']];
-        yield ['/api/token/user', ['User0', 'password0']];
+        yield ['/api/token/client', ['Client0', 'password0']];
     }
 
 
@@ -184,7 +184,7 @@ final class SecurityFunctionalTest extends ApiTestCase
     public function badLoginProvider()
     {
         yield ['/api/token/company', ['Bilemo', 'BilemoAA']];
-        yield ['/api/token/user', ['User0', 'password0AA']];
+        yield ['/api/token/client', ['Client0', 'password0AA']];
     }
 
 
@@ -194,7 +194,7 @@ final class SecurityFunctionalTest extends ApiTestCase
     public function AllRoutesProvider()
     {
         $phoneId = $this->getPhoneId();
-        $userId = $this->getUserId();
+        $clientId = $this->getClientId();
 
         $postPhone = [
             'manufacturer' => [
@@ -212,14 +212,14 @@ final class SecurityFunctionalTest extends ApiTestCase
             'stock' => 42,
         ];
 
-        $postUser = [
-            'username' => 'userForTest',
+        $postClient = [
+            'username' => 'clientForTest',
             'password' => 'passwordForTest',
             'email' => 'emailForTest@mail.com',
             'phoneNumber' => '0' . rand(000000000, 999999999)
         ];
 
-        $putUser = [
+        $putClient = [
             'password' => 'updatePassword',
             'email' => 'updateEmail@mail.com',
             'phoneNumber' => '0'. rand(000000000, 999999999)
@@ -231,28 +231,28 @@ final class SecurityFunctionalTest extends ApiTestCase
         yield ['/api/phones/'. $phoneId, 'GET',     null                    , Response::HTTP_OK];
         yield ['/api/phones/'. $phoneId, 'PUT',     json_encode($putPhone)  , Response::HTTP_OK];
         yield ['/api/phones/'. $phoneId, 'DELETE',  null                    , Response::HTTP_NO_CONTENT];
-        yield ['/api/users',            'GET',      null                    , Response::HTTP_OK];
-        yield ['/api/users/'. $userId, 'GET',       null                    , Response::HTTP_OK];
-        yield ['/api/users',            'POST',     json_encode($postUser)  , Response::HTTP_CREATED];
-        yield ['/api/users/'. $userId, 'PUT',       json_encode($putUser)   , Response::HTTP_OK];
-        yield ['/api/users/'. $userId, 'DELETE',    null                    , Response::HTTP_NO_CONTENT];
+        yield ['/api/clients',            'GET',      null                    , Response::HTTP_OK];
+        yield ['/api/clients/'. $clientId, 'GET',       null                    , Response::HTTP_OK];
+        yield ['/api/clients',            'POST',     json_encode($postClient)  , Response::HTTP_CREATED];
+        yield ['/api/clients/'. $clientId, 'PUT',       json_encode($putClient)   , Response::HTTP_OK];
+        yield ['/api/clients/'. $clientId, 'DELETE',    null                    , Response::HTTP_NO_CONTENT];
     }
 
 
     /**
      * @return \Generator
      */
-    public function roleSelfUserCanAccessRouteProvider()
+    public function roleSelfClientCanAccessRouteProvider()
     {
-        $username = 'User1';
+        $clientName = 'Client1';
         $password = 'password1';
         $updatePassword = 'updatePassword';
-        $credentials = [$username, $password];
+        $credentials = [$clientName, $password];
 
         $phoneId = $this->getPhoneId();
-        $userId = $this->getUserId($username);
+        $clientId = $this->getClientId($clientName);
 
-        $putUser = [
+        $putClient = [
             'password' => $updatePassword,
             'email' => 'updateEmail@mail.com',
             'phoneNumber' => '0'. rand(000000000, 999999999)
@@ -260,33 +260,33 @@ final class SecurityFunctionalTest extends ApiTestCase
 
         yield ['/api/phones',               'GET',      null     , $credentials, Response::HTTP_OK];
         yield ['/api/phones/'. $phoneId,    'GET',      null     , $credentials, Response::HTTP_OK];
-        yield ['/api/users/'. $userId,      'GET',      null     , $credentials, Response::HTTP_OK];
-        yield ['/api/users/'. $userId,      'PUT',      json_encode($putUser), $credentials, Response::HTTP_OK];
-        yield ['/api/users/'. $userId,      'DELETE',   null     , [$username, $updatePassword], Response::HTTP_NO_CONTENT];
+        yield ['/api/clients/'. $clientId,      'GET',      null     , $credentials, Response::HTTP_OK];
+        yield ['/api/clients/'. $clientId,      'PUT',      json_encode($putClient), $credentials, Response::HTTP_OK];
+        yield ['/api/clients/'. $clientId,      'DELETE',   null     , [$clientName, $updatePassword], Response::HTTP_NO_CONTENT];
     }
 
 
     /**
      * @return \Generator
      */
-    public function roleSelfUserCanNOTAccessRouteProvider()
+    public function roleSelfClientCanNOTAccessRouteProvider()
     {
         $phoneId = $this->getPhoneId();
-        $userId = $this->getUserId('User0');
+        $clientId = $this->getClientId('Client0');
 
         yield ['/api/phones', 'POST', json_encode(['' => ''])];
         yield ['/api/phones/'. $phoneId, 'PUT', json_encode(['' => ''])];
         yield ['/api/phones/'. $phoneId, 'DELETE', null];
-        yield ['/api/users', 'GET', null];
-        yield ['/api/users', 'POST', json_encode(['' => ''])];
-        yield ['/api/users/'. $userId, 'GET', null];
+        yield ['/api/clients', 'GET', null];
+        yield ['/api/clients', 'POST', json_encode(['' => ''])];
+        yield ['/api/clients/'. $clientId, 'GET', null];
     }
 
 
     /**
      * @return \Generator
      */
-    public function roleUserCanAccessProvider()
+    public function roleClientCanAccessProvider()
     {
         $phoneId = $this->getPhoneId();
 
@@ -298,18 +298,18 @@ final class SecurityFunctionalTest extends ApiTestCase
     /**
      * @return \Generator
      */
-    public function roleUserCanNOTAccessProvider()
+    public function roleClientCanNOTAccessProvider()
     {
         $phoneId = $this->getPhoneId();
-        $userId = $this->getUserId('User0');
+        $clientId = $this->getClientId('Client0');
 
         yield ['/api/phones',               'POST',     json_encode(['' => '']) ];
         yield ['/api/phones/'. $phoneId,    'PUT',      json_encode(['' => '']) ];
         yield ['/api/phones/'. $phoneId,    'DELETE',   null ];
-        yield ['/api/users',                'GET',      null ];
-        yield ['/api/users',                'POST',     json_encode(['' => '']) ];
-        yield ['/api/users/'. $userId,      'GET',      null ];
-        yield ['/api/users/'. $userId,      'PUT',      json_encode(['' => '']) ];
-        yield ['/api/users/'. $userId,      'DELETE',   null ];
+        yield ['/api/clients',                'GET',      null ];
+        yield ['/api/clients',                'POST',     json_encode(['' => '']) ];
+        yield ['/api/clients/'. $clientId,      'GET',      null ];
+        yield ['/api/clients/'. $clientId,      'PUT',      json_encode(['' => '']) ];
+        yield ['/api/clients/'. $clientId,      'DELETE',   null ];
     }
 }

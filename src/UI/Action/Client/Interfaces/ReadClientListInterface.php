@@ -1,27 +1,27 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User\Interfaces;
+namespace App\UI\Action\Client\Interfaces;
 
-use App\Domain\Repository\UserRepository;
+use App\Domain\Repository\ClientRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Interface ReadUserListInterface
- * @package App\UI\Action\User\Interfaces
+ * Interface ReadClientListInterface
+ * @package App\UI\Action\Client\Interfaces
  */
-interface ReadUserListInterface
+interface ReadClientListInterface
 {
     /**
-     * ReadUserListInterface constructor.
+     * ReadClientListInterface constructor.
      *
-     * @param UserRepository $userRepository
+     * @param ClientRepository $userRepository
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        UserRepository $userRepository,
+        ClientRepository $userRepository,
         SerializerInterface $serializer
     );
 

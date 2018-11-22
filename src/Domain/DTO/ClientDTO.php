@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace App\Domain\DTO;
 
 /**
- * Class UserDTO
+ * Class ClientDTO
  * @package App\Domain\DTO
  */
-final class UserDTO
+final class ClientDTO
 {
     /**
      * @var string

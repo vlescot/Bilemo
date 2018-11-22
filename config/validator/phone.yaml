@@ -2,8 +2,8 @@ App\Domain\Entity\Phone:
 
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            fields: [manufacturer, model]
-            message: This model with this manufacturer already exists on database
+            fields: [model]
+            message: This model already exists on database
             groups:
                 - phone
 

@@ -1,0 +1,16 @@
+client_0:
+    Username: Client0
+    Password: password0
+    Email: client0@mail.com
+client_1:
+    Username: Client1
+    Password: password1
+    Email: client1@mail.com
+client_2:
+    Username: Client2
+    Password: password2
+    Email: client2@mail.com
+client_3:
+    Username: RegularClient
+    Password: OpenClassrooms
+    Email: RegularClient@mail.com

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User\Interfaces;
+namespace App\UI\Action\Client\Interfaces;
 
 use App\UI\Factory\Interfaces\CreateEntityFactoryInterface;
 use App\UI\Responder\Interfaces\CreateResponderInterface;
@@ -9,13 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Interface CreateUserInterface
- * @package App\UI\Action\User\Interfaces
+ * Interface CreateClientInterface
+ * @package App\UI\Action\Client\Interfaces
  */
-interface CreateUserInterface
+interface CreateClientInterface
 {
     /**
-     * CreateUserInterface constructor.
+     * CreateClientInterface constructor.
      *
      * @param CreateEntityFactoryInterface $createFactory
      */

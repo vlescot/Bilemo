@@ -1,0 +1,58 @@
+App\Domain\Entity\Client:
+
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [username]
+            message: This username {{ value }} already exists on database
+            groups:
+                - client
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [email]
+            message: This email {{ value }} already exists on database
+            groups:
+                - client
+
+    properties:
+
+        username:
+            - NotBlank:
+                message: The username is needed
+                groups:
+                    - client
+            - Length:
+                min: 3
+                minMessage: The username must have minimum 3 caracters
+                max: 255
+                maxMessage: This username is too long
+                groups:
+                    - client
+
+        password:
+            - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
+                message: This password is not valid
+            - NotBlank:
+                message: The passwors is needed
+                groups:
+                    - client
+            - Length:
+                min: 8
+                minMessage: The password must have minimum 8 caracters
+                max: 64
+                maxMessage: This password is too long
+                groups:
+                    - client
+
+        email:
+            - NotBlank:
+                message: An e-mail is needed
+                groups:
+                    - client
+            - Email:
+                message: This e-mail is not valid
+                groups:
+                    - client
+
+        createdAt:
+            - NotBlank:
+                groups:
+                    - client

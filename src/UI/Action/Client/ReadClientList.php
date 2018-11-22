@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\UI\Action\User;
+namespace App\UI\Action\Client;
 
-use App\Domain\Repository\UserRepository;
-use App\UI\Action\User\Interfaces\ReadUserListInterface;
+use App\Domain\Repository\ClientRepository;
+use App\UI\Action\Client\Interfaces\ReadClientListInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,20 +12,20 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(
- *     "/api/users",
- *     name="users_list",
+ *     "/api/clients",
+ *     name="clients_list",
  *     methods={"GET"}
  * )
  *
- * Class User
- * @package App\UI\Action\User
+ * Class Client
+ * @package App\UI\Action\Client
  */
-final class ReadUserList implements ReadUserListInterface
+final class ReadClientList implements ReadClientListInterface
 {
     /**
-     * @var UserRepository
+     * @var ClientRepository
      */
-    private $userRepository;
+    private $clientRepository;
 
     /**
      * @var SerializerInterface
@@ -36,10 +36,10 @@ final class ReadUserList implements ReadUserListInterface
      * {@inheritdoc}
      */
     public function __construct(
-        UserRepository $userRepository,
+        ClientRepository $clientRepository,
         SerializerInterface $serializer
     ) {
-        $this->userRepository = $userRepository;
+        $this->clientRepository = $clientRepository;
         $this->serializer = $serializer;
     }
 
@@ -48,7 +48,7 @@ final class ReadUserList implements ReadUserListInterface
      */
     public function __invoke(Request $request): Response
     {
-        $timestamp = $this->userRepository->getLastUpdateDate();
+        $timestamp = $this->clientRepository->getLastUpdateDate();
         $lastModified = new \DateTime();
         $lastModified->setTimestamp(intval($timestamp));
 
@@ -60,9 +60,9 @@ final class ReadUserList implements ReadUserListInterface
             return $response;
         }
 
-        $users = $this->userRepository->findAll();
+        $clients = $this->clientRepository->findAll();
 
-        $json  = $this->serializer->serialize($users, 'json', ['groups' => ['users_list']]);
+        $json  = $this->serializer->serialize($clients, 'json', ['groups' => ['clients_list']]);
 
         $response->setStatusCode(200);
         $response->headers->set('Content-Type', 'application/hal+json');

@@ -3,37 +3,37 @@ declare(strict_types=1);
 
 namespace App\Domain\Repository;
 
-use App\Domain\Entity\User;
+use App\Domain\Entity\Client;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserRepository extends ServiceEntityRepository implements UserLoaderInterface
+class ClientRepository extends ServiceEntityRepository implements UserLoaderInterface
 {
     /**
-     * UserRepository constructor.
+     * ClientRepository constructor.
      *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, User::class);
+        parent::__construct($registry, Client::class);
     }
 
     /**
-     * @param string $userId
+     * @param string $clientId
      *
      * @return null|object
      */
-    public function findOneById(string $userId): ? User
+    public function findOneById(string $clientId): ? Client
     {
-        return parent::findOneBy(['id' => $userId]);
+        return parent::findOneBy(['id' => $clientId]);
     }
 
     /**
-     * @param $username
+     * @param $clientname
      * @return null|UserInterface
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -48,20 +48,19 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
     }
 
     /**
-     * @param string $userId
+     * @param string $clientId
      * @return null|string
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getOneUpdateDate(string $userId): ? string
+    public function getOneUpdateDate(string $clientId): ? string
     {
         return $this->createQueryBuilder('u')
             ->select('u.updatedAt')
             ->where('u.id LIKE :id')
-            ->setParameters(['id' => $userId])
+            ->setParameters(['id' => $clientId])
             ->setCacheable(true)
             ->getQuery()
-            ->useResultCache(true)
             ->useQueryCache(true)
             ->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
     }
@@ -77,34 +76,33 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->select('MAX(u.updatedAt) as lastUpdate')
             ->setCacheable(true)
             ->getQuery()
-            ->useResultCache(true)
             ->useQueryCache(true)
             ->getSingleScalarResult();
     }
 
     /**
-     * @param UserInterface $user
+     * @param UserInterface $client
      */
-    public function save(UserInterface $user)
+    public function save(UserInterface $client)
     {
-        $this->_em->persist($user);
+        $this->_em->persist($client);
         $this->_em->flush();
     }
 
     /**
-     * @param string $userId
+     * @param string $clientId
      *
      * @return bool
      */
-    public function remove(string $userId): bool
+    public function remove(string $clientId): bool
     {
-        $user = $this->findOneById($userId);
+        $client = $this->findOneById($clientId);
 
-        if (null === $user) {
+        if (null === $client) {
             return false;
         }
 
-        $this->_em->remove($user);
+        $this->_em->remove($client);
         $this->_em->flush();
 
         return true;
