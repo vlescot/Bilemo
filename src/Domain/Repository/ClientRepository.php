@@ -61,7 +61,6 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->setParameters(['id' => $userId])
             ->setCacheable(true)
             ->getQuery()
-            ->useResultCache(true)
             ->useQueryCache(true)
             ->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
     }
@@ -77,7 +76,6 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->select('MAX(u.updatedAt) as lastUpdate')
             ->setCacheable(true)
             ->getQuery()
-            ->useResultCache(true)
             ->useQueryCache(true)
             ->getSingleScalarResult();
     }

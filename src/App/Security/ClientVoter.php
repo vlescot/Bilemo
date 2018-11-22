@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\App\Security;
 
-use App\Domain\Repository\UserRepository;
+use App\Domain\Repository\ClientRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -20,7 +20,7 @@ final class UserVoter implements VoterInterface
     ];
 
     /**
-     * @var UserRepository
+     * @var ClientRepository
      */
     private $userRepository;
 
@@ -28,9 +28,9 @@ final class UserVoter implements VoterInterface
     /**
      * UserVoter constructor.
      *
-     * @param UserRepository $userRepository
+     * @param ClientRepository $userRepository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(ClientRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\DataFixtures;
 
-use App\Domain\Entity\User;
+use App\Domain\Entity\Client;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -39,7 +39,7 @@ final class UserFixtures extends Fixture
         $users = $this->getDataFixture('User');
 
         foreach ($users as $reference => $user) {
-            $userEntity = new User();
+            $userEntity = new Client();
 
             $password = $this->passwordEncoder->encodePassword($userEntity, $user['Password']);
 
