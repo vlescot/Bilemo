@@ -66,24 +66,23 @@ final class ClientVoter implements VoterInterface
         $id = $subject->attributes->get('id');
 
         $querierUser = $token->getUser();
-        $queringUser = $this->userRepository->findOneById($id);
+        $requestedUser = $this->userRepository->findOneById($id);
 
-        if (!$queringUser) {
+        if (!$requestedUser) {
             return false;
         }
 
-        return $this->allowAccess($querierUser, $queringUser);
+        return $this->allowAccess($querierUser, $requestedUser);
     }
 
     /**
      * @param UserInterface $querierUser
-     * @param UserInterface $queringUser
-     *
+     * @param UserInterface $requestedUser
      * @return int
      */
-    private function allowAccess(UserInterface $querierUser, UserInterface $queringUser): int
+    private function allowAccess(UserInterface $querierUser, UserInterface $requestedUser): int
     {
-        if ($queringUser->isEqualTo($querierUser)) {
+        if ($querierUser->isEqualTo($requestedUser)) {
             return VoterInterface::ACCESS_GRANTED;
         }
         return VoterInterface::ACCESS_ABSTAIN;

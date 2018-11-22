@@ -9,8 +9,10 @@ use App\App\ParametersBuilder\Interfaces\ParametersBuilderInterface;
 use App\App\Validator\Interfaces\ApiValidatorInterface;
 use App\Domain\DTO\PhoneDTO;
 use App\Domain\DTO\ClientDTO;
+use App\Domain\DTO\UserDTO;
 use App\Domain\Entity\Phone;
 use App\Domain\Entity\Client;
+use App\Domain\Entity\User;
 use App\UI\Factory\Interfaces\UpdateEntityFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,12 +30,14 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
 {
     private const ENTITY_DTO = [
         Phone::class => PhoneDTO::class,
-        Client::class => ClientDTO::class
+        Client::class => ClientDTO::class,
+        User::class => UserDTO::class
     ];
 
     private const ENTITY_STRING = [
         Phone::class => 'phone',
-        Client::class => 'client'
+        Client::class => 'client',
+        User::class => 'user'
     ];
 
     /**
@@ -108,7 +112,7 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
         $params = $this->parametersBuilder->BuildParameters($dto, $entityName, 'update');
         call_user_func_array([$entity, 'update'], $params);
 
-        $this->apiValidator->validate($entity, null, [ self::ENTITY_STRING[$entityName] ]);
+        $this->apiValidator->validate($entity, null, [self::ENTITY_STRING[$entityName] ]);
 
         $repository->save($entity);
 

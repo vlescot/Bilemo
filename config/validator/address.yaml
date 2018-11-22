@@ -1,0 +1,36 @@
+App\Domain\Entity\Address:
+
+    properties:
+
+        streetAddress:
+            - NotBlank:
+                message: A street address is nedded
+                groups:
+                    - user
+            - Type:
+                type: string
+                groups:
+                    - user
+        city:
+            - NotBlank:
+                message: A city is nedded
+                groups:
+                    - user
+            - Type:
+                type: string
+                groups:
+                    - user
+        postcode:
+            - NotBlank:
+                message: A postcode is nedded
+                groups:
+                    - user
+            - Type:
+                type: integer
+                groups:
+                    - user
+            - Length:
+                min: 5
+                max: 5
+                minMessage: A post must have five figures
+                maxMessage: A post must have five figures

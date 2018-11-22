@@ -1,10 +1,12 @@
 App\Domain\Entity\Client:
     attributes:
         username:
-            groups: ['clients_list', 'client']
+            groups: ['clients_list', 'client', 'users_list', 'user']
         email:
             groups: ['clients_list', 'client']
         phoneNumber:
             groups: ['client']
         createdAt:
-            groups: ['clients_list']
+            groups: ['clients_list', 'client']
+        users:
+            groups: ['client']

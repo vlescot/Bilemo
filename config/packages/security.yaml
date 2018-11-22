@@ -53,13 +53,13 @@ security:
                     - lexik_jwt_authentication.security.guard.jwt_token_authenticator
 
     access_control:
-        - { path: ^/api/client/token,     roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/client/token,   roles: IS_AUTHENTICATED_ANONYMOUSLY,  methods: POST }
+        - { path: ^/api/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY,  methods: POST }
 
-        - { path: ^/api/phones/,        roles: ROLE_CLIENT,     methods: [GET] }
-        - { path: ^/api/phones/,        roles: ROLE_COMPANY,  methods: [PUT, DELETE] }
-        - { path: ^/api/phones,          roles: ROLE_CLIENT,     methods: [GET] }
-        - { path: ^/api/phones,          roles: ROLE_COMPANY,  methods: [POST] }
+        - { path: ^/api/phones/,        roles: ROLE_CLIENT,                   methods: [GET] }
+        - { path: ^/api/phones/,        roles: ROLE_COMPANY,                  methods: [PUT, DELETE] }
+        - { path: ^/api/phones,         roles: ROLE_CLIENT,                   methods: [GET] }
+        - { path: ^/api/phones,         roles: ROLE_COMPANY,                  methods: [POST] }
 
-        - { path: ^/api/clients/,         roles: ROLE_SELF_CLIENT, methods: [GET, PUT, DELETE] }
-        - { path: ^/api/clients,           roles: ROLE_COMPANY,  methods: [GET, POST] }
+        - { path: ^/api/clients/,       roles: ROLE_SELF_CLIENT,              methods: [GET, PUT, DELETE] }
+        - { path: ^/api/clients,        roles: ROLE_COMPANY,                  methods: [GET, POST] }

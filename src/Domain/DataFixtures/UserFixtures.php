@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\DataFixtures;
 
+use App\Domain\Entity\Address;
 use App\Domain\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -11,6 +12,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class UserFixtures extends Fixture implements DependentFixtureInterface
 {
+    use LoadDataFixtureTrait;
+
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -28,19 +31,26 @@ final class UserFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
+        $address = $this->getDataFixture('Address');
+
         $nb = 0;
         while ($nb < 42) {
-            $username = 'user' . $nb;
-            $password = 'password' . $nb;
-            $email = $username . '@gmail.com';
+            $name = 'User' . $nb;
+            $email = $name . '@gmail.com';
             $phoneNumber = '0'. rand(100000000, 599999999);
             $client = $this->getReference('client_'. rand(0, 3));
 
+            $randomAddress = 'address_'. rand(0, 5);
+
+            $userAddress = new Address(
+                $address[$randomAddress]['street_address'],
+                $address[$randomAddress]['city'],
+                $address[$randomAddress]['postcode']
+            );
+
+
             $userEntity = new User();
-
-            $password = $this->passwordEncoder->encodePassword($userEntity, $password);
-
-            $userEntity->create($username, $password, $email, $phoneNumber, $client);
+            $userEntity->create($name, $phoneNumber, $email, $userAddress, $client);
 
             $manager->persist($userEntity);
 

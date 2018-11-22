@@ -19,3 +19,7 @@ App\Domain\Entity\Manufacturer:
                 maxMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
                 groups:
                     - phone
+            - Type:
+                type: string
+                groups:
+                    - phone

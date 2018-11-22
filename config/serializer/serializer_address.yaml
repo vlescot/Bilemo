@@ -1,0 +1,8 @@
+App\Domain\Entity\Address:
+    attributes:
+        streetAddress:
+            groups: ['user']
+        city:
+            groups: ['users_list', 'user']
+        postcode:
+            groups: ['users_list', 'user']

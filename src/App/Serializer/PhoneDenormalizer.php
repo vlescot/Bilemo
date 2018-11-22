@@ -5,7 +5,6 @@ namespace App\App\Serializer;
 
 use App\Domain\DTO\PhoneDTO;
 use App\Domain\Entity\Manufacturer;
-use App\Domain\Entity\Phone;
 use App\Domain\Repository\ManufacturerRepository;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -43,13 +42,11 @@ final class PhoneDenormalizer implements DenormalizerInterface
      * @param null $format
      * @param array $context
      *
-     * @return object
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return PhoneDTO
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = array()): PhoneDTO
     {
-        $phoneDTO = $this->normalizer->denormalize($data, PhoneDTO::class, 'json');
+        $phoneDTO = $this->normalizer->denormalize($data, $class, 'json', $context);
 
         if (isset($data['manufacturer']['name'])) {
             $manufacturerName = $data['manufacturer']['name'];

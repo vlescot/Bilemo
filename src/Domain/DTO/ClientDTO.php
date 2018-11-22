@@ -30,7 +30,7 @@ final class ClientDTO
     public $password;
 
     /**
-     * UserDTO constructor.
+     * ClientDTO constructor.
      *
      * @param string $email
      * @param string $phoneNumber

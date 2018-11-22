@@ -17,7 +17,7 @@
         <field name="password" type="string" nullable="false" />
         <field name="phoneNumber" type="string" nullable="false" />
         <field name="email" type="string" unique="true" nullable="false" />
-        <one-to-many field="users" target-entity="App\Domain\Entity\User" mapped-by="client" />
+        <one-to-many field="users" target-entity="App\Domain\Entity\User" mapped-by="client" orphan-removal="true" />
     </entity>
 
 </doctrine-mapping>

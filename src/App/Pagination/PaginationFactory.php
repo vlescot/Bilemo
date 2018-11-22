@@ -61,17 +61,17 @@ final class PaginationFactory implements PaginationFactoryInterface
         $this->routeParams = $routeParams;
 
         $queryParams = $request->query->all();
-        $page = (int) $request->query->get('page', 1);
+        $currentPage = (int) $request->query->get('page', 1);
 
         // Make sure query parameters are included in pagination links
         $this->routeParams = array_merge($routeParams, $queryParams);
 
-        $paginator = new Paginator($repository, $page, $this->itemsPerPage, $queryParams);
+        $paginator = new Paginator($repository, $currentPage, $this->itemsPerPage, $queryParams);
 
 
         // Check if the page exists and return 404 Exception if false
         $nbPages = (int) ceil($paginator->getNbResults() / $this->itemsPerPage);
-        if ($page > $nbPages) {
+        if ($currentPage > $nbPages) {
             $apiError = new ApiError(404, ApiError::TYPE_INVALID_REQUEST_FILTER_PAGINATION);
             if ($nbPages > 0) {
                 $apiError->set('page_max', $this->createLinkUrl($nbPages));
@@ -81,24 +81,12 @@ final class PaginationFactory implements PaginationFactoryInterface
             throw new ApiException($apiError);
         }
 
-
         $paginatedCollection = new PaginatedCollection(
             $paginator->getCurrentPageResults(),
             $paginator->getNbResults()
         );
 
-        $paginatedCollection->addLink('first', $this->createLinkUrl(1));
-        if ($paginator->hasPreviousPage()) {
-            $paginatedCollection->addLink('prev', $this->createLinkUrl($paginator->getPreviousPage()));
-        }
-        $paginatedCollection->addLink('self', $this->createLinkUrl($page));
-        if ($paginator->hasNextPage()) {
-            $paginatedCollection->addLink('next', $this->createLinkUrl($paginator->getNextPage()));
-        }
-        $paginatedCollection->addLink('last', $this->createLinkUrl($paginator->getNbPages()));
-
-
-        return $paginatedCollection;
+        return $this->addCollectionLinks($paginatedCollection, $paginator, $currentPage);
     }
 
     /**
@@ -115,5 +103,27 @@ final class PaginationFactory implements PaginationFactoryInterface
                 ['page' => $targetPage]
             )
         );
+    }
+
+    /**
+     * @param PaginatedCollectionInterface $paginatedCollection
+     * @param Paginator $paginator
+     * @param int $currentPage
+     *
+     * @return PaginatedCollectionInterface
+     */
+    private function addCollectionLinks(PaginatedCollectionInterface $paginatedCollection, Paginator $paginator, int $currentPage): PaginatedCollectionInterface
+    {
+        $paginatedCollection->addLink('first', $this->createLinkUrl(1));
+        if ($paginator->hasPreviousPage()) {
+            $paginatedCollection->addLink('prev', $this->createLinkUrl($paginator->getPreviousPage()));
+        }
+        $paginatedCollection->addLink('self', $this->createLinkUrl($currentPage));
+        if ($paginator->hasNextPage()) {
+            $paginatedCollection->addLink('next', $this->createLinkUrl($paginator->getNextPage()));
+        }
+        $paginatedCollection->addLink('last', $this->createLinkUrl($paginator->getNbPages()));
+
+        return $paginatedCollection;
     }
 }

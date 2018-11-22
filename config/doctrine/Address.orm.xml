@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+
+    <entity
+            name="App\Domain\Entity\Address"
+            table="bm_address"
+            repository-class="App\Domain\Repository\AddressRepository"
+    >
+
+        <id name="id" type="uuid" />
+        <field name="streetAddress" type="string" nullable="false" />
+        <field name="city" type="string" nullable="false" />
+        <field name="postcode" type="integer" nullable="false"/>
+
+    </entity>
+
+</doctrine-mapping>

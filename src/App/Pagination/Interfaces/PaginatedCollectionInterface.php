@@ -12,10 +12,10 @@ interface PaginatedCollectionInterface
     /**
      * PaginatedCollectionInterface constructor.
      *
-     * @param array $phones
+     * @param array $objects
      * @param int $total
      */
-    public function __construct(array $phones, int $total);
+    public function __construct(array $objects, int $total);
 
     /**
      * @param $ref
@@ -43,5 +43,5 @@ interface PaginatedCollectionInterface
     /**
      * @return array
      */
-    public function getPhones(): array;
+    public function getObjects(): array;
 }

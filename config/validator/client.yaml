@@ -26,6 +26,10 @@ App\Domain\Entity\Client:
                 maxMessage: This username is too long
                 groups:
                     - client
+            - Type:
+                type: string
+                groups:
+                    - client
 
         password:
             - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
@@ -53,6 +57,11 @@ App\Domain\Entity\Client:
                     - client
 
         createdAt:
+            - NotBlank:
+                groups:
+                    - client
+
+        updatedAt:
             - NotBlank:
                 groups:
                     - client

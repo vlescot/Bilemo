@@ -29,17 +29,17 @@ final class PaginatedCollection implements PaginatedCollectionInterface
     /**
      * @var array
      */
-    private $phones;
+    private $objects;
 
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $phones, int $total)
+    public function __construct(array $objects, int $total)
     {
-        $this->phones = $phones;
+        $this->objects = $objects;
         $this->total = $total;
-        $this->limit = \count($phones);
+        $this->limit = \count($objects);
     }
 
     /**
@@ -77,8 +77,8 @@ final class PaginatedCollection implements PaginatedCollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function getPhones(): array
+    public function getObjects(): array
     {
-        return $this->phones;
+        return $this->objects;
     }
 }

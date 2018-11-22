@@ -1,0 +1,84 @@
+App\Domain\Entity\User:
+
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [name]
+            message: This username {{ value }} already exists on database
+            groups:
+                - user
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [email]
+            message: This email {{ value }} already exists on database
+            groups:
+                - user
+
+    properties:
+
+        createdAt:
+            - NotBlank:
+                groups:
+                    - user
+
+        updatedAt:
+            - NotBlank:
+                groups:
+                    - user
+
+        name:
+            - NotBlank:
+                message: The name is needed
+                groups:
+                    - user
+            - Length:
+                min: 3
+                minMessage: The username must have minimum 3 caracters
+                max: 255
+                maxMessage: This username is too long
+                groups:
+                    - user
+            - Type:
+                type: string
+                groups:
+                    - user
+
+        phoneNumber:
+            - Notblank:
+                message: A phone njumber is needed
+                groups:
+                    - user
+
+        email:
+            - NotBlank:
+                message: An e-mail is needed
+                groups:
+                    - user
+            - Email:
+                message: This e-mail is not valid
+                groups:
+                    - user
+            - Type:
+                type: string
+                groups:
+                    - user
+
+        address:
+            - NotBlank:
+                message: An address is needed
+                groups:
+                    - user
+            - Valid:
+                groups:
+                    - user
+            - Type:
+                type: object
+                groups:
+                    - user
+
+        client:
+            - NotBlank:
+                message: An User must belong to a Client
+                groups:
+                    - user
+            - Valid:
+                groups:
+                    - user

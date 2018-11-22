@@ -1,0 +1,29 @@
+address_0:
+    street_address: 100 Avenue du Carrefour
+    city: Perros-Guirec, France
+    postcode: 22700
+
+address_1:
+    street_address: 49 Chaussée du Sillon
+    city: Saint-Malo, France
+    postcode: 35400
+
+address_2:
+    street_address: 252 Quai Francois Mitterrand
+    city:  La Ciotat, France
+    postcode: 13600
+
+address_3:
+    street_address: 5 avenue David D'Angers
+    city: Saumur, France
+    postcode: 49400
+
+address_4:
+    street_address: 9 rue Roy | 8th Arr.
+    city: Paris, France
+    postcode: 75008
+
+address_5:
+    street_address: Avenue des sources
+    city: Forges-les-Eaux, France
+    postcode: 76440

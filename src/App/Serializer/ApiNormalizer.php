@@ -5,6 +5,7 @@ namespace App\App\Serializer;
 
 use App\Domain\Entity\Phone;
 use App\Domain\Entity\Client;
+use App\Domain\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -17,7 +18,8 @@ final class ApiNormalizer implements NormalizerInterface
 {
     private const ENTITY_STRING = [
         Phone::class => 'phone',
-        Client::class => 'client'
+        Client::class => 'client',
+        User::class => 'user'
     ];
 
     /**
@@ -79,8 +81,6 @@ final class ApiNormalizer implements NormalizerInterface
         $routeNamePrefix = self::ENTITY_STRING[$this->class];
 
         $links['self']['href'] = $this->generateRoute($entity, $routeNamePrefix .'_read');
-        $links['update']['href'] = $this->generateRoute($entity, $routeNamePrefix .'_update');
-        $links['delete']['href'] = $this->generateRoute($entity, $routeNamePrefix .'_delete');
 
         return $links;
     }
@@ -120,6 +120,11 @@ final class ApiNormalizer implements NormalizerInterface
 
             case Client::class:
                 $this->class = Client::class;
+                $result = true;
+                break;
+
+            case User::class:
+                $this->class = User::class;
                 $result = true;
                 break;
 

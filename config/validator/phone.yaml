@@ -32,7 +32,10 @@ App\Domain\Entity\Phone:
                 minMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou plus
                 max: 30
                 maxMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
-
+                groups:
+                    - phone
+            - Type:
+                type: string
                 groups:
                     - phone
 
@@ -46,6 +49,10 @@ App\Domain\Entity\Phone:
                 minMessage : La valeur {{ value }} doit avoir {{ limit }} caratères ou moins
                 groups:
                     - phone
+            - Type:
+                type: string
+                groups:
+                    - phone
 
         price:
             - NotBlank:
@@ -57,6 +64,10 @@ App\Domain\Entity\Phone:
                 message: Le champs price avec la valeur {{ value }} doit être du type numeric
                 groups:
                     - phone
+            - Type:
+                type: integer
+                groups:
+                    - phone
 
         stock:
             - NotBlank:
@@ -66,5 +77,9 @@ App\Domain\Entity\Phone:
             - Type:
                 type: integer
                 message: Le champs stock avec la valeur {{ value }} doit être du type numeric
+                groups:
+                    - phone
+            - Type:
+                type: integer
                 groups:
                     - phone

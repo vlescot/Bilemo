@@ -5,6 +5,7 @@ namespace App\UI\Action\Client;
 
 use App\Domain\Repository\ClientRepository;
 use App\UI\Action\Client\Interfaces\ReadClientListInterface;
+use App\UI\Responder\Interfaces\CacheReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  *     methods={"GET"}
  * )
  *
- * Class Client
+ * Class ReadClientList
  * @package App\UI\Action\Client
  */
 final class ReadClientList implements ReadClientListInterface
@@ -46,26 +47,18 @@ final class ReadClientList implements ReadClientListInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, CacheReadResponderInterface $responder): Response
     {
         $timestamp = $this->clientRepository->getLastUpdateDate();
-        $lastModified = new \DateTime();
-        $lastModified->setTimestamp(intval($timestamp));
 
-        $response = new Response();
-        $response->setLastModified($lastModified);
-        $response->setPublic();
+        $responder->buildCache(intval($timestamp));
 
-        if ($response->isNotModified($request)) {
-            return $response;
+        if ($responder->isCacheValid($request)) {
+            return $responder->getResponse();
         }
 
         $clients = $this->clientRepository->findAll();
 
-        $json  = $this->serializer->serialize($clients, 'json', ['groups' => ['clients_list']]);
-
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'application/hal+json');
-        return $response->setContent($json);
+        return $responder->createResponse($clients, 'clients_list');
     }
 }

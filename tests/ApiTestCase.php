@@ -5,6 +5,7 @@ namespace App\Tests;
 
 use App\Domain\Entity\Phone;
 use App\Domain\Entity\Client;
+use App\Domain\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,11 +19,7 @@ class ApiTestCase extends WebTestCase
     }
 
 
-    /**
-     * @param array $expectedContent
-     * @param array $responseContent
-     */
-    protected function assertResponseContent(array $expectedContent, array $responseContent)
+    private function assertResponseContent(array $expectedContent, array $responseContent)
     {
         foreach ($expectedContent as $attributes => $type) {
             if (\is_array($type)) {
@@ -41,11 +38,27 @@ class ApiTestCase extends WebTestCase
     }
 
 
-    /**
-     * @param string $username
-     * @param string $password
-     * @return \Symfony\Bundle\FrameworkBundle\Client
-     */
+    protected function assertResponse(
+        string $method,
+        string $uri,
+        int $expectedStatusCode,
+        string $expectedContentType,
+        array $expectedContent
+    ) {
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient->request($method, $uri);
+
+        $responseContent = json_decode($kernelClient->getResponse()->getContent(), true);
+
+        if ($kernelClient->getResponse()->getStatusCode() === 500 || $kernelClient->getResponse()->getStatusCode() === 404) {
+            $this->showError($kernelClient->getResponse());
+        }
+
+        static::assertSame($expectedStatusCode, $kernelClient->getResponse()->getStatusCode());
+        static::assertSame($expectedContentType, $kernelClient->getResponse()->headers->get('Content-Type'));
+        $this->assertResponseContent($expectedContent, $responseContent);
+    }
+
 
     protected function getAuthenticatedClient(string $username, string $password)
     {
@@ -117,6 +130,17 @@ class ApiTestCase extends WebTestCase
         return $client->getId();
     }
 
+    protected function getUserId(string $user = null)
+    {
+        if (!$user) {
+            $user = 'User0';
+        }
+
+        $repository = $this->getRepository(User::class);
+        $user = $repository->findOneBy(['name' => $user]);
+        return $user->getId();
+    }
+
     protected function findBy(string $entity, array $params)
     {
         $repository = $this->getRepository($entity);
@@ -126,6 +150,6 @@ class ApiTestCase extends WebTestCase
     protected function showError(Response $response)
     {
         dump($response->getStatusCode());
-        dump($response->getContent());
+        dump(json_decode($response->getContent(), true));
     }
 }

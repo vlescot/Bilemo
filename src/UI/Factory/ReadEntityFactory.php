@@ -5,10 +5,11 @@ namespace App\UI\Factory;
 
 use App\Domain\Entity\Phone;
 use App\Domain\Entity\Client;
+use App\Domain\Entity\User;
 use App\UI\Factory\Interfaces\ReadEntityFactoryInterface;
+use App\UI\Responder\Interfaces\CacheReadResponderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -20,7 +21,8 @@ final class ReadEntityFactory implements ReadEntityFactoryInterface
 {
     private const ENTITY_STRING = [
         Phone::class => 'phone',
-        Client::class => 'client'
+        Client::class => 'client',
+        User::class => 'user'
     ];
 
     /**
@@ -34,14 +36,21 @@ final class ReadEntityFactory implements ReadEntityFactoryInterface
     private $serializer;
 
     /**
+     * @var CacheReadResponderInterface
+     */
+    private $responder;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
         EntityManagerInterface $em,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        CacheReadResponderInterface $responder
     ) {
         $this->em = $em;
         $this->serializer = $serializer;
+        $this->responder = $responder;
     }
 
     /**
@@ -58,23 +67,14 @@ final class ReadEntityFactory implements ReadEntityFactoryInterface
             throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $entityId));
         }
 
-        $lastModified = new \DateTime();
-        $lastModified->setTimestamp(intval($phoneLastUpdateDate));
+        $this->responder->buildCache(intval($phoneLastUpdateDate));
 
-        $response = new Response();
-        $response->setLastModified($lastModified);
-        $response->setPublic();
-
-        if ($response->isNotModified($request)) {
-            return $response;
+        if ($this->responder->isCacheValid($request)) {
+            return $this->responder->getResponse();
         }
 
         $phone = $repository->findOneById($entityId);
 
-        $json = $this->serializer->serialize($phone, 'json', ['groups' => [self::ENTITY_STRING[$entityName]]]);
-
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->set('Content-Type', 'application/hal+json');
-        return $response->setContent($json);
+        return $this->responder->createResponse($phone, self::ENTITY_STRING[$entityName]);
     }
 }

@@ -11,13 +11,19 @@
             repository-class="App\Domain\Repository\UserRepository"
     >
         <id name="id" type="uuid" />
-        <field name="roles" type="array" nullable="false" />
         <field name="createdAt" type="integer" nullable="false" />
         <field name="updatedAt" type="integer" nullable="false" />
-        <field name="username" type="string" unique="true" nullable="false" />
-        <field name="password" type="string" nullable="false" />
+        <field name="name" type="string" unique="true" nullable="false" />
         <field name="phoneNumber" type="string" nullable="false" />
         <field name="email" type="string" unique="true" nullable="false" />
+
+
+        <one-to-one field="address" target-entity="App\Domain\Entity\Address" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <join-column nullable="false" />
+        </one-to-one>
 
         <many-to-one field="client" target-entity="App\Domain\Entity\Client">
             <join-column nullable="false" />
