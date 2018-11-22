@@ -67,7 +67,7 @@ final class ApiNormalizer implements NormalizerInterface
         $data['_links'] = $this->generateHalLinks($object);
 
         return $data;
-    }   
+    }
 
     /**
      * @param $entity
