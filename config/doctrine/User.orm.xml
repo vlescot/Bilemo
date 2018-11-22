@@ -4,10 +4,11 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
+
     <entity
-            name="App\Domain\Entity\Client"
-            table="bm_client"
-            repository-class="App\Domain\Repository\ClientRepository"
+            name="App\Domain\Entity\User"
+            table="bm_user"
+            repository-class="App\Domain\Repository\UserRepository"
     >
         <id name="id" type="uuid" />
         <field name="roles" type="array" nullable="false" />
@@ -17,7 +18,11 @@
         <field name="password" type="string" nullable="false" />
         <field name="phoneNumber" type="string" nullable="false" />
         <field name="email" type="string" unique="true" nullable="false" />
-        <one-to-many field="users" target-entity="App\Domain\Entity\User" mapped-by="client" />
+
+        <many-to-one field="client" target-entity="App\Domain\Entity\Client">
+            <join-column nullable="false" />
+        </many-to-one>
+
     </entity>
 
 </doctrine-mapping>

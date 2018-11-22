@@ -10,7 +10,7 @@
         repository-class="App\Domain\Repository\ManufacturerRepository"
     >
         <id name="id" type="uuid" />
-        <field name="name" type="string" unique="true" />
+        <field name="name" type="string" unique="true" nullable="false" />
         <one-to-many field="phones" target-entity="App\Domain\Entity\Phone" mapped-by="manufacturer" />
 
     </entity>

@@ -10,19 +10,18 @@
         repository-class="App\Domain\Repository\PhoneRepository"
     >
         <id name="id" type="uuid" />
-        
-        <field name="createdAt" type="integer" />
-        <field name="updatedAt" type="integer" />
+        <field name="createdAt" type="integer" nullable="false" />
+        <field name="updatedAt" type="integer" nullable="false" />
         <many-to-one field="manufacturer" target-entity="App\Domain\Entity\Manufacturer" inversed-by="phones">
             <cascade>
                 <cascade-persist/>
             </cascade>
             <join-column nullable="false" />
         </many-to-one>
-        <field name="model" type="string" />
-        <field name="description" type="text" />
-        <field name="price" type="integer" />
-        <field name="stock" type="integer" />
+        <field name="model" type="string" nullable="false" />
+        <field name="description" type="text" nullable="false" />
+        <field name="price" type="integer" nullable="false" />
+        <field name="stock" type="integer" nullable="false" />
 
     </entity>
 
