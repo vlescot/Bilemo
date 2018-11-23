@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace App\UI\Action\User;
 
-use App\App\Pagination\Interfaces\PaginationFactoryInterface;
 use App\Domain\Repository\UserRepository;
 use App\UI\Action\User\Interfaces\ReadUserListInterface;
 use App\UI\Responder\Interfaces\ReadResponderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -30,41 +31,35 @@ final class ReadUserList implements ReadUserListInterface
     private $userRepository;
 
     /**
-     * @var PaginationFactoryInterface
-     */
-    private $paginationFactory;
-
-    /**
      * @var SerializerInterface
      */
     private $serializer;
+
 
     /**
      * {@inheritdoc}
      */
     public function __construct(
         UserRepository $userRepository,
-        PaginationFactoryInterface $paginationFactory,
         SerializerInterface $serializer
     ) {
         $this->userRepository = $userRepository;
-        $this->paginationFactory = $paginationFactory;
         $this->serializer = $serializer;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function __invoke(Request $request, ReadResponderInterface $responder): Response
+    public function __invoke(Request $request, UserInterface $user, ReadResponderInterface $responder) : Response
     {
-        $route = $request->attributes->get('_route');
+        $clientId = $user->getId()->toString();
 
-        $paginatedCollection = $this->paginationFactory->createCollection(
-            $this->userRepository,
-            $request,
-            $route
-        );
+        $users = $this->userRepository->findUsersByClient($clientId);
 
-        return $responder($paginatedCollection, 'users_list');
+        if (!$users) {
+            throw new NotFoundHttpException(sprintf('Resources %s not found with client id "%s"', 'User', $clientId));
+        }
+
+        return $responder($users, 'users_list');
     }
 }

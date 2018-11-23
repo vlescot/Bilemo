@@ -8,7 +8,34 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ResponseUserFunctionalTest extends ApiTestCase
 {
-    public function test_GET_users_list()
+    public function test_GET_users_list() // For Client access
+    {
+        $expectedContent = [
+            0 => [
+                'name' => 'string',
+                'address' => [
+                    'city' => 'string',
+                    'postcode' => 'int'
+                ],
+                '_links' => [
+                    'self' => [
+                        'href' => 'string'
+                    ],
+                ],
+            ]
+        ];
+
+        $this->assertResponse(
+            'GET',
+            '/api/users',
+            Response::HTTP_OK,
+            'application/hal+json',
+            $expectedContent,
+            true
+        );
+    }
+
+    public function test_GET_users_client_list() // For Bilemo access
     {
         $expectedContent = [
             'total' => 'int',
@@ -27,7 +54,7 @@ final class ResponseUserFunctionalTest extends ApiTestCase
                         'postcode' => 'int'
                     ],
                     'client' => [
-                        'username' => 'string'
+                        'username' => 'string',
                     ],
                     '_links' => [
                         'self' => [
@@ -40,7 +67,7 @@ final class ResponseUserFunctionalTest extends ApiTestCase
 
         $this->assertResponse(
             'GET',
-            '/api/users',
+            '/api/users-list',
             Response::HTTP_OK,
             'application/hal+json',
             $expectedContent
@@ -60,7 +87,7 @@ final class ResponseUserFunctionalTest extends ApiTestCase
                 'postcode' => 'int'
             ],
             'client' => [
-                'username' => 'string'
+                'username' => 'string',
             ],
             '_links' => [
                 'self' => [
@@ -81,6 +108,8 @@ final class ResponseUserFunctionalTest extends ApiTestCase
 
     public function test_POST_user()
     {
+        $clientUserName = 'Client2';
+
         $user = [
             'name' => 'userTest',
             'phoneNumber' => '0566778899',
@@ -89,13 +118,10 @@ final class ResponseUserFunctionalTest extends ApiTestCase
                 'streetAddress' => 'addressTest street',
                 'city' => 'cityTest',
                 'postcode' => 99999,
-            ],
-            'client' => [
-                'username' => 'Client0'
             ]
         ];
 
-        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient = $this->getAuthenticatedClient($clientUserName, 'password2');
         $kernelClient->request('POST', '/api/users', [], [], [], json_encode($user));
         $userEntity = $this->findBy(User::class, ['name' => $user['name'] ]);
 
@@ -106,11 +132,13 @@ final class ResponseUserFunctionalTest extends ApiTestCase
         static::assertSame($user['address']['streetAddress'], $userEntity->getAddress()->getStreetAddress());
         static::assertSame($user['address']['city'], $userEntity->getAddress()->getCity());
         static::assertSame($user['address']['postcode'], $userEntity->getAddress()->getPostcode());
-        static::assertSame($user['client']['username'], $userEntity->getClient()->getUsername());
+        static::assertSame($clientUserName, $userEntity->getClient()->getUsername());
     }
 
     public function test_PUT_user()
     {
+        $clientUserName = 'Client2';
+
         $user = [
             'phoneNumber' => '0988776655',
             'email' => 'updatedEmail@mail.com',
@@ -121,7 +149,7 @@ final class ResponseUserFunctionalTest extends ApiTestCase
             ]
         ];
 
-        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient = $this->getAuthenticatedClient($clientUserName, 'password2');
         $kernelClient->request('PUT', '/api/users/'. $this->getUserId('userTest'), [], [], [], json_encode($user));
         $userEntity = $this->findBy(User::class, ['name' => 'userTest' ]);
 
@@ -131,18 +159,16 @@ final class ResponseUserFunctionalTest extends ApiTestCase
         static::assertSame($user['address']['streetAddress'], $userEntity->getAddress()->getStreetAddress());
         static::assertSame($user['address']['city'], $userEntity->getAddress()->getCity());
         static::assertSame($user['address']['postcode'], $userEntity->getAddress()->getPostcode());
+        static::assertSame($clientUserName, $userEntity->getClient()->getUsername());
     }
 
     public function test_DELETE_user()
     {
         $userId = $this->getUserId('userTest');
 
-        $kernelClient = $this->getAuthenticatedCompanyClient();
+        $kernelClient = $this->getAuthenticatedClient('Client2', 'password2');
         $kernelClient->request('DELETE', '/api/users/'. $userId);
 
         static::assertEquals(Response::HTTP_NO_CONTENT, $kernelClient->getResponse()->getStatusCode());
-
-        $kernelClient->request('GET', '/api/users/'. $userId);
-        static::assertEquals(Response::HTTP_NOT_FOUND, $kernelClient->getResponse()->getStatusCode());
     }
 }

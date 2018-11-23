@@ -4,9 +4,6 @@ security:
             algorithm: bcrypt
         Symfony\Component\Security\Core\User\UserInterface: plaintext
 
-    role_hierarchy:
-        ROLE_COMPANY:   [ROLE_CLIENT, ROLE_SELF_CLIENT]
-
     providers:
         chain_provider:
             chain:
@@ -53,13 +50,18 @@ security:
                     - lexik_jwt_authentication.security.guard.jwt_token_authenticator
 
     access_control:
-        - { path: ^/api/client/token,   roles: IS_AUTHENTICATED_ANONYMOUSLY,  methods: POST }
-        - { path: ^/api/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY,  methods: POST }
+        - { path: ^/api/client/token,   roles: IS_AUTHENTICATED_ANONYMOUSLY,      methods: POST }
+        - { path: ^/api/company/token,  roles: IS_AUTHENTICATED_ANONYMOUSLY,      methods: POST }
 
-        - { path: ^/api/phones/,        roles: ROLE_CLIENT,                   methods: [GET] }
-        - { path: ^/api/phones/,        roles: ROLE_COMPANY,                  methods: [PUT, DELETE] }
-        - { path: ^/api/phones,         roles: ROLE_CLIENT,                   methods: [GET] }
-        - { path: ^/api/phones,         roles: ROLE_COMPANY,                  methods: [POST] }
+        - { path: ^/api/phones/,        roles: [ROLE_CLIENT, ROLE_COMPANY],       methods: [GET] }
+        - { path: ^/api/phones/,        roles: ROLE_COMPANY,                      methods: [PUT, DELETE] }
+        - { path: ^/api/phones,         roles: [ROLE_CLIENT, ROLE_COMPANY],       methods: [GET] }
+        - { path: ^/api/phones,         roles: ROLE_COMPANY,                      methods: [POST] }
 
-        - { path: ^/api/clients/,       roles: ROLE_SELF_CLIENT,              methods: [GET, PUT, DELETE] }
-        - { path: ^/api/clients,        roles: ROLE_COMPANY,                  methods: [GET, POST] }
+        - { path: ^/api/clients/,       roles: [ROLE_SELF_CLIENT, ROLE_COMPANY],  methods: [GET, PUT, DELETE] }
+        - { path: ^/api/clients,        roles: ROLE_COMPANY,                      methods: [GET, POST] }
+
+        - { path: ^/api/users-list,     roles: ROLE_COMPANY,                      methods: GET }
+        - { path: ^/api/users/,         roles: [ROLE_COMPANY, ROLE_SELF_CLIENT],  methods: GET }
+        - { path: ^/api/users/,         roles: ROLE_SELF_CLIENT,                  methods: [PUT, DELETE] }
+        - { path: ^/api/users,          roles: ROLE_CLIENT,                       methods: [GET, POST] }

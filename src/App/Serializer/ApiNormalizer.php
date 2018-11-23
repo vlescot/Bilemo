@@ -33,11 +33,6 @@ final class ApiNormalizer implements NormalizerInterface
     private $normalizer;
 
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
      * ApiNormalizer constructor.
      *
      * @param UrlGeneratorInterface $urlGenerator
@@ -60,6 +55,7 @@ final class ApiNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = array())
     {
+        $this->normalizer->setCircularReferenceLimit(2);
         $data = $this->normalizer->normalize($object, $format, $context);
 
         if (isset($data['createdAt'])) {
@@ -78,7 +74,7 @@ final class ApiNormalizer implements NormalizerInterface
      */
     private function generateHalLinks($entity): array
     {
-        $routeNamePrefix = self::ENTITY_STRING[$this->class];
+        $routeNamePrefix = self::ENTITY_STRING[get_class($entity)];
 
         $links['self']['href'] = $this->generateRoute($entity, $routeNamePrefix .'_read');
 
@@ -114,17 +110,14 @@ final class ApiNormalizer implements NormalizerInterface
 
         switch (get_class($data)) {
             case Phone::class:
-                $this->class = Phone::class;
                 $result = true;
                 break;
 
             case Client::class:
-                $this->class = Client::class;
                 $result = true;
                 break;
 
             case User::class:
-                $this->class = User::class;
                 $result = true;
                 break;
 

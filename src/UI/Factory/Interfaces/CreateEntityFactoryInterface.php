@@ -8,6 +8,7 @@ use App\App\Validator\Interfaces\ApiValidatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -17,20 +18,22 @@ use Symfony\Component\Serializer\SerializerInterface;
 interface CreateEntityFactoryInterface
 {
     /**
-     * CreateEntityInterface constructor.
+     * CreateEntityFactoryInterface constructor.
      *
      * @param SerializerInterface $serializer
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param ApiValidatorInterface $apiValidator
      * @param EntityManagerInterface $em
      * @param ParametersBuilderInterface $parametersBuilder
+     * @param TokenStorageInterface $tokenStorage
      */
     public function __construct(
         SerializerInterface $serializer,
         UserPasswordEncoderInterface $passwordEncoder,
         ApiValidatorInterface $apiValidator,
         EntityManagerInterface $em,
-        ParametersBuilderInterface $parametersBuilder
+        ParametersBuilderInterface $parametersBuilder,
+        TokenStorageInterface $tokenStorage
     ) ;
 
     /**

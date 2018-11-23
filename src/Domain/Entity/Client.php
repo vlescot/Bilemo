@@ -150,7 +150,7 @@ class Client implements UserInterface
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword(): ? string
     {
         return $this->password;
     }
@@ -189,7 +189,6 @@ class Client implements UserInterface
 
     public function eraseCredentials()
     {
-        $this->password = null;
     }
 
     /**
@@ -197,7 +196,7 @@ class Client implements UserInterface
      *
      * @return bool
      */
-    public function isEqualTo(UserInterface $user)
+    public function isEqualTo(UserInterface $user): bool
     {
         return $this->id === $user->getId();
     }

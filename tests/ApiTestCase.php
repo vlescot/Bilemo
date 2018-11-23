@@ -43,9 +43,15 @@ class ApiTestCase extends WebTestCase
         string $uri,
         int $expectedStatusCode,
         string $expectedContentType,
-        array $expectedContent
+        array $expectedContent,
+        bool $isClientUser = false
     ) {
-        $kernelClient = $this->getAuthenticatedCompanyClient();
+        if ($isClientUser) {
+            $kernelClient = $this->getAuthenticatedClient('Client2', 'password2');
+        } else {
+            $kernelClient = $this->getAuthenticatedCompanyClient();
+        }
+
         $kernelClient->request($method, $uri);
 
         $responseContent = json_decode($kernelClient->getResponse()->getContent(), true);
@@ -60,7 +66,7 @@ class ApiTestCase extends WebTestCase
     }
 
 
-    protected function getAuthenticatedClient(string $username, string $password)
+    protected function getAuthenticatedClient(string $username = 'Client1', string $password = 'password1')
     {
         $body  = json_encode([
             'username' => $username,
@@ -70,6 +76,9 @@ class ApiTestCase extends WebTestCase
         $client = static::createClient();
         $client->request('POST', '/api/token/client', [], [], [], $body);
 
+        if ($client->getResponse()->getStatusCode() !== 200) {
+            $this->showError($client->getResponse());
+        }
         $data = json_decode($client->getResponse()->getContent(), true);
 
         $client = static::createClient();
@@ -127,7 +136,7 @@ class ApiTestCase extends WebTestCase
         $repository = $this->getRepository(Client::class);
         $client = $repository->findOneBy(['username' => $username]);
 
-        return $client->getId();
+        return $client->getId()->toString();
     }
 
     protected function getUserId(string $user = null)
@@ -139,6 +148,16 @@ class ApiTestCase extends WebTestCase
         $repository = $this->getRepository(User::class);
         $user = $repository->findOneBy(['name' => $user]);
         return $user->getId();
+    }
+
+    public function getUserClientId(string $usernameClient = null): string
+    {
+        $clientId = $this->getClientId($usernameClient);
+
+        $repository = $this->getRepository(Client::class);
+        $client = $repository->findOneById($clientId);
+
+        return $client->getUsers()->toArray()[0]->getId()->toString();
     }
 
     protected function findBy(string $entity, array $params)

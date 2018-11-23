@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -62,6 +63,11 @@ final class CreateEntityFactory implements CreateEntityFactoryInterface
     private $parametersBuilder;
 
     /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
@@ -69,14 +75,17 @@ final class CreateEntityFactory implements CreateEntityFactoryInterface
         UserPasswordEncoderInterface $passwordEncoder,
         ApiValidatorInterface $apiValidator,
         EntityManagerInterface $em,
-        ParametersBuilderInterface $parametersBuilder
+        ParametersBuilderInterface $parametersBuilder,
+        TokenStorageInterface $tokenStorage
     ) {
         $this->serializer = $serializer;
         $this->passwordEncoder = $passwordEncoder;
         $this->apiValidator = $apiValidator;
         $this->em = $em;
         $this->parametersBuilder = $parametersBuilder;
+        $this->tokenStorage = $tokenStorage;
     }
+
 
     /**
      * {@inheritdoc}
@@ -91,6 +100,11 @@ final class CreateEntityFactory implements CreateEntityFactoryInterface
             $apiError = new ApiError(Response::HTTP_BAD_REQUEST, ApiError::TYPE_INVALID_REQUEST_BODY_FORMAT);
             throw new ApiException($apiError);
         }
+
+        if ('user_create' === $request->get('_route')) {
+            $dto->client = $this->tokenStorage->getToken()->getUser();
+        }
+
 
         $entity = new $entityName();
 

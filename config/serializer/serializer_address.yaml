@@ -3,6 +3,6 @@ App\Domain\Entity\Address:
         streetAddress:
             groups: ['user']
         city:
-            groups: ['users_list', 'user']
+            groups: ['users_list', 'users_client_list', 'user']
         postcode:
-            groups: ['users_list', 'user']
+            groups: ['users_list', 'users_client_list', 'user']

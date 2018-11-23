@@ -38,7 +38,7 @@ final class UserFixtures extends Fixture implements DependentFixtureInterface
             $name = 'User' . $nb;
             $email = $name . '@gmail.com';
             $phoneNumber = '0'. rand(100000000, 599999999);
-            $client = $this->getReference('client_'. rand(0, 3));
+            $client = $this->getReference('client_'. rand(0, 4));
 
             $randomAddress = 'address_'. rand(0, 5);
 

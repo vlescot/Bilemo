@@ -11,6 +11,10 @@ client_2:
     Password: password2
     Email: client2@mail.com
 client_3:
+    Username: Client3
+    Password: password3
+    Email: client3@mail.com
+client_4:
     Username: RegularClient
     Password: OpenClassrooms
     Email: RegularClient@mail.com

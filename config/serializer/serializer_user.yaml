@@ -1,7 +1,7 @@
 App\Domain\Entity\User:
     attributes:
         name:
-            groups: ['users_list', 'user', 'client']
+            groups: ['users_list', 'users_client_list', 'user', 'client']
         email:
             groups: ['user', 'client']
         phoneNumber:
@@ -9,7 +9,7 @@ App\Domain\Entity\User:
         createdAt:
             groups: ['user']
         address:
-            groups: ['users_list', 'user']
+            groups: ['users_list', 'users_client_list', 'user']
         client:
-            groups: ['users_list', 'user']
+            groups: ['users_client_list', 'user']
 

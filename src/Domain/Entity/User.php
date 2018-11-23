@@ -5,6 +5,7 @@ namespace App\Domain\Entity;
 
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class User
@@ -48,7 +49,7 @@ class User
     private $address;
 
     /**
-     * @var Client
+     * @var UserInterface
      */
     private $client;
 
@@ -62,17 +63,17 @@ class User
 
     /**
      * @param string $name
-     * @param Address $address
-     * @param string $email
      * @param string $phoneNumber
-     * @param Client $client
+     * @param string $email
+     * @param Address $address
+     * @param UserInterface $client
      */
     public function create(
         string $name,
         string $phoneNumber,
         string $email,
         Address $address,
-        Client $client
+        UserInterface $client
     ) {
         $this->createdAt = time();
         $this->updatedAt = time();
@@ -158,7 +159,7 @@ class User
     /**
      * @return Client
      */
-    public function getClient(): Client
+    public function getClient(): UserInterface
     {
         return $this->client;
     }

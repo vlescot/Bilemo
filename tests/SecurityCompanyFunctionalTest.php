@@ -45,6 +45,7 @@ final class SecurityCompanyFunctionalTest extends ApiTestCase
     {
         $phoneId = $this->getPhoneId();
         $clientId = $this->getClientId();
+        $userId = $this->getUserClientId();
 
         $postPhone = [
             'manufacturer' => [
@@ -75,7 +76,8 @@ final class SecurityCompanyFunctionalTest extends ApiTestCase
             'phoneNumber' => '0'. rand(000000000, 999999999)
         ];
 
-
+        yield['/api/users-list',        'GET',      null                    , Response::HTTP_OK];
+        yield['/api/users/'. $userId,   'GET',      null                    , Response::HTTP_OK];
         yield ['/api/phones',           'GET',      null                    , Response::HTTP_OK];
         yield ['/api/phones',           'POST',     json_encode($postPhone) , Response::HTTP_CREATED];
         yield ['/api/phones/'. $phoneId, 'GET',     null                    , Response::HTTP_OK];
@@ -86,5 +88,60 @@ final class SecurityCompanyFunctionalTest extends ApiTestCase
         yield ['/api/clients',            'POST',     json_encode($postClient)  , Response::HTTP_CREATED];
         yield ['/api/clients/'. $clientId, 'PUT',       json_encode($putClient)   , Response::HTTP_OK];
         yield ['/api/clients/'. $clientId, 'DELETE',    null                    , Response::HTTP_NO_CONTENT];
+    }
+
+
+
+    /**
+     * @param string $uri
+     * @param string $method
+     * @param string $content
+     *
+     * @dataProvider ROLE_COMPANY_can_NOT_access_provider
+     */
+    public function test_try_ROLE_COMPANY_can_NOT_access(
+        string $uri,
+        string $method,
+        string $content = null
+    ) {
+        $kernelClient = $this->getAuthenticatedCompanyClient();
+
+        $kernelClient->request($method, $uri, [], [], [], $content);
+
+        static::assertSame(Response::HTTP_FORBIDDEN, $kernelClient->getResponse()->getStatusCode());
+    }
+
+    /**
+     * @return \Generator
+     */
+    public function ROLE_COMPANY_can_NOT_access_provider()
+    {
+        $userId = $this->getUserClientId();
+
+        $postUser = [
+            'name' => 'userTest',
+            'phoneNumber' => '0566778899',
+            'email' => 'userTest@mail.com',
+            'address' => [
+                'streetAddress' => 'addressTest street',
+                'city' => 'cityTest',
+                'postcode' => 99999,
+            ]
+        ];
+
+        $putUser = [
+            'phoneNumber' => '0988776655',
+            'email' => 'updatedEmail@mail.com',
+            'address' => [
+                'streetAddress' => 'updated street',
+                'city' => 'Uptown',
+                'postcode' => 42000
+            ]
+        ];
+
+        yield['/api/users',             'GET',      null                    ];
+        yield['/api/users',             'POST',     json_encode($postUser)  ];
+        yield['/api/users/'. $userId,   'PUT',      json_encode($putUser)   ];
+        yield['/api/users/'. $userId,   'DELETE',   null                    ];
     }
 }

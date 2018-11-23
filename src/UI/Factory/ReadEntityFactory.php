@@ -64,7 +64,7 @@ final class ReadEntityFactory implements ReadEntityFactoryInterface
         $phoneLastUpdateDate = $repository->getOneUpdateDate($entityId);
 
         if (!$phoneLastUpdateDate) {
-            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', 'Phone', $entityId));
+            throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', ucfirst(self::ENTITY_STRING[$entityName]), $entityId));
         }
 
         $this->responder->buildCache(intval($phoneLastUpdateDate));
@@ -72,6 +72,7 @@ final class ReadEntityFactory implements ReadEntityFactoryInterface
         if ($this->responder->isCacheValid($request)) {
             return $this->responder->getResponse();
         }
+
 
         $phone = $repository->findOneById($entityId);
 

@@ -1,7 +1,7 @@
 App\Domain\Entity\Client:
     attributes:
         username:
-            groups: ['clients_list', 'client', 'users_list', 'user']
+            groups: ['clients_list', 'client', 'users_client_list', 'user']
         email:
             groups: ['clients_list', 'client']
         phoneNumber:

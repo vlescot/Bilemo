@@ -98,6 +98,7 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
             throw new NotFoundHttpException(sprintf('Resource %s not found with id "%s"', self::ENTITY_STRING[$entityName], $entityId));
         }
 
+
         try {
             $dto = $this->serializer->deserialize($json, self::ENTITY_DTO[$entityName], 'json');
         } catch (NotEncodableValueException $e) {
@@ -108,6 +109,7 @@ final class UpdateEntityFactory implements UpdateEntityFactoryInterface
         if (property_exists($dto, 'password')) {
             $dto->password = $this->passwordEncoder->encodePassword($entity, $dto->password);
         }
+
 
         $params = $this->parametersBuilder->BuildParameters($dto, $entityName, 'update');
         call_user_func_array([$entity, 'update'], $params);
