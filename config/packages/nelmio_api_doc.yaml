@@ -88,6 +88,8 @@ nelmio_api_doc:
                     address:
                         type: object
                         properties:
+                          streetAddress:
+                            type: string
                           city:
                             type: string
                           postcode:
@@ -185,7 +187,7 @@ nelmio_api_doc:
                 get:
                     tags:
                         - Phone
-                    summary: Gets phones list
+                    summary: Gets Phones list with pagination and filter on Manufacturer's name and/or Phone model
                     description: '## Authorization: Access for _Client_ and _Company_'
                     produces:
                       - application/hal+json
@@ -556,176 +558,241 @@ nelmio_api_doc:
                       '404':
                         description: RESOURCE NOT FOUND
         # User
-#            '/api/clients':
-#                get:
-#                    tags:
-#                        - Client
-#                    summary: Gets clients list
-#                    description: '## Authorization: Access for _Company_ ONLY'
-#                    produces:
-#                      - application/hal+json
-#                      - application/json
-#                    parameters:
-#                      - in: header
-#                        name: authorization
-#                        description: Bearer {YourAccessToken}
-#                        required: true
-#                        type: string
-#                        default: Bearer TOKEN
-#                    responses:
-#                      '200':
-#                        description: OK
-#                        schema:
-#                          type: array
-#                          items:
-#                              $ref: "#/definitions/Client"
-#                      '401':
-#                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
-#                post:
-#                    tags:
-#                        - Client
-#                    summary: Create a new client
-#                    description: '## Authorization: Access for _Company_ ONLY'
-#                    consumes:
-#                      - application/json
-#                    produces:
-#                      - application/json
-#                    parameters:
-#                      - in: header
-#                        name: authorization
-#                        description: Bearer {YourAccessToken}
-#                        required: true
-#                        type: string
-#                        default: Bearer TOKEN
-#                      - in: body
-#                        name: JSON
-#                        description: Client object that needs to be added
-#                        required: true
-#                        schema:
-#                          type: object
-#                          properties:
-#                            username:
-#                              type: string
-#                            password:
-#                              type: string
-#                            email:
-#                              type: string
-#                            phoneNumber:
-#                              type: string
-#                    responses:
-#                      '201':
-#                        description: CREATED
-#                        headers:
-#                          Location :
-#                            type: string
-#                            description: Link to the new resource
-#                      '400':
-#                        description: BAD REQUEST - There was a validation error | Invalid JSON format sent
-#                      '401':
-#                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
-#            '/api/clients/{id}':
-#                get:
-#                    tags:
-#                        - Client
-#                    summary: Gets details about a specific client
-#                    description: '## Authorization: Access for _Company_, and _Client for himself_'
-#                    produces:
-#                      - application/hal+json
-#                      - application/json
-#                    parameters:
-#                      - in: header
-#                        name: authorization
-#                        description: Bearer {YourAccessToken}
-#                        required: true
-#                        type: string
-#                        default: Bearer TOKEN
-#                      - in: path
-#                        name: id
-#                        description: id of client to return
-#                        required: true
-#                        type: string
-#                    responses:
-#                      '200':
-#                        description: OK
-#                        schema:
-#                          $ref: "#/definitions/Client"
-#                      '401':
-#                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
-#                      '404':
-#                        description: RESOURCE NOT FOUND
-#                put:
-#                    tags:
-#                        - Client
-#                    summary: Update a specific client
-#                    description: '## Authorization: Access for _Company_, and _Client for himself_'
-#                    consumes:
-#                      - application/json
-#                    produces:
-#                      - application/json
-#                    parameters:
-#                      - in: header
-#                        name: authorization
-#                        description: Bearer {YourAccessToken}
-#                        required: true
-#                        type: string
-#                        default: Bearer TOKEN
-#                      - in: path
-#                        name: id
-#                        description: id of client to return
-#                        required: true
-#                        type: string
-#                      - in: body
-#                        name: JSON
-#                        description: Client object that needs to be updated
-#                        required: true
-#                        schema:
-#                          type: object
-#                          properties:
-#                            password:
-#                              type: string
-#                            email:
-#                              type: string
-#                            phoneNumber:
-#                              type: string
-#                    responses:
-#                      '200':
-#                        description: OK
-#                        headers:
-#                          Location :
-#                            type: string
-#                            description: Link to the new resource
-#                      '400':
-#                        description: BAD REQUEST - There was a validation error | Invalid JSON format sent
-#                      '401':
-#                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
-#                      '404':
-#                        description: RESOURCE NOT FOUND
-#                delete:
-#                    tags:
-#                        - Client
-#                    summary: Delete a specific client
-#                    description: '## Authorization: Access for _Company_, and _Client for himself_'
-#                    produces:
-#                      - application/json
-#                    parameters:
-#                      - in: header
-#                        name: authorization
-#                        description: Bearer {YourAccessToken}
-#                        required: true
-#                        type: string
-#                        default: Bearer TOKEN
-#                      - in: path
-#                        name: id
-#                        description: id of client to return
-#                        required: true
-#                        type: string
-#                    responses:
-#                      '204':
-#                        description: NO CONTENT
-#                      '401':
-#                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
-#                      '404':
-#                        description: RESOURCE NOT FOUND
+            '/api/users-list':
+                get:
+                    tags:
+                        - User
+                    summary: Gets all Users list with pagination and filter on client's name (Bilemo access)
+                    description: '## Authorization: Access for _Company_ ONLY'
+                    produces:
+                      - application/hal+json
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: authorization
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                        default: Bearer TOKEN
+                      - in: query
+                        name: page
+                        description: The page number to show
+                        type: integer
+                      - in: query
+                        name: client
+                        description: The client's name
+                        type: string
+                    responses:
+                      '200':
+                        description: OK
+                        schema:
+                          type: object
+                          properties:
+                            total:
+                              type: integer
+                            limit:
+                              type: integer
+                            links:
+                              type: object
+                              properties:
+                                first:
+                                  type: string
+                                self:
+                                  type: string
+                                next:
+                                  type: string
+                                last:
+                                  type: string
+                            phones:
+                              type: array
+                              items:
+                                $ref: "#/definitions/User"
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+            '/api/users':
+                get:
+                    tags:
+                        - User
+                    summary: Clients read their own Users listing (Client access)
+                    description: '## Authorization: Access for _Client for himself_ ONLY'
+                    produces:
+                      - application/hal+json
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: authorization
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                        default: Bearer TOKEN
+                    responses:
+                      '200':
+                        description: OK
+                        schema:
+                          type: array
+                          items:
+                              $ref: "#/definitions/User"
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                post:
+                    tags:
+                        - User
+                    summary: Create a new Client's User
+                    description: '## Authorization: Access for _Client for himself_ ONLY'
+                    consumes:
+                      - application/json
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: authorization
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                        default: Bearer TOKEN
+                      - in: body
+                        name: JSON
+                        description: User object that needs to be added
+                        required: true
+                        schema:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            phoneNumber:
+                              type: string
+                            email:
+                              type: string
+                            address:
+                              type: object
+                              properties:
+                                streetAddress:
+                                  type: string
+                                city:
+                                  type: string
+                                postcode:
+                                  type: string
+                    responses:
+                      '201':
+                        description: CREATED
+                        headers:
+                          Location :
+                            type: string
+                            description: Link to the new resource
+                      '400':
+                        description: BAD REQUEST - There was a validation error | Invalid JSON format sent
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+            '/api/users/{id}':
+                get:
+                    tags:
+                        - User
+                    summary: Gets details about a specific User
+                    description: '## Authorization: Access for _Company_, and _Client for it s own user'
+                    produces:
+                      - application/hal+json
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: authorization
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                        default: Bearer TOKEN
+                      - in: path
+                        name: id
+                        description: id of user to return
+                        required: true
+                        type: string
+                    responses:
+                      '200':
+                        description: OK
+                        schema:
+                          $ref: "#/definitions/User"
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
+                put:
+                    tags:
+                        - User
+                    summary: Update a specific User
+                    description: '## Authorization: Access for _Client for it s own user_'
+                    consumes:
+                      - application/json
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: authorization
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                        default: Bearer TOKEN
+                      - in: path
+                        name: id
+                        description: id of user to return
+                        required: true
+                        type: string
+                      - in: body
+                        name: JSON
+                        description: User object that needs to be updated
+                        required: true
+                        schema:
+                          type: object
+                          properties:
+                            phoneNumber:
+                              type: string
+                            email:
+                              type: string
+                            address:
+                              type: object
+                              properties:
+                                streetAddress:
+                                  type: string
+                                city:
+                                  type: string
+                                postcode:
+                                  type: integer
+                    responses:
+                      '200':
+                        description: OK
+                        headers:
+                          Location :
+                            type: string
+                            description: Link to the new resource
+                      '400':
+                        description: BAD REQUEST - There was a validation error | Invalid JSON format sent
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
+                delete:
+                    tags:
+                        - User
+                    summary: Delete a specific User
+                    description: '## Authorization: Access for _Client for it s own user_'
+                    produces:
+                      - application/json
+                    parameters:
+                      - in: header
+                        name: authorization
+                        description: Bearer {YourAccessToken}
+                        required: true
+                        type: string
+                        default: Bearer TOKEN
+                      - in: path
+                        name: id
+                        description: id of client to return
+                        required: true
+                        type: string
+                    responses:
+                      '204':
+                        description: NO CONTENT
+                      '401':
+                        description: UNAUTHORIZED - JWT Token not found | Expired JWT Token | Invalid JWT Token
+                      '404':
+                        description: RESOURCE NOT FOUND
         # Documentation
             '/api/doc':
                 get:
@@ -735,7 +802,6 @@ nelmio_api_doc:
                     responses:
                       '200':
                         description: OK
-
             '/api/doc.json':
                 get:
                     summary: Bilemo Api Documentation formated in JSON
