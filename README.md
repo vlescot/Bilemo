@@ -3,6 +3,7 @@
 **[Visit the API Doc](http://bilemo.vincentlescot.fr/api/doc)**
 
 Bilemo is a REST API built during my [web develpment learning path](https://openclassrooms.com/paths/developpeur-se-d-application-php-symfony) with OpenClassrooms. 
+This API provides a catalog of phones accessible by the Clients and their address book management.
 
 This application is built with Symfony ~4.0 and [ADR (Action-Domain-Responder)](https://youtu.be/y7c-XWLYMVA) architectural pattern.
 
